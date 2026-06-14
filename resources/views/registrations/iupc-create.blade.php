@@ -60,7 +60,7 @@
                     </label>
                     <label>
                         <span class="{{ $labelClass }}">Institution</span>
-                        <input id="teamInstitution" name="institution" value="{{ old('institution') }}" class="{{ $inputClass }}" placeholder="Institution name">
+                        <input id="teamInstitution" data-university-search name="institution" value="{{ old('institution') }}" class="{{ $inputClass }}" placeholder="Institution name" autocomplete="off" spellcheck="false">
                         @error('institution')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                     </label>
                 </div>
@@ -127,7 +127,7 @@
                                 </label>
                                 <label class="sm:col-span-2">
                                     <span class="{{ $labelClass }}">University</span>
-                                    <input data-participant-university name="participants[{{ $index }}][university]" value="{{ old("participants.$index.university") }}" class="{{ $inputClass }}" placeholder="University name">
+                                    <input data-participant-university data-university-search name="participants[{{ $index }}][university]" value="{{ old("participants.$index.university") }}" class="{{ $inputClass }}" placeholder="University name" autocomplete="off" spellcheck="false">
                                     @error("participants.$index.university")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                                 </label>
                             </div>
@@ -176,4 +176,5 @@
     })();
 </script>
 @endpush
+@include('registrations.partials.university-search', ['universities' => $universities])
 @endsection

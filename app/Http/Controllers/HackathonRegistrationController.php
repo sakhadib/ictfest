@@ -27,7 +27,10 @@ class HackathonRegistrationController extends Controller
             return $this->registrationComingSoon($event);
         }
 
-        return view('registrations.hackathon-create', compact('event'));
+        return view('registrations.hackathon-create', [
+            'event' => $event,
+            'universities' => $this->universitySearchOptions(),
+        ]);
     }
 
     /**

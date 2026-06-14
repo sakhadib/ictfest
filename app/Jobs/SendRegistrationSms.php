@@ -45,10 +45,14 @@ class SendRegistrationSms implements ShouldQueue
             return;
         }
 
+        $label = $this->registration->event?->code === '01' ? 'Pre-Registration' : 'Registration';
+
         $message = sprintf(
-            "Thank you for your registration at IUT 12th ICT FEST 2026 @ %s. Check Status at %s. \n -IUTCS",
+            'Thank you for your %s at IUT 12th ICT FEST 2026 @ %s. Check Status at %s. %s-IUTCS',
+            strtolower($label),
             $this->registration->event?->name ?? 'ICT Fest',
             route('registration.status', ['code' => $this->registration->registration_code]),
+            "\n -",
         );
 
         Log::info('Registration confirmation SMS dispatch attempt.', [

@@ -27,7 +27,10 @@ class GamejamRegistrationController extends Controller
             return $this->registrationComingSoon($event);
         }
 
-        return view('registrations.gamejam-create', compact('event'));
+        return view('registrations.gamejam-create', [
+            'event' => $event,
+            'universities' => $this->universitySearchOptions(),
+        ]);
     }
 
     /**

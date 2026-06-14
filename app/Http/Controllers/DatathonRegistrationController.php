@@ -30,7 +30,10 @@ class DatathonRegistrationController extends Controller
             return $this->registrationComingSoon($event);
         }
 
-        return view('registrations.datathon-create', compact('event'));
+        return view('registrations.datathon-create', [
+            'event' => $event,
+            'universities' => $this->universitySearchOptions(),
+        ]);
     }
 
     /**

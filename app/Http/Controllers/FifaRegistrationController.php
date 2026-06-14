@@ -30,7 +30,10 @@ class FifaRegistrationController extends Controller
             return $this->registrationComingSoon($event);
         }
 
-        return view('registrations.fifa-create', compact('event'));
+        return view('registrations.fifa-create', [
+            'event' => $event,
+            'universities' => $this->universitySearchOptions(),
+        ]);
     }
 
     /**

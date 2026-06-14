@@ -30,7 +30,10 @@ class ValorantRegistrationController extends Controller
             return $this->registrationComingSoon($event);
         }
 
-        return view('registrations.valorant-create', compact('event'));
+        return view('registrations.valorant-create', [
+            'event' => $event,
+            'universities' => $this->universitySearchOptions(),
+        ]);
     }
 
     /**

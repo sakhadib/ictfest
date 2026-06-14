@@ -26,7 +26,10 @@ class IupcRegistrationController extends Controller
             return $this->registrationComingSoon($event);
         }
 
-        return view('registrations.iupc-create', compact('event'));
+        return view('registrations.iupc-create', [
+            'event' => $event,
+            'universities' => $this->universitySearchOptions(),
+        ]);
     }
 
     /**
