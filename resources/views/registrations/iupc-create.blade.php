@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'IUPC Registration | '.config('app.name'))
+@section('title', 'IUPC Pre-registration | '.config('app.name'))
 
 @section('content')
 @php
@@ -13,10 +13,10 @@
         <div class="max-w-4xl">
             <div class="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45">
                 <span class="h-px w-10 bg-volt/70"></span>
-                IUPC Registration
+                IUPC Pre-registration
             </div>
             <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                Register your squad for IUPC
+                Pre-register your squad for IUPC
             </h1>
             <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
                 Member 1 will be treated as the team leader and primary contact.

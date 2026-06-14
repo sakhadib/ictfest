@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\SendRegistrationConfirmationEmail;
+use App\Actions\SendRegistrationConfirmationSms;
 use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Http\RedirectResponse;
@@ -79,6 +80,7 @@ class HackathonRegistrationController extends Controller
         });
 
         SendRegistrationConfirmationEmail::queue($registration);
+        SendRegistrationConfirmationSms::queue($registration);
 
         return redirect()->route('hackathon.register.success', ['code' => $registration->registration_code]);
     }

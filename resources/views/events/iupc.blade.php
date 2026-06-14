@@ -104,8 +104,10 @@
                         </div>
 
                         <div class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-7">
-                            <p class="text-xs uppercase tracking-[.18em] text-white/35">{{ $block['date'] }}</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">{{ $block['label'] }}</h3>
+                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <h3 class="text-xl font-semibold text-white">{{ $block['label'] }}</h3>
+                                <p class="inline-flex w-fit rounded-full border border-white/12 bg-white/[.06] px-3 py-1 text-sm font-semibold tracking-[.12em] text-white">{{ $block['date'] }}</p>
+                            </div>
 
                             <div class="mt-7 grid gap-3 sm:grid-cols-2">
                                 @foreach($block['items'] as $item)
@@ -152,14 +154,14 @@
 
 <section class="px-4 pb-32 pt-16 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-6xl rounded-lg border border-white/10 bg-white/[.035] px-6 py-14 text-center sm:px-10">
-        <p class="text-xs font-medium uppercase tracking-[.22em] text-volt/80">IUPC Registration</p>
+        <p class="text-xs font-medium uppercase tracking-[.22em] text-volt/80">IUPC Pre-registration</p>
         <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">Ready for the contest floor?</h2>
         <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/56">
-            Keep your team details, payment, and valid student identification ready before registration closes.
+            Keep your team details, payment, and valid student identification ready before pre-registration closes.
         </p>
         <div class="mt-10 flex justify-center">
             <a href="{{ route('iupc.register') }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-volt">
-                Register Now
+                Pre-register Now
             </a>
         </div>
     </div>

@@ -246,7 +246,7 @@
 
                         @if(isset($event['register_url']))
                             <a href="{{ url($event['register_url']) }}" class="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-volt">
-                                Register
+                                {{ $event['name'] === 'Programming Contest' ? 'Pre-register' : 'Register' }}
                             </a>
                         @endif
                     </div>
@@ -268,8 +268,8 @@
                 <div class="absolute left-4 top-4 hidden h-[calc(100%-2rem)] w-px bg-gradient-to-b from-volt/70 via-white/14 to-ember/70 sm:block"></div>
 
                 @foreach([
-                    ['date' => '18 June', 'label' => 'Registration opens', 'text' => 'Teams start reserving their place across programming, data, game development, hackathon, and esports tracks.', 'icon' => 'fa-door-open', 'accent' => 'volt'],
-                    ['date' => '10-20 July', 'label' => 'Online rounds', 'text' => 'Remote rounds, submissions, and qualifiers shape the finalist pool before the campus finale.', 'icon' => 'fa-laptop-code', 'accent' => 'iris'],
+                    ['date' => '15 June', 'label' => 'Registration opens', 'text' => 'Teams start reserving their place across programming, data, game development, hackathon, and esports tracks.', 'icon' => 'fa-door-open', 'accent' => 'volt'],
+                    ['date' => '1-21 July', 'label' => 'Online rounds', 'text' => 'Remote rounds, submissions, and qualifiers shape the finalist pool before the campus finale.', 'icon' => 'fa-laptop-code', 'accent' => 'iris'],
                     ['date' => '24-25 July', 'label' => 'IUT campus finals', 'text' => 'Onsite contests, showcases, LAN finals, and prize moments bring the festival into one compact finish.', 'icon' => 'fa-flag-checkered', 'accent' => 'ember'],
                 ] as $index => $item)
                     <div class="relative grid gap-5 pb-12 last:pb-0 sm:grid-cols-[4rem_1fr]">

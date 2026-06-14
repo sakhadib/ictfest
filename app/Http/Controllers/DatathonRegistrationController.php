@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\SendRegistrationConfirmationEmail;
+use App\Actions\SendRegistrationConfirmationSms;
 use App\Models\Event;
 use App\Models\Payment;
 use App\Models\Registration;
@@ -87,6 +88,7 @@ class DatathonRegistrationController extends Controller
         });
 
         SendRegistrationConfirmationEmail::queue($registration);
+        SendRegistrationConfirmationSms::queue($registration);
 
         return redirect()->route('datathon.register.success', ['code' => $registration->registration_code]);
     }

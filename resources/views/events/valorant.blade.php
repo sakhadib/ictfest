@@ -131,8 +131,10 @@
                         </div>
 
                         <div class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-7">
-                            <p class="text-xs uppercase tracking-[.18em] text-white/35">{{ $block['date'] }}</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">{{ $block['label'] }}</h3>
+                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <h3 class="text-xl font-semibold text-white">{{ $block['label'] }}</h3>
+                                <p class="inline-flex w-fit rounded-full border border-white/12 bg-white/[.06] px-3 py-1 text-sm font-semibold tracking-[.12em] text-white">{{ $block['date'] }}</p>
+                            </div>
 
                             <div class="mt-7 grid gap-3 sm:grid-cols-2">
                                 @foreach($block['items'] as $item)
