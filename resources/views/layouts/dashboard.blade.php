@@ -64,6 +64,10 @@
                             <span>Report</span>
                             <span class="text-xs opacity-50">CSV</span>
                         </a>
+                        <a href="{{ route('dashboard.event-status.index') }}" class="flex items-center justify-between rounded-lg px-3 py-2.5 font-medium transition {{ request()->routeIs('dashboard.event-status.*') ? 'bg-white text-coal shadow-lg shadow-black/10' : 'text-white/68 hover:bg-white/10 hover:text-white' }}">
+                            <span>Event Status</span>
+                            <span class="text-xs opacity-50">Live</span>
+                        </a>
                     </div>
                 </div>
 

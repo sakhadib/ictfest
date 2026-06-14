@@ -24,7 +24,11 @@ class ValorantRegistrationController extends Controller
      */
     public function create(): View
     {
-        $event = Event::where('code', self::EVENT_CODE)->firstOrFail();
+        $event = $this->registrationEvent(self::EVENT_CODE);
+
+        if (! $event->is_live) {
+            return $this->registrationComingSoon($event);
+        }
 
         return view('registrations.valorant-create', compact('event'));
     }
@@ -34,6 +38,9 @@ class ValorantRegistrationController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $event = $this->registrationEvent(self::EVENT_CODE);
+        $this->ensureRegistrationIsLive($event);
+
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
             'institution' => ['required', 'string', 'max:255'],
@@ -48,7 +55,6 @@ class ValorantRegistrationController extends Controller
         ]);
 
         $participants = array_values($validated['participants']);
-        $event = Event::where('code', self::EVENT_CODE)->firstOrFail();
         $leader = $participants[0];
 
         $registration = DB::transaction(function () use ($event, $leader, $participants, $validated) {

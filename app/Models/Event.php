@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['code', 'name', 'min_team_size', 'max_team_size'])]
+#[Fillable(['code', 'name', 'min_team_size', 'max_team_size', 'rulebook_link', 'is_live'])]
 class Event extends Model
 {
     public $timestamps = false;
@@ -21,6 +21,7 @@ class Event extends Model
         return [
             'min_team_size' => 'integer',
             'max_team_size' => 'integer',
+            'is_live' => 'boolean',
         ];
     }
 

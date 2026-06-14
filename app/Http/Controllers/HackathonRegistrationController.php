@@ -21,7 +21,11 @@ class HackathonRegistrationController extends Controller
      */
     public function create(): View
     {
-        $event = Event::where('code', self::EVENT_CODE)->firstOrFail();
+        $event = $this->registrationEvent(self::EVENT_CODE);
+
+        if (! $event->is_live) {
+            return $this->registrationComingSoon($event);
+        }
 
         return view('registrations.hackathon-create', compact('event'));
     }
@@ -31,6 +35,9 @@ class HackathonRegistrationController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $event = $this->registrationEvent(self::EVENT_CODE);
+        $this->ensureRegistrationIsLive($event);
+
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
             'institution' => ['required', 'string', 'max:255'],
@@ -49,7 +56,6 @@ class HackathonRegistrationController extends Controller
 
         abort_unless(count($participants) >= 1 && count($participants) <= 3, 422);
 
-        $event = Event::where('code', self::EVENT_CODE)->firstOrFail();
         $leader = $participants[0];
 
         $registration = DB::transaction(function () use ($event, $leader, $participants, $validated) {

@@ -65,6 +65,17 @@
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
                     A 64-player individual EA FC 26 tournament on PS4, moving from direct knockout rounds into best-of series and a best-of-five final.
                 </p>
+                <div class="mt-10">
+                    @if(filled($eventRecord?->rulebook_link))
+                        <a href="{{ $eventRecord->rulebook_link }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-ember">
+                            See Rulebook
+                        </a>
+                    @else
+                        <span class="inline-flex items-center justify-center gap-3 rounded-md border border-white/12 bg-white/[.04] px-5 py-3 text-sm font-semibold text-white/58">
+                            Rulebook will come soon
+                        </span>
+                    @endif
+                </div>
             </div>
 
             <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
@@ -190,9 +201,15 @@
             Register as an individual player and prepare your controller-only match setup.
         </p>
         <div class="mt-10 flex justify-center">
-            <a href="{{ route('fifa.register') }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-ember">
-                Register Now
-            </a>
+            @if($eventRecord?->is_live)
+                <a href="{{ route('fifa.register') }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-ember">
+                    Register Now
+                </a>
+            @else
+                <span class="inline-flex items-center justify-center gap-3 rounded-md border border-white/12 bg-white/[.04] px-5 py-3 text-sm font-semibold text-white/58">
+                    Registration will be live soon
+                </span>
+            @endif
         </div>
     </div>
 </section>

@@ -24,7 +24,11 @@ class FifaRegistrationController extends Controller
      */
     public function create(): View
     {
-        $event = Event::where('code', self::EVENT_CODE)->firstOrFail();
+        $event = $this->registrationEvent(self::EVENT_CODE);
+
+        if (! $event->is_live) {
+            return $this->registrationComingSoon($event);
+        }
 
         return view('registrations.fifa-create', compact('event'));
     }
@@ -34,6 +38,9 @@ class FifaRegistrationController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $event = $this->registrationEvent(self::EVENT_CODE);
+        $this->ensureRegistrationIsLive($event);
+
         $validated = $request->validate([
             'institution' => ['required', 'string', 'max:255'],
             'payment_method' => ['required', Rule::in(['bkash', 'nagad'])],
@@ -45,7 +52,6 @@ class FifaRegistrationController extends Controller
             'participant.university' => ['required', 'string', 'max:255'],
         ]);
 
-        $event = Event::where('code', self::EVENT_CODE)->firstOrFail();
         $participant = $validated['participant'];
 
         $registration = DB::transaction(function () use ($event, $participant, $validated) {

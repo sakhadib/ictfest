@@ -4,8 +4,17 @@
 
 @section('content')
 @php
+    try {
+        $eventRecords = \App\Models\Event::whereIn('code', ['01', '02', '03', '04', '05', '06'])
+            ->get()
+            ->keyBy('code');
+    } catch (\Throwable $exception) {
+        $eventRecords = collect();
+    }
+
     $events = [
         [
+            'code' => '01',
             'name' => 'Programming Contest',
             'short' => 'IUPC',
             'logo' => 'iupc.png',
@@ -21,6 +30,7 @@
             'register_url' => '/iupc/register',
         ],
         [
+            'code' => '02',
             'name' => 'Agentic AI Hackathon',
             'short' => 'Hackathon',
             'logo' => 'hackathon.png',
@@ -31,11 +41,12 @@
             'window' => '18 June - 3 July',
             'date' => 'Online: 10 July, Final: 24-25 July',
             'venue' => 'AB2 301, 302 & Auditorium',
-            'signal' => 'Problem release at 6:00 PM on Day 1, 4-hour online round, then onsite final build.',
+            'signal' => 'Two rounds of Hackathon, 4-hour online round, then onsite final build.',
             'url' => '/hackathon',
             'register_url' => '/hackathon/register',
         ],
         [
+            'code' => '03',
             'name' => 'Datathon',
             'short' => 'Datathon',
             'logo' => 'datathon.png',
@@ -51,6 +62,7 @@
             'register_url' => '/datathon/register',
         ],
         [
+            'code' => '04',
             'name' => 'Gamejam',
             'short' => 'Gamejam',
             'logo' => 'gamejam.png',
@@ -66,6 +78,7 @@
             'register_url' => '/gamejam/register',
         ],
         [
+            'code' => '05',
             'name' => 'FIFA',
             'short' => 'EA FC 26',
             'logo' => 'fifa.png',
@@ -81,6 +94,7 @@
             'register_url' => '/fifa/register',
         ],
         [
+            'code' => '06',
             'name' => 'Valorant',
             'short' => 'Valorant',
             'logo' => 'valorant.png',
@@ -182,6 +196,9 @@
 
         <div class="mt-16 grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
             @foreach($events as $event)
+                @php
+                    $eventIsLive = (bool) ($eventRecords[$event['code']]?->is_live ?? false);
+                @endphp
                 <article class="group flex h-full min-h-[29rem] flex-col rounded-lg border border-white/10 bg-white/[.035] p-5 transition duration-300 hover:-translate-y-1 hover:border-white/24 hover:bg-white/[.055]">
                     <div class="flex items-start gap-4">
                         <div class="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-white/[.06] p-1">
@@ -236,7 +253,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-5 grid gap-3 sm:grid-cols-{{ isset($event['register_url']) ? '2' : '1' }}">
+                    <div class="mt-5 grid gap-3 {{ isset($event['register_url']) && $eventIsLive ? 'sm:grid-cols-2' : '' }}">
                         @if(isset($event['url']))
                             <a href="{{ url($event['url']) }}" class="inline-flex items-center justify-center gap-2 rounded-md border border-white/12 bg-white/[.04] px-4 py-2.5 text-sm font-medium text-white/72 transition hover:border-volt/60 hover:text-white">
                                 Details
@@ -244,7 +261,7 @@
                             </a>
                         @endif
 
-                        @if(isset($event['register_url']))
+                        @if(isset($event['register_url']) && $eventIsLive)
                             <a href="{{ url($event['register_url']) }}" class="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-volt">
                                 {{ $event['name'] === 'Programming Contest' ? 'Pre-register' : 'Register' }}
                             </a>

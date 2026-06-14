@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\EventRegistrationController;
+use App\Http\Controllers\Dashboard\EventStatusController;
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\Dashboard\StatusLookupController;
 use App\Http\Controllers\Dashboard\UserController;
@@ -20,6 +21,7 @@ Route::get('/', function () {
 });
 
 Route::view('/about', 'about')->name('about');
+Route::view('/contact', 'contact')->name('contact');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -32,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/status', [StatusLookupController::class, 'index'])->name('dashboard.status.index');
     Route::get('/dashboard/reports', [ReportController::class, 'index'])->name('dashboard.reports.index');
     Route::get('/dashboard/reports/download', [ReportController::class, 'download'])->name('dashboard.reports.download');
+    Route::get('/dashboard/event-status', [EventStatusController::class, 'index'])->name('dashboard.event-status.index');
+    Route::patch('/dashboard/event-status/{event:code}', [EventStatusController::class, 'update'])->name('dashboard.event-status.update');
     Route::get('/dashboard/events/{event:code}', [EventRegistrationController::class, 'index'])->name('dashboard.events.registrations.index');
     Route::patch('/dashboard/events/{event:code}/registrations/{registration}/approve', [EventRegistrationController::class, 'approve'])->name('dashboard.events.registrations.approve');
     Route::patch('/dashboard/events/{event:code}/registrations/{registration}/unapprove', [EventRegistrationController::class, 'unapprove'])->name('dashboard.events.registrations.unapprove');
@@ -86,7 +90,7 @@ Route::get('/test-sms', function () {
 });
 
 Route::get('/iupc', function () {
-    return view('events.iupc');
+    return view('events.iupc', ['eventRecord' => \App\Models\Event::where('code', '01')->firstOrFail()]);
 });
 
 Route::get('/iupc/register', [IupcRegistrationController::class, 'create'])->name('iupc.register');
@@ -94,7 +98,7 @@ Route::post('/iupc/register', [IupcRegistrationController::class, 'store'])->nam
 Route::get('/iupc/register/{code}', [IupcRegistrationController::class, 'success'])->name('iupc.register.success');
 
 Route::get('/hackathon', function () {
-    return view('events.hackathon');
+    return view('events.hackathon', ['eventRecord' => \App\Models\Event::where('code', '02')->firstOrFail()]);
 });
 
 Route::get('/hackathon/register', [HackathonRegistrationController::class, 'create'])->name('hackathon.register');
@@ -102,7 +106,7 @@ Route::post('/hackathon/register', [HackathonRegistrationController::class, 'sto
 Route::get('/hackathon/register/{code}', [HackathonRegistrationController::class, 'success'])->name('hackathon.register.success');
 
 Route::get('/datathon', function () {
-    return view('events.datathon');
+    return view('events.datathon', ['eventRecord' => \App\Models\Event::where('code', '03')->firstOrFail()]);
 });
 
 Route::get('/datathon/register', [DatathonRegistrationController::class, 'create'])->name('datathon.register');
@@ -110,7 +114,7 @@ Route::post('/datathon/register', [DatathonRegistrationController::class, 'store
 Route::get('/datathon/register/{code}', [DatathonRegistrationController::class, 'success'])->name('datathon.register.success');
 
 Route::get('/gamejam', function () {
-    return view('events.gamejam');
+    return view('events.gamejam', ['eventRecord' => \App\Models\Event::where('code', '04')->firstOrFail()]);
 });
 
 Route::get('/gamejam/register', [GamejamRegistrationController::class, 'create'])->name('gamejam.register');
@@ -118,7 +122,7 @@ Route::post('/gamejam/register', [GamejamRegistrationController::class, 'store']
 Route::get('/gamejam/register/{code}', [GamejamRegistrationController::class, 'success'])->name('gamejam.register.success');
 
 Route::get('/fifa', function () {
-    return view('events.fifa');
+    return view('events.fifa', ['eventRecord' => \App\Models\Event::where('code', '05')->firstOrFail()]);
 });
 
 Route::get('/fifa/register', [FifaRegistrationController::class, 'create'])->name('fifa.register');
@@ -126,7 +130,7 @@ Route::post('/fifa/register', [FifaRegistrationController::class, 'store'])->nam
 Route::get('/fifa/register/{code}', [FifaRegistrationController::class, 'success'])->name('fifa.register.success');
 
 Route::get('/valorant', function () {
-    return view('events.valorant');
+    return view('events.valorant', ['eventRecord' => \App\Models\Event::where('code', '06')->firstOrFail()]);
 });
 
 Route::get('/valorant/register', [ValorantRegistrationController::class, 'create'])->name('valorant.register');

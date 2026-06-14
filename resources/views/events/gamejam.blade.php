@@ -95,6 +95,17 @@
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
                     A game development challenge with an online creation round, a finalist selection, and an onsite showcase for the selected teams.
                 </p>
+                <div class="mt-10">
+                    @if(filled($eventRecord?->rulebook_link))
+                        <a href="{{ $eventRecord->rulebook_link }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-volt">
+                            See Rulebook
+                        </a>
+                    @else
+                        <span class="inline-flex items-center justify-center gap-3 rounded-md border border-white/12 bg-white/[.04] px-5 py-3 text-sm font-semibold text-white/58">
+                            Rulebook will come soon
+                        </span>
+                    @endif
+                </div>
             </div>
 
             <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
@@ -223,9 +234,15 @@
             Form your team, plan your build window, and prepare your files for the onsite showcase.
         </p>
         <div class="mt-10 flex justify-center">
-            <a href="{{ route('gamejam.register') }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-volt">
-                Register Now
-            </a>
+            @if($eventRecord?->is_live)
+                <a href="{{ route('gamejam.register') }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-volt">
+                    Register Now
+                </a>
+            @else
+                <span class="inline-flex items-center justify-center gap-3 rounded-md border border-white/12 bg-white/[.04] px-5 py-3 text-sm font-semibold text-white/58">
+                    Registration will be live soon
+                </span>
+            @endif
         </div>
     </div>
 </section>
