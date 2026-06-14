@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\EventRegistrationController;
+use App\Http\Controllers\Dashboard\ReportController;
+use App\Http\Controllers\Dashboard\StatusLookupController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\IupcRegistrationController;
 use App\Http\Controllers\HackathonRegistrationController;
@@ -24,6 +26,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
     Route::get('/dashboard', fn () => redirect()->route('dashboard.users.index'))->name('dashboard');
+    Route::get('/dashboard/status', [StatusLookupController::class, 'index'])->name('dashboard.status.index');
+    Route::get('/dashboard/reports', [ReportController::class, 'index'])->name('dashboard.reports.index');
+    Route::get('/dashboard/reports/download', [ReportController::class, 'download'])->name('dashboard.reports.download');
     Route::get('/dashboard/events/{event:code}', [EventRegistrationController::class, 'index'])->name('dashboard.events.registrations.index');
     Route::patch('/dashboard/events/{event:code}/registrations/{registration}/approve', [EventRegistrationController::class, 'approve'])->name('dashboard.events.registrations.approve');
     Route::patch('/dashboard/events/{event:code}/registrations/{registration}/unapprove', [EventRegistrationController::class, 'unapprove'])->name('dashboard.events.registrations.unapprove');

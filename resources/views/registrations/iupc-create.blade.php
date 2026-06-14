@@ -39,13 +39,6 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="grid h-10 w-10 place-items-center rounded-md bg-volt/10 text-volt"><i class="fa-solid fa-ticket"></i></div>
-                    <div>
-                        <p class="text-xs uppercase tracking-[.16em] text-white/32">Fee</p>
-                        <p class="mt-1 text-sm font-medium text-white">5099 BDT</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
                     <div class="grid h-10 w-10 place-items-center rounded-md bg-volt/10 text-volt"><i class="fa-solid fa-hashtag"></i></div>
                     <div>
                         <p class="text-xs uppercase tracking-[.16em] text-white/32">Code Format</p>
@@ -121,35 +114,6 @@
                             </div>
                         </div>
                     @endfor
-                </div>
-            </div>
-
-            <div class="mt-12">
-                <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Payment</p>
-                <div class="mt-6 grid gap-5 sm:grid-cols-2">
-                    <div>
-                        <span class="{{ $labelClass }}">Method</span>
-                        <div class="mt-2 grid grid-cols-2 gap-3">
-                            <label class="cursor-pointer">
-                                <input type="radio" name="payment_method" value="bkash" class="peer sr-only" @checked(old('payment_method') === 'bkash')>
-                                <span class="flex items-center justify-center rounded-md border border-white/10 bg-white/[.035] px-4 py-3 text-sm font-semibold text-white/58 transition peer-checked:border-volt/60 peer-checked:bg-volt/10 peer-checked:text-white hover:border-white/24">
-                                    bKash
-                                </span>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="payment_method" value="nagad" class="peer sr-only" @checked(old('payment_method') === 'nagad')>
-                                <span class="flex items-center justify-center rounded-md border border-white/10 bg-white/[.035] px-4 py-3 text-sm font-semibold text-white/58 transition peer-checked:border-volt/60 peer-checked:bg-volt/10 peer-checked:text-white hover:border-white/24">
-                                    Nagad
-                                </span>
-                            </label>
-                        </div>
-                        @error('payment_method')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
-                    </div>
-                    <label>
-                        <span class="{{ $labelClass }}">Transaction ID</span>
-                        <input name="trx_id" value="{{ old('trx_id') }}" class="{{ $inputClass }}" placeholder="TRX ID">
-                        @error('trx_id')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
-                    </label>
                 </div>
             </div>
 

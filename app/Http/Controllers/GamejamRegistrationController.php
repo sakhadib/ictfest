@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SendRegistrationConfirmationEmail;
 use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Http\RedirectResponse;
@@ -70,6 +71,8 @@ class GamejamRegistrationController extends Controller
 
             return $registration;
         });
+
+        SendRegistrationConfirmationEmail::queue($registration);
 
         return redirect()->route('gamejam.register.success', ['code' => $registration->registration_code]);
     }

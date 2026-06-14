@@ -12,7 +12,7 @@
                     colors: {
                         coal: '#101216',
                         paper: '#f6f4ef',
-                        mint: '#16c79a',
+                        primary: '#d4574e',
                         saffron: '#f4b23f',
                     },
                     boxShadow: {
@@ -35,7 +35,7 @@
             <div class="border-b border-white/10 px-5 py-5">
                 <div class="flex items-start justify-between gap-4">
                     <a href="{{ route('dashboard.users.index') }}" class="group flex items-center gap-3">
-                        <span class="grid h-11 w-11 place-items-center rounded-lg bg-mint text-sm font-bold text-coal shadow-lg shadow-mint/20">IF</span>
+                        <img src="{{ asset('assets/logo-white.png') }}" alt="12th IUT ICT FEST 2026" class="h-11 w-auto shrink-0">
                         <span>
                             <span class="block text-[11px] font-semibold uppercase tracking-[.22em] text-white/45">12th IUT</span>
                             <span class="mt-1 block text-lg font-semibold leading-none">ICT Fest</span>
@@ -56,6 +56,14 @@
                             <span>Users</span>
                             <span class="text-xs opacity-50">Manage</span>
                         </a>
+                        <a href="{{ route('dashboard.status.index') }}" class="flex items-center justify-between rounded-lg px-3 py-2.5 font-medium transition {{ request()->routeIs('dashboard.status.*') ? 'bg-white text-coal shadow-lg shadow-black/10' : 'text-white/68 hover:bg-white/10 hover:text-white' }}">
+                            <span>Status</span>
+                            <span class="text-xs opacity-50">Lookup</span>
+                        </a>
+                        <a href="{{ route('dashboard.reports.index') }}" class="flex items-center justify-between rounded-lg px-3 py-2.5 font-medium transition {{ request()->routeIs('dashboard.reports.*') ? 'bg-white text-coal shadow-lg shadow-black/10' : 'text-white/68 hover:bg-white/10 hover:text-white' }}">
+                            <span>Report</span>
+                            <span class="text-xs opacity-50">CSV</span>
+                        </a>
                     </div>
                 </div>
 
@@ -64,7 +72,7 @@
                     <div class="mt-2 space-y-1">
                         @foreach($dashboardEvents as $navEvent)
                             <a href="{{ route('dashboard.events.registrations.index', ['event' => $navEvent->code]) }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 font-medium transition {{ request()->routeIs('dashboard.events.*') && request()->route('event')?->is($navEvent) ? 'bg-white text-coal shadow-lg shadow-black/10' : 'text-white/68 hover:bg-white/10 hover:text-white' }}">
-                                <span class="grid h-7 w-7 shrink-0 place-items-center rounded-md {{ request()->routeIs('dashboard.events.*') && request()->route('event')?->is($navEvent) ? 'bg-mint text-coal' : 'bg-white/10 text-white/58' }} text-xs font-semibold">
+                                <span class="grid h-7 w-7 shrink-0 place-items-center rounded-md {{ request()->routeIs('dashboard.events.*') && request()->route('event')?->is($navEvent) ? 'bg-primary text-white' : 'bg-white/10 text-white/58' }} text-xs font-semibold">
                                     {{ $navEvent->code }}
                                 </span>
                                 <span class="min-w-0 truncate">{{ $navEvent->code === '01' ? 'IUPC' : $navEvent->name }}</span>

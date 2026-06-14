@@ -12,7 +12,7 @@
             <p class="mt-8 text-xs font-medium uppercase tracking-[.22em] text-white/38">Registration Submitted</p>
             <h1 class="mt-4 text-3xl font-semibold text-white sm:text-4xl">Keep this registration code.</h1>
             <p class="mx-auto mt-5 max-w-xl text-sm leading-7 text-white/56">
-                Your IUPC registration and payment information have been submitted for review.
+                Your IUPC registration has been submitted for review.
             </p>
 
             <div class="mx-auto mt-10 max-w-md rounded-lg border border-volt/25 bg-volt/10 p-6">
@@ -24,10 +24,6 @@
                 <div class="rounded-md border border-white/10 bg-black/15 p-4">
                     <p class="text-xs uppercase tracking-[.16em] text-white/32">Team</p>
                     <p class="mt-2 text-sm font-medium text-white">{{ $registration->team_name }}</p>
-                </div>
-                <div class="rounded-md border border-white/10 bg-black/15 p-4">
-                    <p class="text-xs uppercase tracking-[.16em] text-white/32">Payment</p>
-                    <p class="mt-2 text-sm font-medium text-white">{{ ucfirst($registration->payment?->method) }} / {{ $registration->payment?->trx_id }}</p>
                 </div>
                 <div class="rounded-md border border-white/10 bg-black/15 p-4">
                     <p class="text-xs uppercase tracking-[.16em] text-white/32">Status</p>

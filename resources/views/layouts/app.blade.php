@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#050816">
 
     <title>@yield('title', '12th IUT ICT FEST 2026')</title>
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo-white.png') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">

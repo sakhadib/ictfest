@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SendRegistrationConfirmationEmail;
 use App\Models\Event;
-use App\Models\Payment;
 use App\Models\Registration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use RuntimeException;
 
 class IupcRegistrationController extends Controller
 {
     private const EVENT_CODE = '01';
-    private const FEE = 5099;
-
     /**
      * Show the IUPC registration form.
      */
@@ -35,8 +32,6 @@ class IupcRegistrationController extends Controller
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
             'institution' => ['required', 'string', 'max:255'],
-            'payment_method' => ['required', Rule::in(['bkash', 'nagad'])],
-            'trx_id' => ['required', 'string', 'max:255'],
             'participants' => ['required', 'array', 'size:3'],
             'participants.*.full_name' => ['required', 'string', 'max:255'],
             'participants.*.email' => ['required', 'email', 'max:255'],
@@ -58,7 +53,7 @@ class IupcRegistrationController extends Controller
                 'contact_email' => $leader['email'],
                 'contact_phone' => $leader['phone'],
                 'status' => 'pending',
-                'payment_status' => 'submitted',
+                'payment_status' => 'unpaid',
             ]);
 
             foreach ($validated['participants'] as $index => $participant) {
@@ -72,17 +67,10 @@ class IupcRegistrationController extends Controller
                 ]);
             }
 
-            Payment::create([
-                'registration_id' => $registration->id,
-                'amount' => self::FEE,
-                'method' => $validated['payment_method'],
-                'trx_id' => $validated['trx_id'],
-                'status' => 'submitted',
-                'submitted_at' => now(),
-            ]);
-
             return $registration;
         });
+
+        SendRegistrationConfirmationEmail::queue($registration);
 
         return redirect()->route('iupc.register.success', ['code' => $registration->registration_code]);
     }
