@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Registration Status | 12th IUT ICT FEST 2026')
+@section('title', 'Registration Status | '.config('app.name'))
 
 @section('content')
 @php
@@ -106,6 +106,14 @@
                             <p class="mt-2 text-sm font-medium leading-6 text-white/72">{{ $registration->contact_name }}</p>
                             <p class="mt-1 text-sm text-white/48">{{ $registration->contact_email }} / {{ $registration->contact_phone }}</p>
                         </div>
+                        @if($registration->coach)
+                            <div>
+                                <p class="text-xs uppercase tracking-[.16em] text-white/32">Coach</p>
+                                <p class="mt-2 text-sm font-medium leading-6 text-white/72">{{ $registration->coach->name }}</p>
+                                <p class="mt-1 text-sm text-white/48">{{ $registration->coach->designation }}</p>
+                                <p class="mt-1 text-sm text-white/48">{{ $registration->coach->official_email }} / {{ $registration->coach->contact_number }}</p>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="mt-12">

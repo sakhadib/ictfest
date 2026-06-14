@@ -32,6 +32,10 @@ class IupcRegistrationController extends Controller
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
             'institution' => ['required', 'string', 'max:255'],
+            'coach.name' => ['required', 'string', 'max:255'],
+            'coach.designation' => ['required', 'string', 'max:255'],
+            'coach.official_email' => ['required', 'email', 'max:255'],
+            'coach.contact_number' => ['required', 'string', 'max:30'],
             'participants' => ['required', 'array', 'size:3'],
             'participants.*.full_name' => ['required', 'string', 'max:255'],
             'participants.*.email' => ['required', 'email', 'max:255'],
@@ -67,6 +71,8 @@ class IupcRegistrationController extends Controller
                 ]);
             }
 
+            $registration->coach()->create($validated['coach']);
+
             return $registration;
         });
 
@@ -84,7 +90,7 @@ class IupcRegistrationController extends Controller
 
         abort_unless($registration->event?->code === self::EVENT_CODE, 404);
 
-        $registration->load(['event', 'participants', 'payment']);
+        $registration->load(['event', 'participants', 'payment', 'coach']);
 
         return view('registrations.iupc-success', compact('registration'));
     }

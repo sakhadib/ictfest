@@ -18,7 +18,7 @@ class RegistrationStatusController extends Controller
         $searched = $code !== '';
 
         if ($searched) {
-            $registration = Registration::with(['event', 'participants', 'payment'])
+            $registration = Registration::with(['event', 'participants', 'payment', 'coach'])
                 ->where('registration_code', $code)
                 ->first();
         }

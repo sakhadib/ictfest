@@ -44,4 +44,12 @@ class Registration extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    /**
+     * Get the coach information for this registration.
+     */
+    public function coach(): HasOne
+    {
+        return $this->hasOne(RegistrationCoach::class);
+    }
 }

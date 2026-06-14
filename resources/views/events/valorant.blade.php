@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Valorant | 12th IUT ICT FEST 2026')
+@section('title', 'Valorant | '.config('app.name'))
 
 @section('content')
 @php
@@ -23,7 +23,7 @@
             ],
         ],
         [
-            'date' => '4-24 July',
+            'date' => '4-21 July',
             'label' => 'Online Match Window',
             'accent' => 'volt',
             'icon' => 'fa-crosshairs',
@@ -45,9 +45,8 @@
     ];
 
     $teamRules = [
-        'Any undergraduate university student can register and form a team.',
-        'Cross-university teams are not allowed.',
-        'All members in the team should be from the same university.',
+        'Any undergraduate university or college student can register and form a team.',
+        'Cross-institution teams are allowed.',
         'Each team must have at least 5 players and no more than 7 players including substitutes.',
         'A team may have a coach, but it is not mandatory.',
         'A player can play for only one team.',
@@ -73,17 +72,23 @@
 
 <section class="px-4 pb-20 pt-36 sm:px-6 lg:px-8 lg:pb-24">
     <div class="mx-auto max-w-6xl">
-        <div class="max-w-4xl">
-            <div class="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45">
-                <span class="h-px w-10 bg-iris/70"></span>
-                Valorant
+        <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,.65fr)]">
+            <div class="order-2 max-w-4xl lg:order-1">
+                <div class="hidden items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45 sm:inline-flex">
+                    <span class="h-px w-10 bg-iris/70"></span>
+                    Valorant
+                </div>
+                <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
+                    Online brackets into a LAN grand finale.
+                </h1>
+                <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
+                    A 32-team Valorant tournament moving through online knockout and double elimination rounds before the onsite LAN final.
+                </p>
             </div>
-            <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                Online brackets into a LAN grand finale.
-            </h1>
-            <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                A 32-team Valorant tournament moving through online knockout and double elimination rounds before the onsite LAN final.
-            </p>
+
+            <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
+                <img src="{{ asset('assets/logos/valorant.png') }}" alt="Valorant" class="w-full max-w-sm object-contain">
+            </div>
         </div>
     </div>
 </section>

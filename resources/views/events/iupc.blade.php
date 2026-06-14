@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'IUPC | 12th IUT ICT FEST 2026')
+@section('title', 'IUPC | '.config('app.name'))
 
 @section('content')
 @php
@@ -45,17 +45,23 @@
 
 <section class="px-4 pb-20 pt-36 sm:px-6 lg:px-8 lg:pb-24">
     <div class="mx-auto max-w-6xl">
-        <div class="max-w-4xl">
-            <div class="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45">
-                <span class="h-px w-10 bg-volt/70"></span>
-                Programming Contest
+        <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,.65fr)]">
+            <div class="order-2 max-w-4xl lg:order-1">
+                <div class="hidden items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45 sm:inline-flex">
+                    <span class="h-px w-10 bg-volt/70"></span>
+                    Programming Contest
+                </div>
+                <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
+                    Inter University Programming Contest
+                </h1>
+                <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
+                    A three-member team contest with a dedicated mock round, a five-hour main round, and onsite lab execution at {{ config('app.name') }}.
+                </p>
             </div>
-            <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                Inter University Programming Contest
-            </h1>
-            <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                A three-member team contest with a dedicated mock round, a five-hour main round, and onsite lab execution at 12th IUT ICT FEST 2026.
-            </p>
+
+            <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
+                <img src="{{ asset('assets/logos/iupc.png') }}" alt="Inter University Programming Contest" class="w-full max-w-sm object-contain">
+            </div>
         </div>
     </div>
 </section>

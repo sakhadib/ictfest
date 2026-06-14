@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#050816">
 
-    <title>@yield('title', '12th IUT ICT FEST 2026')</title>
+    <title>@yield('title', config('app.name'))</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/logo-white.png') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,8 +41,8 @@
         <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur-xl">
             <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
                 <a href="{{ url('/') }}" class="flex items-center gap-3">
-                    <img src="{{ asset('assets/logo-white.png') }}" alt="12th IUT ICT FEST 2026" class="h-10 w-auto">
-                    <span class="hidden text-sm font-semibold uppercase tracking-[.24em] text-white/80 sm:block">12th IUT ICT FEST 2026</span>
+                    <img src="{{ asset('assets/logo-white.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto">
+                    <span class="hidden text-sm font-semibold uppercase tracking-[.24em] text-white/80 sm:block">{{ config('app.name') }}</span>
                 </a>
 
                 <div class="flex items-center gap-1 rounded-full border border-white/10 bg-white/[.04] p-1 text-sm text-white/72">
@@ -62,9 +62,9 @@
         <footer id="contact" class="border-t border-white/10 bg-black/20">
             <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.15fr_.85fr_.85fr] lg:px-8">
                 <div>
-                    <img src="{{ asset('assets/logo-white.png') }}" alt="12th IUT ICT FEST 2026" class="h-12 w-auto">
+                    <img src="{{ asset('assets/logo-white.png') }}" alt="{{ config('app.name') }}" class="h-12 w-auto">
                     <p class="mt-5 max-w-md text-sm leading-6 text-white/64">
-                        12th IUT ICT FEST 2026 brings university teams together for programming, open API builds, data science, game creation, and esports on the IUT campus.
+                        {{ config('app.name') }} brings university teams together for programming, open API builds, data science, game creation, and esports on the IUT campus.
                     </p>
                     <div class="mt-6 flex gap-3">
                         <a href="#" aria-label="Facebook" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[.04] text-white/72 transition hover:border-volt/60 hover:text-volt"><i class="fa-brands fa-facebook-f"></i></a>
@@ -97,7 +97,7 @@
             </div>
 
             <div class="border-t border-white/10 px-4 py-5 text-center text-xs text-white/42">
-                <span>&copy; {{ date('Y') }} 12th IUT ICT FEST 2026. Organized for the CSE community.</span>
+                <span>&copy; {{ date('Y') }} {{ config('app.name') }}. Organized for the CSE community.</span>
             </div>
         </footer>
     </div>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'FIFA Registration | 12th IUT ICT FEST 2026')
+@section('title', 'FIFA Registration | '.config('app.name'))
 
 @section('content')
 @php
@@ -43,13 +43,6 @@
                     <div>
                         <p class="text-xs uppercase tracking-[.16em] text-white/32">Fee</p>
                         <p class="mt-1 text-sm font-medium text-white">200 BDT</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="grid h-10 w-10 place-items-center rounded-md bg-ember/10 text-ember"><i class="fa-solid fa-hashtag"></i></div>
-                    <div>
-                        <p class="text-xs uppercase tracking-[.16em] text-white/32">Code Format</p>
-                        <p class="mt-1 text-sm font-medium text-white">05-48372</p>
                     </div>
                 </div>
             </div>

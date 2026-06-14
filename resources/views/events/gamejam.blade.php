@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Gamejam | 12th IUT ICT FEST 2026')
+@section('title', 'Gamejam | '.config('app.name'))
 
 @section('content')
 @php
@@ -13,7 +13,7 @@
 
     $timeline = [
         [
-            'date' => '18 June - 10 July',
+            'date' => '18 June - 17 July',
             'label' => 'Registration',
             'accent' => 'volt',
             'icon' => 'fa-pen-to-square',
@@ -23,13 +23,23 @@
             ],
         ],
         [
-            'date' => '14-19 July',
+            'date' => '13-19 July',
             'label' => 'Online Round',
             'accent' => 'iris',
             'icon' => 'fa-gamepad',
             'items' => [
-                ['value' => '6 Days', 'label' => 'Build Window', 'icon' => 'fa-hourglass-half'],
+                ['value' => '7 Days', 'label' => 'Build Window', 'icon' => 'fa-hourglass-half'],
                 ['value' => 'Online', 'label' => 'Preliminary Round', 'icon' => 'fa-wifi'],
+            ],
+        ],
+        [
+            'date' => '20-21 July',
+            'label' => 'Pitch Submission',
+            'accent' => 'volt',
+            'icon' => 'fa-circle-play',
+            'items' => [
+                ['value' => 'YouTube', 'label' => 'Video Submission', 'icon' => 'fa-circle-play'],
+                ['value' => 'Duration', 'label' => 'Under 5 Min', 'icon' => 'fa-clock'],
             ],
         ],
         [
@@ -73,17 +83,23 @@
 
 <section class="px-4 pb-20 pt-36 sm:px-6 lg:px-8 lg:pb-24">
     <div class="mx-auto max-w-6xl">
-        <div class="max-w-4xl">
-            <div class="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45">
-                <span class="h-px w-10 bg-volt/70"></span>
-                Gamejam
+        <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,.65fr)]">
+            <div class="order-2 max-w-4xl lg:order-1">
+                <div class="hidden items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45 sm:inline-flex">
+                    <span class="h-px w-10 bg-volt/70"></span>
+                    Gamejam
+                </div>
+                <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
+                    Build a game, then bring it to the floor.
+                </h1>
+                <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
+                    A game development challenge with an online creation round, a finalist selection, and an onsite showcase for the selected teams.
+                </p>
             </div>
-            <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                Build a game, then bring it to the floor.
-            </h1>
-            <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                A game development challenge with an online creation round, a finalist selection, and an onsite showcase for the selected teams.
-            </p>
+
+            <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
+                <img src="{{ asset('assets/logos/gamejam.png') }}" alt="Gamejam" class="w-full max-w-sm object-contain">
+            </div>
         </div>
     </div>
 </section>

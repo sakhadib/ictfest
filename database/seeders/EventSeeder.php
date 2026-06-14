@@ -14,7 +14,7 @@ class EventSeeder extends Seeder
     {
         $events = [
             ['code' => '01', 'name' => 'Inter University Programming Contest (IUPC)', 'min_team_size' => 3, 'max_team_size' => 3],
-            ['code' => '02', 'name' => 'Open API Hackathon', 'min_team_size' => 2, 'max_team_size' => 3],
+            ['code' => '02', 'name' => 'Agentic AI Hackathon', 'min_team_size' => 1, 'max_team_size' => 3],
             ['code' => '03', 'name' => 'Datathon', 'min_team_size' => 1, 'max_team_size' => 4],
             ['code' => '04', 'name' => 'Gamejam', 'min_team_size' => 1, 'max_team_size' => 3],
             ['code' => '05', 'name' => 'FIFA', 'min_team_size' => 1, 'max_team_size' => 1],

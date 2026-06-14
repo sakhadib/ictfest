@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'IUPC Registration | 12th IUT ICT FEST 2026')
+@section('title', 'IUPC Registration | '.config('app.name'))
 
 @section('content')
 @php
@@ -38,13 +38,6 @@
                         <p class="mt-1 text-sm font-medium text-white">3 members</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="grid h-10 w-10 place-items-center rounded-md bg-volt/10 text-volt"><i class="fa-solid fa-hashtag"></i></div>
-                    <div>
-                        <p class="text-xs uppercase tracking-[.16em] text-white/32">Code Format</p>
-                        <p class="mt-1 text-sm font-medium text-white">01-48372</p>
-                    </div>
-                </div>
             </div>
         </aside>
 
@@ -69,6 +62,32 @@
                         <span class="{{ $labelClass }}">Institution</span>
                         <input id="teamInstitution" name="institution" value="{{ old('institution') }}" class="{{ $inputClass }}" placeholder="Institution name">
                         @error('institution')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                    </label>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Coach</p>
+                <div class="mt-6 grid gap-5 sm:grid-cols-2">
+                    <label>
+                        <span class="{{ $labelClass }}">Coach Name</span>
+                        <input name="coach[name]" value="{{ old('coach.name') }}" class="{{ $inputClass }}" placeholder="Coach full name">
+                        @error('coach.name')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                    </label>
+                    <label>
+                        <span class="{{ $labelClass }}">Designation</span>
+                        <input name="coach[designation]" value="{{ old('coach.designation') }}" class="{{ $inputClass }}" placeholder="Assistant Professor">
+                        @error('coach.designation')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                    </label>
+                    <label>
+                        <span class="{{ $labelClass }}">Official Email</span>
+                        <input type="email" name="coach[official_email]" value="{{ old('coach.official_email') }}" class="{{ $inputClass }}" placeholder="coach@university.edu">
+                        @error('coach.official_email')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                    </label>
+                    <label>
+                        <span class="{{ $labelClass }}">Contact Number</span>
+                        <input name="coach[contact_number]" value="{{ old('coach.contact_number') }}" class="{{ $inputClass }}" placeholder="Contact number">
+                        @error('coach.contact_number')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                     </label>
                 </div>
             </div>

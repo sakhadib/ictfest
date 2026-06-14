@@ -21,10 +21,10 @@
 **Venue:** On-campus Event: AB2 CSE Labs 1-6, ICT Center Labs  
 **Rulebook: \[Insert link here\]**
 
-**Event Name: Open API Hackathon**  
+**Event Name: Agentic AI Hackathon**  
 **Registration Fees:** No fees for preliminary round, 1500 BDT for Final Round  
 **Registration Window:** 18 June \- 3 July  
-**Team Size:** 2-3 members  
+**Team Size:** 1-3 members  
 **Event Timeline**: 18 June \- 25 July 
 
 * **First Stage Registration**: 18 June \- 3 July  

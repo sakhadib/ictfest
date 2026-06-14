@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Dashboard') | 12th IUT ICT FEST 2026</title>
+    <title>@yield('title', 'Dashboard') | {{ config('app.name') }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -35,7 +35,7 @@
             <div class="border-b border-white/10 px-5 py-5">
                 <div class="flex items-start justify-between gap-4">
                     <a href="{{ route('dashboard.users.index') }}" class="group flex items-center gap-3">
-                        <img src="{{ asset('assets/logo-white.png') }}" alt="12th IUT ICT FEST 2026" class="h-11 w-auto shrink-0">
+                        <img src="{{ asset('assets/logo-white.png') }}" alt="{{ config('app.name') }}" class="h-11 w-auto shrink-0">
                         <span>
                             <span class="block text-[11px] font-semibold uppercase tracking-[.22em] text-white/45">12th IUT</span>
                             <span class="mt-1 block text-lg font-semibold leading-none">ICT Fest</span>

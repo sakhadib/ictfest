@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Datathon | 12th IUT ICT FEST 2026')
+@section('title', 'Datathon | '.config('app.name'))
 
 @section('content')
 @php
@@ -22,6 +22,7 @@
                 ['value' => '30 June', 'label' => 'First Deadline', 'icon' => 'fa-lock'],
             ],
         ],
+        /*
         [
             'date' => '1-13 July',
             'label' => 'Extended Registration',
@@ -32,14 +33,15 @@
                 ['value' => '13 July', 'label' => 'Final Deadline', 'icon' => 'fa-hourglass-end'],
             ],
         ],
+        */
         [
             'date' => '1-20 July',
             'label' => 'First Round',
             'accent' => 'ember',
             'icon' => 'fa-chart-line',
             'items' => [
-                ['value' => '20 Days', 'label' => 'Analysis Window', 'icon' => 'fa-chart-simple'],
-                ['value' => '22 July', 'label' => 'Paper & Code Deadline', 'icon' => 'fa-file-arrow-up'],
+                ['value' => '20 Days', 'label' => 'Preliminary', 'icon' => 'fa-chart-simple'],
+                ['value' => '21 July', 'label' => 'Paper & Code Submission', 'icon' => 'fa-file-arrow-up'],
             ],
         ],
         [
@@ -73,17 +75,23 @@
 
 <section class="px-4 pb-20 pt-36 sm:px-6 lg:px-8 lg:pb-24">
     <div class="mx-auto max-w-6xl">
-        <div class="max-w-4xl">
-            <div class="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45">
-                <span class="h-px w-10 bg-iris/70"></span>
-                Datathon
+        <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,.65fr)]">
+            <div class="order-2 max-w-4xl lg:order-1">
+                <div class="hidden items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45 sm:inline-flex">
+                    <span class="h-px w-10 bg-iris/70"></span>
+                    Datathon
+                </div>
+                <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
+                    Turn data into a defensible story.
+                </h1>
+                <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
+                    A university-level data competition where teams move from analysis and modeling to paper, codebase, report, slides, and an onsite final.
+                </p>
             </div>
-            <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                Turn data into a defensible story.
-            </h1>
-            <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                A university-level data competition where teams move from analysis and modeling to paper, codebase, report, slides, and an onsite final.
-            </p>
+
+            <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
+                <img src="{{ asset('assets/logos/datathon.png') }}" alt="Datathon" class="w-full max-w-sm object-contain">
+            </div>
         </div>
     </div>
 </section>

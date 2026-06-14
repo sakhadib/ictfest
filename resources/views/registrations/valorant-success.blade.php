@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Valorant Registration Submitted | 12th IUT ICT FEST 2026')
+@section('title', 'Valorant Registration Submitted | '.config('app.name'))
 
 @section('content')
 <section class="px-4 pb-32 pt-36 sm:px-6 lg:px-8">

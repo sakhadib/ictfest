@@ -1,0 +1,22 @@
+cd /var/www/ictfest
+
+git pull
+
+composer install --no-dev --optimize-autoloader
+
+php artisan migrate --force
+
+php artisan optimize
+
+systemctl restart ictfest-queue
+
+
+
+
+
+
+
+================
+
+
+codex resume 019ec450-ae05-7e32-816c-e93512fe1eb1

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Gamejam Registration | 12th IUT ICT FEST 2026')
+@section('title', 'Gamejam Registration | '.config('app.name'))
 
 @section('content')
 @php
@@ -45,13 +45,6 @@
                     <div>
                         <p class="text-xs uppercase tracking-[.16em] text-white/32">Preliminary Fee</p>
                         <p class="mt-1 text-sm font-medium text-white">No fees</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="grid h-10 w-10 place-items-center rounded-md bg-volt/10 text-volt"><i class="fa-solid fa-hashtag"></i></div>
-                    <div>
-                        <p class="text-xs uppercase tracking-[.16em] text-white/32">Code Format</p>
-                        <p class="mt-1 text-sm font-medium text-white">04-48372</p>
                     </div>
                 </div>
             </div>

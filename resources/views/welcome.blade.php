@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '12th IUT ICT FEST 2026')
+@section('title', config('app.name'))
 
 @section('content')
 @php
@@ -8,6 +8,7 @@
         [
             'name' => 'Programming Contest',
             'short' => 'IUPC',
+            'logo' => 'iupc.png',
             'icon' => 'fa-code',
             'accent' => 'volt',
             'fee' => '5099 BDT per team',
@@ -20,22 +21,24 @@
             'register_url' => '/iupc/register',
         ],
         [
-            'name' => 'Open API Hackathon',
+            'name' => 'Agentic AI Hackathon',
             'short' => 'Hackathon',
+            'logo' => 'hackathon.png',
             'icon' => 'fa-plug-circle-bolt',
             'accent' => 'ember',
             'fee' => 'Free preliminary, 1500 BDT final',
-            'team' => '2-3 members',
+            'team' => '1-3 members',
             'window' => '18 June - 3 July',
             'date' => 'Online: 10 July, Final: 24-25 July',
             'venue' => 'AB2 301, 302 & Auditorium',
-            'signal' => 'Fresh repo at 09:00 PM on Day 1, 48-hour online round, then onsite final build.',
+            'signal' => 'Problem release at 6:00 PM on Day 1, 4-hour online round, then onsite final build.',
             'url' => '/hackathon',
             'register_url' => '/hackathon/register',
         ],
         [
             'name' => 'Datathon',
             'short' => 'Datathon',
+            'logo' => 'datathon.png',
             'icon' => 'fa-chart-line',
             'accent' => 'iris',
             'fee' => '800 BDT per team',
@@ -50,6 +53,7 @@
         [
             'name' => 'Gamejam',
             'short' => 'Gamejam',
+            'logo' => 'gamejam.png',
             'icon' => 'fa-gamepad',
             'accent' => 'volt',
             'fee' => 'Free preliminary, 700 BDT final',
@@ -64,6 +68,7 @@
         [
             'name' => 'FIFA',
             'short' => 'EA FC 26',
+            'logo' => 'fifa.png',
             'icon' => 'fa-futbol',
             'accent' => 'ember',
             'fee' => '200 BDT',
@@ -78,6 +83,7 @@
         [
             'name' => 'Valorant',
             'short' => 'Valorant',
+            'logo' => 'valorant.png',
             'icon' => 'fa-crosshairs',
             'accent' => 'iris',
             'fee' => '600 BDT per team',
@@ -118,34 +124,50 @@
 
 <section id="home" class="relative z-10 px-4 pb-28 pt-36 sm:px-6 lg:px-8 lg:pb-36">
     <div class="mx-auto max-w-6xl">
-        <div class="max-w-3xl">
-            <div class="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45">
-                <span class="h-px w-10 bg-volt/70"></span>
-                12th IUT ICT FEST 2026
-            </div>
-            <h1 class="mt-8 max-w-4xl text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                A quieter stage for sharp minds and competitive craft.
-            </h1>
-            <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                Six events across code, data, game development, and esports. Built around the IUT campus, online qualifiers, and a focused July finale.
-            </p>
+        <div class="grid items-center gap-16 lg:grid-cols-[1.05fr_.95fr]">
+            <div class="order-2 max-w-3xl lg:order-1">
+                <div class="hidden items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45 sm:inline-flex">
+                    <span class="h-px w-10 bg-volt/70"></span>
+                    {{ config('app.name') }}
+                </div>
+                <h1 class="mt-8 max-w-4xl text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
+                    A quieter stage for sharp minds and competitive craft.
+                </h1>
+                <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
+                    Six events across code, data, game development, and esports. Built around the IUT campus, online qualifiers, and a focused July finale.
+                </p>
 
-            <div class="mt-12 flex flex-wrap gap-4">
-                <a href="#events" class="inline-flex items-center gap-3 bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-volt">
-                    Explore events
-                </a>
+                <div class="mt-12 flex flex-wrap gap-4">
+                    <a href="#events" class="inline-flex items-center gap-3 bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-volt">
+                        Explore events
+                    </a>
+                </div>
+            </div>
+
+            <div class="order-1 relative flex justify-center lg:order-2 lg:justify-end">
+                <div class="relative w-full max-w-xl rounded-[2rem] px-10 py-12">
+                    <img src="{{ asset('assets/logo-white.png') }}" alt="{{ config('app.name') }}" class="mx-auto w-full max-w-md drop-shadow-[0_24px_80px_rgba(255,255,255,.10)]">
+                    <!-- <p class="mt-8 text-center text-xs font-medium uppercase tracking-[.22em] text-white/42">{{ config('app.name') }}</p> -->
+                </div>
             </div>
         </div>
 
-        <div class="mt-28 hidden gap-4 lg:grid lg:grid-cols-6">
-            @foreach($events as $event)
-                <a href="#events" class="group border-t border-white/12 pt-5 transition hover:border-white/38 lg:col-span-1">
-                    <div class="{{ $accentClasses[$event['accent']] }} grid h-10 w-10 place-items-center text-base">
-                        <i class="fa-solid {{ $event['icon'] }}"></i>
-                    </div>
-                    <p class="mt-6 text-sm font-medium text-white">{{ $event['short'] }}</p>
-                    <p class="mt-2 text-xs leading-5 text-white/42">{{ $event['window'] }}</p>
-                </a>
+        <div class="mt-24 grid grid-cols-2 gap-6 py-8 sm:grid-cols-3 lg:grid-cols-6 lg:gap-8">
+            @foreach([
+                ['file' => 'iupc.png', 'alt' => 'IUPC'],
+                ['file' => 'hackathon.png', 'alt' => 'Agentic AI Hackathon'],
+                ['file' => 'datathon.png', 'alt' => 'Datathon'],
+                ['file' => 'gamejam.png', 'alt' => 'Game Jam'],
+                ['file' => 'fifa.png', 'alt' => 'FIFA'],
+                ['file' => 'valorant.png', 'alt' => 'Valorant'],
+            ] as $logo)
+                <div class="flex items-center justify-center px-3 py-4">
+                    <img
+                        src="{{ asset('assets/logos/' . $logo['file']) }}"
+                        alt="{{ $logo['alt'] }}"
+                        class="h-12 w-full max-w-[8.5rem] object-contain sm:h-14 lg:h-16"
+                    >
+                </div>
             @endforeach
         </div>
     </div>
@@ -162,11 +184,10 @@
             @foreach($events as $event)
                 <article class="group flex h-full min-h-[29rem] flex-col rounded-lg border border-white/10 bg-white/[.035] p-5 transition duration-300 hover:-translate-y-1 hover:border-white/24 hover:bg-white/[.055]">
                     <div class="flex items-start gap-4">
-                        <div class="{{ $accentClasses[$event['accent']] }} grid h-12 w-12 shrink-0 place-items-center rounded-md text-lg">
-                            <i class="fa-solid {{ $event['icon'] }}"></i>
+                        <div class="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-white/[.06] p-1">
+                            <img src="{{ asset('assets/logos/' . $event['logo']) }}" alt="{{ $event['name'] }}" class="h-full w-full object-contain">
                         </div>
                         <div>
-                            <p class="text-xs uppercase tracking-[.18em] text-white/35">{{ $event['short'] }}</p>
                             <h3 class="mt-2 text-xl font-semibold leading-tight text-white">{{ $event['name'] }}</h3>
                         </div>
                     </div>
@@ -278,7 +299,7 @@
         <p class="text-xs font-medium uppercase tracking-[.22em] text-volt/80">Join the festival</p>
         <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">Are you ready to participate ?</h2>
         <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/56">
-            Choose your event, form your team, and get ready for the July rounds at 12th IUT ICT FEST 2026.
+            Choose your event, form your team, and get ready for the July rounds at {{ config('app.name') }}.
         </p>
 
         <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">

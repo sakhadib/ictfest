@@ -20,6 +20,10 @@ class ReportController extends Controller
         'contact_name',
         'contact_email',
         'contact_phone',
+        'coach_name',
+        'coach_designation',
+        'coach_official_email',
+        'coach_contact_number',
         'registration_status',
         'payment_status',
         'payment_method',
@@ -86,6 +90,10 @@ class ReportController extends Controller
             'contact_name' => 'Team Lead Name',
             'contact_email' => 'Team Lead Email',
             'contact_phone' => 'Team Lead Phone',
+            'coach_name' => 'Coach Name',
+            'coach_designation' => 'Coach Designation',
+            'coach_official_email' => 'Coach Official Email',
+            'coach_contact_number' => 'Coach Contact Number',
             'registration_status' => 'Registration Status',
             'payment_status' => 'Payment Status',
             'payment_method' => 'Payment Method',
@@ -154,7 +162,7 @@ class ReportController extends Controller
     private function reportQuery(array $filters): Builder
     {
         $query = Registration::query()
-            ->with(['event', 'payment', 'participants' => fn ($query) => $query->orderByDesc('is_leader')->orderBy('id')])
+            ->with(['event', 'payment', 'coach', 'participants' => fn ($query) => $query->orderByDesc('is_leader')->orderBy('id')])
             ->withCount('participants');
 
         $query
@@ -172,6 +180,10 @@ class ReportController extends Controller
                     ->orWhere('team_name', 'like', "%{$search}%")
                     ->orWhere('contact_email', 'like', "%{$search}%")
                     ->orWhere('contact_phone', 'like', "%{$search}%")
+                    ->orWhereHas('coach', fn (Builder $query) => $query
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('official_email', 'like', "%{$search}%")
+                        ->orWhere('contact_number', 'like', "%{$search}%"))
                     ->orWhereHas('payment', fn (Builder $query) => $query->where('trx_id', 'like', "%{$search}%"));
             });
         }
@@ -244,6 +256,10 @@ class ReportController extends Controller
             'contact_name' => $registration->contact_name,
             'contact_email' => $registration->contact_email,
             'contact_phone' => $registration->contact_phone,
+            'coach_name' => $registration->coach?->name,
+            'coach_designation' => $registration->coach?->designation,
+            'coach_official_email' => $registration->coach?->official_email,
+            'coach_contact_number' => $registration->coach?->contact_number,
             'registration_status' => $registration->status,
             'payment_status' => $registration->payment_status,
             'payment_method' => $registration->payment?->method,

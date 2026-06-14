@@ -12,7 +12,7 @@
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;overflow:hidden;border-radius:18px;background:#ffffff;border:1px solid rgba(16,18,22,.08);">
                     <tr>
                         <td style="background:#101216;padding:26px 28px;">
-                            <img src="https://sakhadib.wordpress.com/wp-content/uploads/2026/06/logo-white.png" alt="12th IUT ICT FEST 2026" style="height:44px;width:auto;display:block;">
+                            <img src="https://sakhadib.wordpress.com/wp-content/uploads/2026/06/logo-white.png" alt="{{ config('app.name') }}" style="height:44px;width:auto;display:block;">
                             <p style="margin:18px 0 0;color:rgba(255,255,255,.56);font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;">Registration received</p>
                             <h1 style="margin:8px 0 0;color:#ffffff;font-size:28px;line-height:1.18;font-weight:700;">{{ $registration->event?->name }}</h1>
                         </td>
@@ -71,7 +71,7 @@
 
                     <tr>
                         <td style="background:#101216;padding:18px 28px;color:rgba(255,255,255,.56);font-size:12px;line-height:1.6;">
-                            12th IUT ICT FEST 2026<br>
+                            {{ config('app.name') }}<br>
                             This is an automated confirmation email.
                         </td>
                     </tr>

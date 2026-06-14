@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Open API Hackathon | 12th IUT ICT FEST 2026')
+@section('title', 'Agentic AI Hackathon | '.config('app.name'))
 
 @section('content')
 @php
     $facts = [
         ['label' => 'Preliminary Fee', 'value' => 'No fees', 'icon' => 'fa-ticket'],
         ['label' => 'Final Round Fee', 'value' => '1500 BDT per team', 'icon' => 'fa-receipt'],
-        ['label' => 'Team Size', 'value' => '2-3 members', 'icon' => 'fa-users'],
+        ['label' => 'Team Size', 'value' => '1-3 members', 'icon' => 'fa-users'],
         ['label' => 'Location', 'value' => 'AB2 301, 302 & Auditorium', 'icon' => 'fa-location-dot'],
     ];
 
@@ -24,12 +24,12 @@
         ],
         [
             'date' => '10 July',
-            'label' => 'Online Round',
+            'label' => 'Preliminary Round',
             'accent' => 'volt',
             'icon' => 'fa-laptop-code',
             'items' => [
-                ['value' => '48h', 'label' => 'Build Window', 'icon' => 'fa-hourglass-half'],
-                ['value' => '09:00 PM', 'label' => 'Fresh Repo Time', 'icon' => 'fa-code-branch'],
+                ['value' => '4h', 'label' => 'Build Window', 'icon' => 'fa-hourglass-half'],
+                ['value' => '6:00 PM', 'label' => 'Problem Release', 'icon' => 'fa-code-branch'],
             ],
         ],
         [
@@ -43,19 +43,19 @@
             ],
         ],
         [
-            'date' => '24-25 July',
+            'date' => '24 July',
             'label' => 'Onsite Final Round',
             'accent' => 'ember',
             'icon' => 'fa-flag-checkered',
             'items' => [
-                ['value' => 'IUT', 'label' => 'Campus Final', 'icon' => 'fa-building-columns'],
+                ['value' => 'IUT', 'label' => 'Final Round', 'icon' => 'fa-building-columns'],
                 ['value' => 'AB2', 'label' => '301, 302 & Auditorium', 'icon' => 'fa-location-dot'],
             ],
         ],
     ];
 
     $requirements = [
-        ['title' => 'Fresh Repository', 'text' => 'A fresh GitHub repository must be created at 09:00 PM on Day 1.', 'icon' => 'fa-code-branch'],
+        ['title' => 'Fresh Repository', 'text' => 'A fresh GitHub repository must be created after the problem is released.', 'icon' => 'fa-code-branch'],
         ['title' => 'No Pre-coded Modules', 'text' => 'Teams cannot use pre-coded modules for the competition build.', 'icon' => 'fa-ban'],
         ['title' => 'Bring Your Setup', 'text' => 'Teams must bring laptops, multiplugs, chargers, and any specialized hardware.', 'icon' => 'fa-plug'],
     ];
@@ -63,17 +63,23 @@
 
 <section class="px-4 pb-20 pt-36 sm:px-6 lg:px-8 lg:pb-24">
     <div class="mx-auto max-w-6xl">
-        <div class="max-w-4xl">
-            <div class="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45">
-                <span class="h-px w-10 bg-ember/70"></span>
-                Open API Hackathon
+        <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,.65fr)]">
+            <div class="order-2 max-w-4xl lg:order-1">
+                <div class="hidden items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45 sm:inline-flex">
+                    <span class="h-px w-10 bg-ember/70"></span>
+                    Agentic AI Hackathon
+                </div>
+                <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
+                    Build an agent that solves a real problem under pressure.
+                </h1>
+                <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
+                    A two-stage hackathon beginning online with a 4-hour build round, then moving selected teams into an onsite final at {{ config('app.name') }}.
+                </p>
             </div>
-            <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                Build with APIs under a real clock.
-            </h1>
-            <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                A two-stage hackathon beginning online with a 48-hour build round, then moving selected teams into an onsite final at 12th IUT ICT FEST 2026.
-            </p>
+
+            <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
+                <img src="{{ asset('assets/logos/hackathon.png') }}" alt="Agentic AI Hackathon" class="w-full max-w-sm object-contain">
+            </div>
         </div>
     </div>
 </section>
@@ -143,8 +149,8 @@
 <section class="px-4 py-20 sm:px-6 lg:px-8">
     <div class="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[.9fr_1.1fr]">
         <div>
-            <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Build Policy</p>
-            <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">What teams must prepare.</h2>
+                <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Build Policy</p>
+                <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">What teams must prepare for the agent.</h2>
         </div>
 
         <div class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-7">
@@ -168,9 +174,9 @@
 <section class="px-4 pb-32 pt-16 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-6xl rounded-lg border border-white/10 bg-white/[.035] px-6 py-14 text-center sm:px-10">
         <p class="text-xs font-medium uppercase tracking-[.22em] text-ember/80">Hackathon Registration</p>
-        <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">Ready to build for the final?</h2>
+        <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">Ready to build an agentic solution?</h2>
         <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/56">
-            Prepare your team, hardware, and repository workflow before the online round begins.
+            Prepare your team, repo workflow, and API strategy before the problem release begins.
         </p>
         <div class="mt-10 flex justify-center">
             <a href="{{ route('hackathon.register') }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-ember">

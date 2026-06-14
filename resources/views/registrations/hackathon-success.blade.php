@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Hackathon Registration Submitted | 12th IUT ICT FEST 2026')
+@section('title', 'Hackathon Registration Submitted | '.config('app.name'))
 
 @section('content')
 <section class="px-4 pb-32 pt-36 sm:px-6 lg:px-8">
@@ -12,7 +12,7 @@
             <p class="mt-8 text-xs font-medium uppercase tracking-[.22em] text-white/38">Registration Submitted</p>
             <h1 class="mt-4 text-3xl font-semibold text-white sm:text-4xl">Keep this registration code.</h1>
             <p class="mx-auto mt-5 max-w-xl text-sm leading-7 text-white/56">
-                Your Open API Hackathon registration has been submitted for review.
+                Your Agentic AI Hackathon registration has been submitted for review.
             </p>
 
             <div class="mx-auto mt-10 max-w-md rounded-lg border border-ember/25 bg-ember/10 p-6">

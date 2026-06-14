@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Datathon Registration | 12th IUT ICT FEST 2026')
+@section('title', 'Datathon Registration | '.config('app.name'))
 
 @section('content')
 @php
@@ -45,13 +45,6 @@
                     <div>
                         <p class="text-xs uppercase tracking-[.16em] text-white/32">Fee</p>
                         <p class="mt-1 text-sm font-medium text-white">800 BDT</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="grid h-10 w-10 place-items-center rounded-md bg-iris/10 text-iris"><i class="fa-solid fa-hashtag"></i></div>
-                    <div>
-                        <p class="text-xs uppercase tracking-[.16em] text-white/32">Code Format</p>
-                        <p class="mt-1 text-sm font-medium text-white">03-48372</p>
                     </div>
                 </div>
             </div>

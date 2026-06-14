@@ -33,7 +33,7 @@ class HackathonRegistrationController extends Controller
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
             'institution' => ['required', 'string', 'max:255'],
-            'participants' => ['required', 'array', 'min:2', 'max:3'],
+            'participants' => ['required', 'array', 'min:1', 'max:3'],
             'participants.*.full_name' => ['required', 'string', 'max:255'],
             'participants.*.email' => ['required', 'email', 'max:255'],
             'participants.*.phone' => ['required', 'string', 'max:30'],
@@ -46,7 +46,7 @@ class HackathonRegistrationController extends Controller
             fn (array $participant) => filled($participant['full_name'] ?? null),
         ));
 
-        abort_unless(count($participants) >= 2 && count($participants) <= 3, 422);
+        abort_unless(count($participants) >= 1 && count($participants) <= 3, 422);
 
         $event = Event::where('code', self::EVENT_CODE)->firstOrFail();
         $leader = $participants[0];

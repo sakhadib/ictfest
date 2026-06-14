@@ -18,9 +18,10 @@ class StatusLookupController extends Controller
         if ($searched) {
             $normalizedCode = strtoupper($query);
 
-            $registrations = Registration::with(['event', 'participants', 'payment'])
+            $registrations = Registration::with(['event', 'participants', 'payment', 'coach'])
                 ->where('registration_code', $normalizedCode)
                 ->orWhere('contact_email', $query)
+                ->orWhereHas('coach', fn ($coachQuery) => $coachQuery->where('official_email', $query))
                 ->latest()
                 ->get();
         }

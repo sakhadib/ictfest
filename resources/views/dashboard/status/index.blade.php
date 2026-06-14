@@ -73,6 +73,14 @@
                                 <p class="mt-1 text-sm capitalize text-coal/55">{{ $registration->payment->method }} / {{ $registration->payment->status }}</p>
                             @endif
                         </div>
+                        @if ($registration->coach)
+                            <div class="sm:col-span-2">
+                                <p class="text-xs font-semibold uppercase tracking-[.16em] text-coal/35">Coach</p>
+                                <p class="mt-1 text-sm font-semibold">{{ $registration->coach->name }}</p>
+                                <p class="mt-1 text-sm text-coal/55">{{ $registration->coach->designation }}</p>
+                                <p class="mt-1 text-sm text-coal/55">{{ $registration->coach->official_email }} / {{ $registration->coach->contact_number }}</p>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="border-t border-black/5 bg-paper/70 p-5">
