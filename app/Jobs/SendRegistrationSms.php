@@ -22,6 +22,9 @@ class SendRegistrationSms implements ShouldQueue
 
     public function __construct(
         public Registration $registration,
+        public string $apiKey,
+        public string $senderId,
+        public string $url,
     ) {
     }
 
@@ -29,12 +32,9 @@ class SendRegistrationSms implements ShouldQueue
     {
         $this->registration->loadMissing('event');
 
-        $apiKey = config('services.bulk_sms.api_key');
-        $senderId = config('services.bulk_sms.sender_id');
-        $url = config('services.bulk_sms.url');
         $number = $this->normalizePhoneNumber($this->registration->contact_phone);
 
-        if (! $apiKey || ! $senderId || ! $url || ! $number) {
+        if (! $this->apiKey || ! $this->senderId || ! $this->url || ! $number) {
             Log::warning('Registration confirmation SMS skipped because configuration or phone number is missing.', [
                 'registration_id' => $this->registration->id,
                 'registration_code' => $this->registration->registration_code,
@@ -56,13 +56,13 @@ class SendRegistrationSms implements ShouldQueue
             'registration_code' => $this->registration->registration_code,
             'phone' => $number,
             'event' => $this->registration->event?->name,
+            'sender_id' => $this->senderId,
         ]);
 
-        $response = Http::timeout(20)->get($url, [
-            'api_key' => $apiKey,
-            'type' => 'text',
+        $response = Http::timeout(20)->asForm()->post($this->url, [
+            'api_key' => $this->apiKey,
             'number' => $number,
-            'senderid' => $senderId,
+            'senderid' => $this->senderId,
             'message' => $message,
         ]);
 

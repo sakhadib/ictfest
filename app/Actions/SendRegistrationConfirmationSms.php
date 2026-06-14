@@ -12,7 +12,12 @@ class SendRegistrationConfirmationSms
     public static function queue(Registration $registration): void
     {
         try {
-            SendRegistrationSms::dispatch($registration);
+            SendRegistrationSms::dispatch(
+                $registration,
+                (string) config('services.bulk_sms.api_key'),
+                (string) config('services.bulk_sms.sender_id'),
+                (string) config('services.bulk_sms.url'),
+            );
         } catch (Throwable $exception) {
             Log::error('Registration confirmation SMS queueing failed.', [
                 'registration_id' => $registration->id,
