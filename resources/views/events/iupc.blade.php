@@ -36,7 +36,6 @@
 
     $eligibility = [
         'Must be enrolled university student undergrad or postgrad.',
-        '2 teams will be allowed from school and college.',
         'All fees must be paid.',
         'Registration must be completed.',
         'All contestants are required to present a valid student identification card.',
