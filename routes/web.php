@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\EventRegistrationController;
+use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\IupcRegistrationController;
 use App\Http\Controllers\HackathonRegistrationController;
 use App\Http\Controllers\DatathonRegistrationController;
@@ -11,6 +14,22 @@ use App\Http\Controllers\ValorantRegistrationController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+    Route::get('/dashboard', fn () => redirect()->route('dashboard.users.index'))->name('dashboard');
+    Route::get('/dashboard/events/{event:code}', [EventRegistrationController::class, 'index'])->name('dashboard.events.registrations.index');
+    Route::patch('/dashboard/events/{event:code}/registrations/{registration}/approve', [EventRegistrationController::class, 'approve'])->name('dashboard.events.registrations.approve');
+    Route::patch('/dashboard/events/{event:code}/registrations/{registration}/unapprove', [EventRegistrationController::class, 'unapprove'])->name('dashboard.events.registrations.unapprove');
+    Route::resource('/dashboard/users', UserController::class)
+        ->except(['create', 'show'])
+        ->names('dashboard.users');
 });
 
 Route::get('/status', [RegistrationStatusController::class, 'index'])->name('registration.status');
