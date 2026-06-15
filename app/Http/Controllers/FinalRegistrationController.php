@@ -110,8 +110,12 @@ class FinalRegistrationController extends Controller
             return null;
         }
 
+        if ($registration->finalRegistration?->status === 'approved') {
+            return null;
+        }
+
         if ($registration->event->isFinalRoundPaidType()) {
-            return in_array($registration->status, ['verified', 'paid'], true) ? $registration : null;
+            return $registration->status === 'verified' ? $registration : null;
         }
 
         if ($registration->event->isInitialPaidType()) {

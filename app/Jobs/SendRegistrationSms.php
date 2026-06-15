@@ -121,42 +121,77 @@ class SendRegistrationSms implements ShouldQueue
         $code = $this->registration->registration_code;
 
         return match ($this->stage) {
-            'final_qualified' => sprintf(
-                'Congratulations! %s is qualified for final round at %s. Submit final details: %s. %s-IUTCS',
-                $code,
-                $event,
-                route('final-registration.show', ['registration_code' => $code]),
-                "\n -",
-            ),
-            'final_payment_confirmed' => sprintf(
-                'Final payment confirmed for %s at %s. Check status: %s. %s-IUTCS',
-                $code,
-                $event,
-                route('registration.status', ['code' => $code]),
-                "\n -",
-            ),
-            'initial_payment_confirmed' => sprintf(
-                'Registration and payment approved for %s at %s. Submit T-shirt details: %s. %s-IUTCS',
-                $code,
-                $event,
-                route('final-registration.show', ['registration_code' => $code]),
-                "\n -",
-            ),
-            'final_intake_confirmed' => sprintf(
-                'Final intake confirmed for %s at %s. Check status: %s. %s-IUTCS',
-                $code,
-                $event,
-                route('registration.status', ['code' => $code]),
-                "\n -",
-            ),
+            'final_qualified' => $this->registration->participants->count() === 1
+                ? sprintf(
+                    'Congratulations! You are qualified for %s. Payable amount: %s. Submit final details: %s. %s-IUTCS',
+                    $event,
+                    $this->formattedAmount(),
+                    route('final-registration.show', ['registration_code' => $code]),
+                    "\n -",
+                )
+                : sprintf(
+                    'Congratulations! Your team %s is qualified for %s at %s. Payable amount: %s. Submit final details: %s. %s-IUTCS',
+                    $this->registration->team_name,
+                    $event,
+                    $this->formattedAmount(),
+                    route('final-registration.show', ['registration_code' => $code]),
+                    "\n -",
+                ),
+            'final_payment_confirmed' => $this->registration->participants->count() === 1
+                ? sprintf(
+                    'Final payment confirmed for you at %s. Check status: %s. %s-IUTCS',
+                    $event,
+                    route('registration.status', ['code' => $code]),
+                    "\n -",
+                )
+                : sprintf(
+                    'Final payment confirmed for your team %s at %s. Check status: %s. %s-IUTCS',
+                    $this->registration->team_name,
+                    $event,
+                    route('registration.status', ['code' => $code]),
+                    "\n -",
+                ),
+            'initial_payment_confirmed' => $this->registration->participants->count() === 1
+                ? sprintf(
+                    'Registration and payment approved for you at %s. Submit T-shirt details: %s. %s-IUTCS',
+                    $event,
+                    route('final-registration.show', ['registration_code' => $code]),
+                    "\n -",
+                )
+                : sprintf(
+                    'Registration and payment approved for your team %s at %s. Submit T-shirt details: %s. %s-IUTCS',
+                    $this->registration->team_name,
+                    $event,
+                    route('final-registration.show', ['registration_code' => $code]),
+                    "\n -",
+                ),
+            'final_intake_confirmed' => $this->registration->participants->count() === 1
+                ? sprintf(
+                    'Final intake confirmed for you at %s. Check status: %s. %s-IUTCS',
+                    $event,
+                    route('registration.status', ['code' => $code]),
+                    "\n -",
+                )
+                : sprintf(
+                    'Final intake confirmed for your team %s at %s. Check status: %s. %s-IUTCS',
+                    $this->registration->team_name,
+                    $event,
+                    route('registration.status', ['code' => $code]),
+                    "\n -",
+                ),
             default => sprintf(
-                'Thank you for your %s at IUT 12th ICT FEST 2026 @ %s. Check Status at %s. %s-IUTCS',
+                'Thank you for your %s at %s @ IUT 12th ICT FEST 2026. Check Status at %s. %s-IUTCS',
                 strtolower($this->registration->event?->isFinalRoundPaidType() ? 'Pre-Registration' : 'Registration'),
                 $event,
                 route('registration.status', ['code' => $code]),
                 "\n -",
             ),
         };
+    }
+
+    private function formattedAmount(): string
+    {
+        return 'BDT '.number_format((int) ($this->registration->event?->amount ?? 0));
     }
 
     private function mapProviderCode(string $code): string

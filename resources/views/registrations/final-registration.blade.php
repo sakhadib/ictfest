@@ -5,7 +5,10 @@
 @section('content')
 @php
     $inputClass = 'mt-2 w-full rounded-md border border-white/10 bg-white/[.035] px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/24 focus:border-volt/50';
-    $selectClass = 'mt-2 w-full rounded-md border border-white/10 bg-white/[.035] px-4 py-3 text-sm text-white outline-none transition focus:border-volt/50';
+    $selectedPaymentMethod = old('payment_method', $registration->payment?->method);
+    $selectedCoachSize = old('coach.tshirt_size', $registration->coach?->tshirt_size);
+
+    $amount = 'BDT '.number_format((int) ($registration->event?->amount ?? 0));
 @endphp
 
 <section class="px-4 pb-20 pt-36 sm:px-6 lg:px-8">
@@ -84,16 +87,24 @@
                         </p>
                     </div>
 
+                    <div class="mt-6 rounded-lg border border-volt/30 bg-volt/10 p-5">
+                        <p class="text-xs font-medium uppercase tracking-[.22em] text-volt/80">Payable Amount</p>
+                        <p class="mt-3 text-4xl font-semibold text-white">{{ $amount }}</p>
+                    </div>
+
                     <div class="mt-6 grid gap-4 md:grid-cols-2">
-                        <label>
+                        <div>
                             <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Payment Method</span>
-                            <select name="payment_method" class="{{ $selectClass }}">
-                                <option value="">Select method</option>
-                                <option value="bkash" @selected(old('payment_method', $registration->payment?->method) === 'bkash')>Bkash</option>
-                                <option value="nagad" @selected(old('payment_method', $registration->payment?->method) === 'nagad')>Nagad</option>
-                            </select>
+                            <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                                @foreach (['bkash' => 'Bkash', 'nagad' => 'Nagad'] as $value => $label)
+                                    <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/[.035] px-4 py-3 text-sm text-white transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10">
+                                        <input type="radio" name="payment_method" value="{{ $value }}" @checked($selectedPaymentMethod === $value) class="h-4 w-4 border-white/30 bg-transparent text-volt focus:ring-volt/50">
+                                        <span class="font-medium">{{ $label }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
                             @error('payment_method')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
-                        </label>
+                        </div>
 
                         <label>
                             <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Transaction ID</span>
@@ -131,16 +142,18 @@
                                     <p class="mt-2 text-sm text-white/58">{{ $participant->student_id }} | {{ $participant->university }}</p>
                                 </div>
 
-                                <label>
+                                <div>
                                     <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">T-shirt Size</span>
-                                    <select name="participants[{{ $participantIndex }}][tshirt_size]" class="{{ $selectClass }}">
-                                        <option value="">Select size</option>
+                                    <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
                                         @foreach($tshirtSizes as $size)
-                                            <option value="{{ $size }}" @selected(old("participants.$participantIndex.tshirt_size", $participant->tshirt_size) === $size)>{{ $size }}</option>
+                                            <label class="flex cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/[.035] px-3 py-3 text-sm text-white transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10">
+                                                <input type="radio" name="participants[{{ $participantIndex }}][tshirt_size]" value="{{ $size }}" @checked(old("participants.$participantIndex.tshirt_size", $participant->tshirt_size) === $size) class="sr-only">
+                                                <span class="font-medium">{{ $size }}</span>
+                                            </label>
                                         @endforeach
-                                    </select>
+                                    </div>
                                     @error("participants.$participantIndex.tshirt_size")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
-                                </label>
+                                </div>
                             </div>
                         </article>
                     @endforeach
@@ -159,16 +172,18 @@
                                     <p class="text-sm text-white/50">{{ $registration->coach->contact_number }}</p>
                                 </div>
 
-                                <label>
+                                <div>
                                     <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">T-shirt Size</span>
-                                    <select name="coach[tshirt_size]" class="{{ $selectClass }}">
-                                        <option value="">Select size</option>
+                                    <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
                                         @foreach($tshirtSizes as $size)
-                                            <option value="{{ $size }}" @selected(old('coach.tshirt_size', $registration->coach->tshirt_size) === $size)>{{ $size }}</option>
+                                            <label class="flex cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/[.035] px-3 py-3 text-sm text-white transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10">
+                                                <input type="radio" name="coach[tshirt_size]" value="{{ $size }}" @checked($selectedCoachSize === $size) class="sr-only">
+                                                <span class="font-medium">{{ $size }}</span>
+                                            </label>
                                         @endforeach
-                                    </select>
+                                    </div>
                                     @error('coach.tshirt_size')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
-                                </label>
+                                </div>
                             </div>
                         </article>
                     @endif

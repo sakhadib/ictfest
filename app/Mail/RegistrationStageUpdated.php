@@ -47,7 +47,7 @@ class RegistrationStageUpdated extends Mailable implements ShouldQueue
             'final_qualified' => [
                 'subject' => 'Final round qualification:',
                 'heading' => 'You are qualified for the final round',
-                'body' => 'Your team has been approved for the final round. Submit your final payment and T-shirt information to complete the next step.',
+                'body' => 'Your team has been approved for the final round. The payable amount is '.$this->formattedAmount().'. Submit your final payment and T-shirt information to complete the next step.',
                 'button' => 'Submit Final Details',
                 'url' => route('final-registration.show', ['registration_code' => $this->registration->registration_code]),
             ],
@@ -80,5 +80,10 @@ class RegistrationStageUpdated extends Mailable implements ShouldQueue
                 'url' => route('registration.status', ['code' => $this->registration->registration_code]),
             ],
         };
+    }
+
+    private function formattedAmount(): string
+    {
+        return 'BDT '.number_format((int) ($this->registration->event?->amount ?? 0));
     }
 }

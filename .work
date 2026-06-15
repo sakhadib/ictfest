@@ -40,3 +40,19 @@ For the type 2 event, registration happens with the Bkash / Nagad Marker and tra
 Now plan for this architecture, how should we build this, and what changes are required 
 
 NB : for any DB change always create new migrations. 
+
+
+
+
+==================
+
+
+A few Fixes are needed.
+
+1. the immidiate SMS after registration. it says ... at IUT 12th ICT FEST 2026 @ {event name}... . now it should be ... at {event name} @ IUT 12th ICT FEST 2026... 
+2. the Qualify SMS say's {code} is qualified. but it should say "Your team {team name} is qualified for {event name}..." for the cases of single participant like FIFA, you can say, "You are qualified for {event name}..."
+3. Same for final payment confirm SMS. No need to highlight the code like this. rather primary point of contact should be Team name / participant name. code is always present in the link and in email as well. 
+4. For the qualify SMS mention the payable amount in SMS and EMail.
+5. now in the final-reg/{code} page, if the payment status is approved participant should not access this page anymore. 
+6. Mention the amount there in that page of final payment. prominently.
+7. in final-reg/{code} page, the payment method and tshirt size are now drop down menu. but it can be multi button type radio, look into it please.
