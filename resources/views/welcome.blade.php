@@ -256,7 +256,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-5 grid gap-3 {{ isset($event['register_url']) && $eventIsLive && ($remainingSlots === null || $remainingSlots > 0) ? 'sm:grid-cols-2' : '' }}">
+                    <div class="mt-5 grid gap-3 {{ isset($event['register_url']) ? 'sm:grid-cols-2' : '' }}">
                         @if(isset($event['url']))
                             <a href="{{ url($event['url']) }}" class="inline-flex items-center justify-center gap-2 rounded-md border border-white/12 bg-white/[.04] px-4 py-2.5 text-sm font-medium text-white/72 transition hover:border-volt/60 hover:text-white">
                                 Details
@@ -271,6 +271,10 @@
                         @elseif(isset($event['register_url']) && $eventIsLive)
                             <span class="inline-flex items-center justify-center gap-2 rounded-md border border-white/12 bg-white/[.04] px-4 py-2.5 text-sm font-semibold text-white/58">
                                 Slots full
+                            </span>
+                        @elseif(isset($event['register_url']))
+                            <span class="inline-flex items-center justify-center gap-2 rounded-md border border-white/12 bg-white/[.04] px-4 py-2.5 text-sm font-semibold text-white/58">
+                                Reg Coming Soon
                             </span>
                         @endif
                     </div>

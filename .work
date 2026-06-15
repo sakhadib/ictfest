@@ -68,3 +68,10 @@ so high level confirmation of flow of type 2 events
 2. payment confirmation clicked on dashboard -> payment confirmation sms and email sent -> waiting for qualify
 3. qualify pressed -> tshirt link sent via SMS and email. -> move to final. -> in dashboard shows if they filled up that form.
 4. Approve pressed -> move to done -> Final SMS and Email Arrives
+
+
+=====================
+
+
+1. In home page cards, if the is_live is false then instead of hiding the registration button hang a notice there for "Reg Coming Soon" disabled button.
+2. in the status page (that is auto opened after registration only) hang a prominent notice something like you will get an SMS and Email within 24 hours, If you have not then contact us. Here contact us is a link to /contact page.

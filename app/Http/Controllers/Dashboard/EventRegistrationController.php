@@ -91,7 +91,10 @@ class EventRegistrationController extends Controller
                 $registration->status === 'pending' &&
                 $registration->payment_status !== 'confirmed'
             ) {
-                $registration->update(['payment_status' => 'confirmed']);
+                $registration->update([
+                    'status' => 'paid',
+                    'payment_status' => 'confirmed',
+                ]);
 
                 $registration->payment?->update([
                     'status' => 'confirmed',

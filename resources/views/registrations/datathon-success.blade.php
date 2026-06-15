@@ -20,6 +20,8 @@
                 <p class="mt-3 text-4xl font-semibold text-white">{{ $registration->registration_code }}</p>
             </div>
 
+            @include('registrations.partials.post-submit-notice')
+
             <div class="mt-10 grid gap-4 text-left sm:grid-cols-2">
                 <div class="rounded-md border border-white/10 bg-black/15 p-4">
                     <p class="text-xs uppercase tracking-[.16em] text-white/32">Team</p>

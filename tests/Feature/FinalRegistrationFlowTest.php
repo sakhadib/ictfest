@@ -134,7 +134,7 @@ class FinalRegistrationFlowTest extends TestCase
 
         $registration->refresh();
 
-        $this->assertSame('pending', $registration->status);
+        $this->assertSame('paid', $registration->status);
         $this->assertSame('confirmed', $registration->payment_status);
         $this->assertSame('confirmed', $registration->payment->status);
         Mail::assertQueued(RegistrationStageUpdated::class);
