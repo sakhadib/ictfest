@@ -8,16 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
     'registration_id',
-    'name',
-    'designation',
-    'official_email',
-    'contact_number',
-    'tshirt_size',
+    'trx_id',
 ])]
-class RegistrationCoach extends Model
+class FinalRegistration extends Model
 {
     /**
-     * Get the registration for this coach entry.
+     * Get the registration for this final registration submission.
      */
     public function registration(): BelongsTo
     {

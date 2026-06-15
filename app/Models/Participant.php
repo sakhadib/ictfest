@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'student_id',
     'university',
     'is_leader',
+    'tshirt_size',
 ])]
 class Participant extends Model
 {

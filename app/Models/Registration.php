@@ -52,4 +52,12 @@ class Registration extends Model
     {
         return $this->hasOne(RegistrationCoach::class);
     }
+
+    /**
+     * Get the final registration submission for this registration.
+     */
+    public function finalRegistration(): HasOne
+    {
+        return $this->hasOne(FinalRegistration::class);
+    }
 }

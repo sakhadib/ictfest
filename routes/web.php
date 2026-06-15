@@ -10,6 +10,7 @@ use App\Http\Controllers\IupcRegistrationController;
 use App\Http\Controllers\HackathonRegistrationController;
 use App\Http\Controllers\DatathonRegistrationController;
 use App\Http\Controllers\FifaRegistrationController;
+use App\Http\Controllers\FinalRegistrationController;
 use App\Http\Controllers\GamejamRegistrationController;
 use App\Http\Controllers\RegistrationStatusController;
 use Illuminate\Support\Facades\Http;
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/status', [RegistrationStatusController::class, 'index'])->name('registration.status');
+Route::get('/final-reg/{registration_code}', [FinalRegistrationController::class, 'show'])->name('final-registration.show');
+Route::post('/final-reg/{registration_code}', [FinalRegistrationController::class, 'store'])->name('final-registration.store');
 
 Route::get('/test-sms', function () {
     $url = config('services.bulk_sms.url');
