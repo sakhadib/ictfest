@@ -95,25 +95,31 @@
                                             </button>
                                         </form>
                                     @elseif($tab === 'review')
-                                        <form method="POST" action="{{ route('dashboard.events.registrations.approve', ['event' => $event->code, 'registration' => $registration]) }}">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
-                                                @if($event->isFinalRoundPaidType())
-                                                    Approve Payment
-                                                @else
-                                                    Approve Intake
-                                                @endif
-                                            </button>
-                                        </form>
+                                        @if($event->isInitialPaidType() && $registration->finalRegistration?->status === \App\Models\FinalRegistration::STATUS_INVITED)
+                                            <span class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-500">
+                                                Waiting for T-shirt
+                                            </span>
+                                        @else
+                                            <form method="POST" action="{{ route('dashboard.events.registrations.approve', ['event' => $event->code, 'registration' => $registration]) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+                                                    @if($event->isFinalRoundPaidType())
+                                                        Approve Payment
+                                                    @else
+                                                        Approve
+                                                    @endif
+                                                </button>
+                                            </form>
 
-                                        <form method="POST" action="{{ route('dashboard.events.registrations.reject-final', ['event' => $event->code, 'registration' => $registration]) }}">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50">
-                                                Reject
-                                            </button>
-                                        </form>
+                                            <form method="POST" action="{{ route('dashboard.events.registrations.reject-final', ['event' => $event->code, 'registration' => $registration]) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50">
+                                                    Reject
+                                                </button>
+                                            </form>
+                                        @endif
                                     @elseif($tab === 'final' && $event->isInitialPaidType())
                                         @if(! $registration->finalRegistration || $registration->finalRegistration->status === \App\Models\FinalRegistration::STATUS_REJECTED)
                                             <form method="POST" action="{{ route('dashboard.events.registrations.approve', ['event' => $event->code, 'registration' => $registration]) }}">
@@ -123,18 +129,6 @@
                                                     Qualify
                                                 </button>
                                             </form>
-                                        @elseif($registration->finalRegistration->status === \App\Models\FinalRegistration::STATUS_SUBMITTED)
-                                            <form method="POST" action="{{ route('dashboard.events.registrations.approve', ['event' => $event->code, 'registration' => $registration]) }}">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
-                                                    Approve
-                                                </button>
-                                            </form>
-                                        @else
-                                            <span class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-500">
-                                                Waiting for T-shirt
-                                            </span>
                                         @endif
                                     @elseif($tab === 'done')
                                         <form method="POST" action="{{ route('dashboard.events.registrations.unapprove', ['event' => $event->code, 'registration' => $registration]) }}">

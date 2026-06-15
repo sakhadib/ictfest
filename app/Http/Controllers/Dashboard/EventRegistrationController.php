@@ -209,20 +209,19 @@ class EventRegistrationController extends Controller
             ->where('payment_status', 'confirmed')
             ->where(function ($query): void {
                 $query->whereDoesntHave('finalRegistration')
-                    ->orWhereHas('finalRegistration', fn ($query) => $query->whereIn('status', [
-                        FinalRegistration::STATUS_INVITED,
-                        FinalRegistration::STATUS_SUBMITTED,
-                        FinalRegistration::STATUS_REJECTED,
-                    ]));
+                    ->orWhereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_REJECTED));
             });
     }
 
     private function finalReview($query, Event $event)
     {
-        if (! $event->isFinalRoundPaidType()) {
-            return $query->whereRaw('1 = 0');
+        if ($event->isFinalRoundPaidType()) {
+            return $query->whereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_SUBMITTED));
         }
 
-        return $query->whereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_SUBMITTED));
+        return $query->whereHas('finalRegistration', fn ($query) => $query->whereIn('status', [
+            FinalRegistration::STATUS_INVITED,
+            FinalRegistration::STATUS_SUBMITTED,
+        ]));
     }
 }
