@@ -20,7 +20,7 @@
             'accent' => 'volt',
             'fee' => '5099 BDT per team',
             'team' => '3 members',
-            'window' => '18 June - 3 July',
+            'window' => '15 June - 25 June',
             'date' => 'Mock: 24 July, Main: 25 July',
             'venue' => 'AB2 CSE Labs 1-6, ICT Center Labs',
             'signal' => 'Five-hour main contest with onsite lab pressure and a dedicated prize giving slot.',
