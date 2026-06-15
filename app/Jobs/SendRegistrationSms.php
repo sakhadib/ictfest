@@ -153,30 +153,28 @@ class SendRegistrationSms implements ShouldQueue
                 ),
             'initial_payment_confirmed' => $this->registration->participants->count() === 1
                 ? sprintf(
-                    'Registration and payment approved for you at %s. Submit T-shirt details: %s. %s-IUTCS',
+                    'Payment approved for you at %s. The T-shirt form will be shared after final intake approval. %s-IUTCS',
                     $event,
-                    route('final-registration.show', ['registration_code' => $code]),
                     "\n -",
                 )
                 : sprintf(
-                    'Registration and payment approved for your team %s at %s. Submit T-shirt details: %s. %s-IUTCS',
+                    'Payment approved for your team %s at %s. The T-shirt form will be shared after final intake approval. %s-IUTCS',
                     $this->registration->team_name,
                     $event,
-                    route('final-registration.show', ['registration_code' => $code]),
                     "\n -",
                 ),
             'final_intake_confirmed' => $this->registration->participants->count() === 1
                 ? sprintf(
-                    'Final intake confirmed for you at %s. Check status: %s. %s-IUTCS',
+                    'Final intake approved for you at %s. Submit T-shirt details: %s. %s-IUTCS',
                     $event,
-                    route('registration.status', ['code' => $code]),
+                    route('final-registration.show', ['registration_code' => $code]),
                     "\n -",
                 )
                 : sprintf(
-                    'Final intake confirmed for your team %s at %s. Check status: %s. %s-IUTCS',
+                    'Final intake approved for your team %s at %s. Submit T-shirt details: %s. %s-IUTCS',
                     $this->registration->team_name,
                     $event,
-                    route('registration.status', ['code' => $code]),
+                    route('final-registration.show', ['registration_code' => $code]),
                     "\n -",
                 ),
             default => sprintf(

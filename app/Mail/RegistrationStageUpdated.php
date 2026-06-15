@@ -61,16 +61,16 @@ class RegistrationStageUpdated extends Mailable implements ShouldQueue
             'initial_payment_confirmed' => [
                 'subject' => 'Registration and payment approved:',
                 'heading' => 'Your registration and payment are approved',
-                'body' => 'Your registration payment has been verified. Submit your T-shirt information to complete final intake.',
-                'button' => 'Submit T-shirt Details',
-                'url' => route('final-registration.show', ['registration_code' => $this->registration->registration_code]),
+                'body' => 'Your payment has been verified. The T-shirt form will be shared after final intake approval.',
+                'button' => 'Check Status',
+                'url' => route('registration.status', ['code' => $this->registration->registration_code]),
             ],
             'final_intake_confirmed' => [
                 'subject' => 'Final confirmation:',
                 'heading' => 'Your final intake is confirmed',
-                'body' => 'Your T-shirt information has been verified and your team intake is approved.',
-                'button' => 'Check Status',
-                'url' => route('registration.status', ['code' => $this->registration->registration_code]),
+                'body' => 'Your T-shirt information has been verified and your team intake is approved. Submit the T-shirt details using the form below.',
+                'button' => 'Submit T-shirt Details',
+                'url' => route('final-registration.show', ['registration_code' => $this->registration->registration_code]),
             ],
             default => [
                 'subject' => 'Registration update:',
