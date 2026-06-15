@@ -56,3 +56,15 @@ A few Fixes are needed.
 5. now in the final-reg/{code} page, if the payment status is approved participant should not access this page anymore. 
 6. Mention the amount there in that page of final payment. prominently.
 7. in final-reg/{code} page, the payment method and tshirt size are now drop down menu. but it can be multi button type radio, look into it please.
+
+
+
+
+===============
+
+
+so high level confirmation of flow of type 2 events
+1. Participant registers -> Email and SMS sent notifying -> in pending
+2. payment confirmation clicked on dashboard -> payment confirmation sms and email sent -> waiting for qualify
+3. qualify pressed -> tshirt link sent via SMS and email. -> move to final. -> in dashboard shows if they filled up that form.
+4. Approve pressed -> move to done -> Final SMS and Email Arrives

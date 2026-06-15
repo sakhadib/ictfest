@@ -23,10 +23,9 @@ class EventRegistrationController extends Controller
 
         $registrations = $event->registrations()
             ->with(['payment', 'finalRegistration', 'participants'])
-            ->when($tab === 'pending', fn ($query) => $query->where('status', 'pending'))
+            ->when($tab === 'pending', fn ($query) => $this->pendingReview($query, $event))
             ->when($tab === 'final', fn ($query) => $this->awaitingFinalSubmission($query, $event))
-            ->when($tab === 'review', fn ($query) => $query
-                ->whereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_SUBMITTED)))
+            ->when($tab === 'review', fn ($query) => $this->finalReview($query, $event))
             ->when($tab === 'done', fn ($query) => $query
                 ->where(function ($query) use ($event): void {
                     if ($event->isFinalRoundPaidType()) {
@@ -45,9 +44,9 @@ class EventRegistrationController extends Controller
             'registrations' => $registrations,
             'tab' => $tab,
             'counts' => [
-                'pending' => $event->registrations()->where('status', 'pending')->count(),
+                'pending' => $this->pendingReview($event->registrations(), $event)->count(),
                 'final' => $this->awaitingFinalSubmission($event->registrations(), $event)->count(),
-                'review' => $event->registrations()->whereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_SUBMITTED))->count(),
+                'review' => $this->finalReview($event->registrations(), $event)->count(),
                 'done' => $event->isFinalRoundPaidType()
                     ? $event->registrations()->where('status', 'paid')->where('payment_status', 'confirmed')->count()
                     : $event->registrations()->whereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_APPROVED))->count(),
@@ -87,11 +86,12 @@ class EventRegistrationController extends Controller
                 return 'final_payment_confirmed';
             }
 
-            if ($event->isInitialPaidType() && $registration->status === 'pending') {
-                $registration->update([
-                    'status' => 'paid',
-                    'payment_status' => 'confirmed',
-                ]);
+            if (
+                $event->isInitialPaidType() &&
+                $registration->status === 'pending' &&
+                $registration->payment_status !== 'confirmed'
+            ) {
+                $registration->update(['payment_status' => 'confirmed']);
 
                 $registration->payment?->update([
                     'status' => 'confirmed',
@@ -99,6 +99,25 @@ class EventRegistrationController extends Controller
                 ]);
 
                 return 'initial_payment_confirmed';
+            }
+
+            if (
+                $event->isInitialPaidType() &&
+                $registration->payment_status === 'confirmed' &&
+                (
+                    ! $registration->finalRegistration ||
+                    $registration->finalRegistration->status === FinalRegistration::STATUS_REJECTED
+                )
+            ) {
+                $registration->finalRegistration()->updateOrCreate(
+                    ['registration_id' => $registration->id],
+                    [
+                        'trx_id' => null,
+                        'status' => FinalRegistration::STATUS_INVITED,
+                    ],
+                );
+
+                return 'final_intake_invited';
             }
 
             if ($event->isInitialPaidType() && $registration->finalRegistration?->status === FinalRegistration::STATUS_SUBMITTED) {
@@ -164,6 +183,17 @@ class EventRegistrationController extends Controller
         $registration->loadMissing(['payment', 'finalRegistration']);
     }
 
+    private function pendingReview($query, Event $event)
+    {
+        if ($event->isInitialPaidType()) {
+            return $query
+                ->where('status', 'pending')
+                ->where('payment_status', '!=', 'confirmed');
+        }
+
+        return $query->where('status', 'pending');
+    }
+
     private function awaitingFinalSubmission($query, Event $event)
     {
         if ($event->isFinalRoundPaidType()) {
@@ -176,11 +206,23 @@ class EventRegistrationController extends Controller
         }
 
         return $query
-            ->where('status', 'paid')
             ->where('payment_status', 'confirmed')
             ->where(function ($query): void {
                 $query->whereDoesntHave('finalRegistration')
-                    ->orWhereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_REJECTED));
+                    ->orWhereHas('finalRegistration', fn ($query) => $query->whereIn('status', [
+                        FinalRegistration::STATUS_INVITED,
+                        FinalRegistration::STATUS_SUBMITTED,
+                        FinalRegistration::STATUS_REJECTED,
+                    ]));
             });
+    }
+
+    private function finalReview($query, Event $event)
+    {
+        if (! $event->isFinalRoundPaidType()) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        return $query->whereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_SUBMITTED));
     }
 }

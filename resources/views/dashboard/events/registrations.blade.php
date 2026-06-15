@@ -82,16 +82,24 @@
                             </td>
                             <td class="px-5 py-4">
                                 <div class="flex justify-end gap-2">
-                                    @if ($tab !== 'done')
+                                    @if ($tab === 'pending')
                                         <form method="POST" action="{{ route('dashboard.events.registrations.approve', ['event' => $event->code, 'registration' => $registration]) }}">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
-                                                @if($event->isFinalRoundPaidType() && $registration->status === 'pending')
+                                                @if($event->isFinalRoundPaidType())
                                                     Qualify
-                                                @elseif($event->isFinalRoundPaidType())
+                                                @else
                                                     Approve Payment
-                                                @elseif($registration->status === 'pending')
+                                                @endif
+                                            </button>
+                                        </form>
+                                    @elseif($tab === 'review')
+                                        <form method="POST" action="{{ route('dashboard.events.registrations.approve', ['event' => $event->code, 'registration' => $registration]) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+                                                @if($event->isFinalRoundPaidType())
                                                     Approve Payment
                                                 @else
                                                     Approve Intake
@@ -99,16 +107,36 @@
                                             </button>
                                         </form>
 
-                                        @if($tab === 'review')
-                                            <form method="POST" action="{{ route('dashboard.events.registrations.reject-final', ['event' => $event->code, 'registration' => $registration]) }}">
+                                        <form method="POST" action="{{ route('dashboard.events.registrations.reject-final', ['event' => $event->code, 'registration' => $registration]) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50">
+                                                Reject
+                                            </button>
+                                        </form>
+                                    @elseif($tab === 'final' && $event->isInitialPaidType())
+                                        @if(! $registration->finalRegistration || $registration->finalRegistration->status === \App\Models\FinalRegistration::STATUS_REJECTED)
+                                            <form method="POST" action="{{ route('dashboard.events.registrations.approve', ['event' => $event->code, 'registration' => $registration]) }}">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50">
-                                                    Reject
+                                                <button type="submit" class="rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+                                                    Qualify
                                                 </button>
                                             </form>
+                                        @elseif($registration->finalRegistration->status === \App\Models\FinalRegistration::STATUS_SUBMITTED)
+                                            <form method="POST" action="{{ route('dashboard.events.registrations.approve', ['event' => $event->code, 'registration' => $registration]) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+                                                    Approve
+                                                </button>
+                                            </form>
+                                        @else
+                                            <span class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-500">
+                                                Waiting for T-shirt
+                                            </span>
                                         @endif
-                                    @else
+                                    @elseif($tab === 'done')
                                         <form method="POST" action="{{ route('dashboard.events.registrations.unapprove', ['event' => $event->code, 'registration' => $registration]) }}">
                                             @csrf
                                             @method('PATCH')
@@ -116,6 +144,10 @@
                                                 Unapprove
                                             </button>
                                         </form>
+                                    @else
+                                        <span class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-500">
+                                            Waiting for submission
+                                        </span>
                                     @endif
                                 </div>
                             </td>

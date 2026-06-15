@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Registration;
+use App\Models\FinalRegistration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -119,7 +120,8 @@ class FinalRegistrationController extends Controller
         }
 
         if ($registration->event->isInitialPaidType()) {
-            return $registration->status === 'paid' && $registration->payment_status === 'confirmed'
+            return $registration->payment_status === 'confirmed' &&
+                in_array($registration->finalRegistration?->status, [FinalRegistration::STATUS_INVITED, FinalRegistration::STATUS_SUBMITTED], true)
                 ? $registration
                 : null;
         }

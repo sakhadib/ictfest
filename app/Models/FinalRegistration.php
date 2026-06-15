@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class FinalRegistration extends Model
 {
+    public const STATUS_INVITED = 'invited';
+
     public const STATUS_SUBMITTED = 'submitted';
 
     public const STATUS_APPROVED = 'approved';
