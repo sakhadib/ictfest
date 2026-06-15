@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Datathon | '.config('app.name'))
+@section('title', 'Datathon 2026 | IUT ICT Fest Data Science Competition')
+@section('meta_description', 'Compete in Datathon at IUT 12th ICT FEST 2026: data science teams solve, report, present, and compete through preliminary and onsite final rounds.')
+@section('canonical', url('/datathon'))
+@section('og_image', asset('assets/logos/datathon.png'))
+
+@push('head')
+    @include('partials.seo.event-jsonld', [
+        'name' => 'Datathon - IUT 12th ICT FEST 2026',
+        'description' => 'A university data science competition with code, notebooks, reports, presentations, and an onsite final round.',
+        'url' => url('/datathon'),
+        'image' => asset('assets/logos/datathon.png'),
+        'startDate' => '2026-07-01T00:00:00+06:00',
+        'endDate' => '2026-07-25T15:00:00+06:00',
+        'locationName' => 'Islamic University of Technology',
+        'registrationUrl' => route('datathon.register'),
+        'price' => 800,
+        'isAvailable' => (bool) ($eventRecord?->is_live ?? false),
+    ])
+@endpush
 
 @section('content')
 @php

@@ -21,6 +21,44 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/robots.txt', function () {
+    return response(
+        "User-agent: *\nDisallow:\n\nSitemap: ".url('/sitemap.xml')."\n",
+        200,
+        ['Content-Type' => 'text/plain; charset=UTF-8']
+    );
+});
+
+Route::get('/sitemap.xml', function () {
+    $pages = collect([
+        ['url' => url('/'), 'priority' => '1.0', 'changefreq' => 'daily'],
+        ['url' => url('/iupc'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['url' => url('/hackathon'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['url' => url('/datathon'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['url' => url('/gamejam'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['url' => url('/fifa'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['url' => url('/valorant'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['url' => route('registration.status'), 'priority' => '0.5', 'changefreq' => 'weekly'],
+        ['url' => route('contact'), 'priority' => '0.4', 'changefreq' => 'monthly'],
+        ['url' => route('about'), 'priority' => '0.4', 'changefreq' => 'monthly'],
+    ]);
+
+    $lastmod = now()->toDateString();
+    $urls = $pages->map(fn (array $page): string => sprintf(
+        "    <url>\n        <loc>%s</loc>\n        <lastmod>%s</lastmod>\n        <changefreq>%s</changefreq>\n        <priority>%s</priority>\n    </url>",
+        e($page['url']),
+        $lastmod,
+        $page['changefreq'],
+        $page['priority'],
+    ))->implode("\n");
+
+    return response(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n".$urls."\n</urlset>\n",
+        200,
+        ['Content-Type' => 'application/xml; charset=UTF-8']
+    );
+});
+
 Route::view('/about', 'about')->name('about');
 Route::view('/contact', 'contact')->name('contact');
 

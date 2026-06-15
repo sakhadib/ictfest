@@ -1,12 +1,40 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
+    @php
+        $seoTitle = trim($__env->yieldContent('title', config('app.name')));
+        $seoDescription = trim($__env->yieldContent('meta_description', 'IUT 12th ICT FEST 2026 brings university students together for programming, hackathon, datathon, game development, FIFA, and Valorant competitions at Islamic University of Technology.'));
+        $seoCanonical = trim($__env->yieldContent('canonical', url()->current()));
+        $seoImage = trim($__env->yieldContent('og_image', asset('assets/logo-white.png')));
+        $seoType = trim($__env->yieldContent('og_type', 'website'));
+        $seoRobots = trim($__env->yieldContent('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'));
+    @endphp
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#050816">
+    <meta name="description" content="{{ $seoDescription }}">
+    <meta name="robots" content="{{ $seoRobots }}">
+    <meta name="author" content="IUT Computer Society">
+    <link rel="canonical" href="{{ $seoCanonical }}">
 
-    <title>@yield('title', config('app.name'))</title>
+    <title>{{ $seoTitle }}</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/logo-white.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/logo-white.png') }}">
+
+    <meta property="og:site_name" content="{{ config('app.name') }}">
+    <meta property="og:type" content="{{ $seoType }}">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDescription }}">
+    <meta property="og:url" content="{{ $seoCanonical }}">
+    <meta property="og:image" content="{{ $seoImage }}">
+    <meta property="og:image:alt" content="{{ $seoTitle }}">
+    <meta property="og:locale" content="en_BD">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $seoTitle }}">
+    <meta name="twitter:description" content="{{ $seoDescription }}">
+    <meta name="twitter:image" content="{{ $seoImage }}">
+    <meta name="twitter:image:alt" content="{{ $seoTitle }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -34,6 +62,7 @@
             },
         };
     </script>
+    @stack('head')
     <style>
         .mobile-nav-panel {
             opacity: 0;

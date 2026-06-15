@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Gamejam | '.config('app.name'))
+@section('title', 'Gamejam 2026 | IUT ICT Fest Game Development Competition')
+@section('meta_description', 'Enter Gamejam at IUT 12th ICT FEST 2026: build a game online, submit a pitch, and qualify for the onsite final showcase at IUT.')
+@section('canonical', url('/gamejam'))
+@section('og_image', asset('assets/logos/gamejam.png'))
+
+@push('head')
+    @include('partials.seo.event-jsonld', [
+        'name' => 'Gamejam - IUT 12th ICT FEST 2026',
+        'description' => 'A game development competition with an online build round, pitch submission, and onsite final showcase.',
+        'url' => url('/gamejam'),
+        'image' => asset('assets/logos/gamejam.png'),
+        'startDate' => '2026-07-13T00:00:00+06:00',
+        'endDate' => '2026-07-25T13:00:00+06:00',
+        'locationName' => 'Islamic University of Technology',
+        'registrationUrl' => route('gamejam.register'),
+        'price' => 0,
+        'isAvailable' => (bool) ($eventRecord?->is_live ?? false),
+    ])
+@endpush
 
 @section('content')
 @php

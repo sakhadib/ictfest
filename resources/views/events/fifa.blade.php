@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'FIFA | '.config('app.name'))
+@section('title', 'FIFA EA FC 26 Tournament 2026 | IUT ICT Fest')
+@section('meta_description', 'Register for FIFA EA FC 26 at IUT 12th ICT FEST 2026: a 64-player PS4 controller-only tournament with knockout rounds and best-of finals.')
+@section('canonical', url('/fifa'))
+@section('og_image', asset('assets/logos/fifa.png'))
+
+@push('head')
+    @include('partials.seo.event-jsonld', [
+        'name' => 'FIFA EA FC 26 - IUT 12th ICT FEST 2026',
+        'description' => 'A 64-player individual EA FC 26 tournament on PS4 with knockout rounds and best-of series.',
+        'url' => url('/fifa'),
+        'image' => asset('assets/logos/fifa.png'),
+        'startDate' => '2026-07-24T09:00:00+06:00',
+        'endDate' => '2026-07-24T18:00:00+06:00',
+        'locationName' => 'IUT Auditorium',
+        'registrationUrl' => route('fifa.register'),
+        'price' => 200,
+        'isAvailable' => (bool) ($eventRecord?->is_live && $eventRecord?->hasAvailableSlots()),
+    ])
+@endpush
 
 @section('content')
 @php

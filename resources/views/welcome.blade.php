@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', config('app.name'))
-
 @section('content')
 @php
     try {
@@ -28,6 +26,9 @@
             'signal' => 'Five-hour main contest with onsite lab pressure and a dedicated prize giving slot.',
             'url' => '/iupc',
             'register_url' => '/iupc/register',
+            'start_date' => '2026-07-24T15:00:00+06:00',
+            'end_date' => '2026-07-25T17:00:00+06:00',
+            'price' => 5099,
         ],
         [
             'code' => '02',
@@ -44,6 +45,9 @@
             'signal' => 'Two rounds of Hackathon, 4-hour online round, then onsite final build.',
             'url' => '/hackathon',
             'register_url' => '/hackathon/register',
+            'start_date' => '2026-07-10T18:00:00+06:00',
+            'end_date' => '2026-07-24T18:00:00+06:00',
+            'price' => 0,
         ],
         [
             'code' => '03',
@@ -60,6 +64,9 @@
             'signal' => 'Paper, codebase, report, slides, and notebooks move together into the final round.',
             'url' => '/datathon',
             'register_url' => '/datathon/register',
+            'start_date' => '2026-07-01T00:00:00+06:00',
+            'end_date' => '2026-07-25T15:00:00+06:00',
+            'price' => 800,
         ],
         [
             'code' => '04',
@@ -76,6 +83,9 @@
             'signal' => 'Online build round selects 15 teams for the final onsite showcase.',
             'url' => '/gamejam',
             'register_url' => '/gamejam/register',
+            'start_date' => '2026-07-13T00:00:00+06:00',
+            'end_date' => '2026-07-25T13:00:00+06:00',
+            'price' => 0,
         ],
         [
             'code' => '05',
@@ -92,6 +102,9 @@
             'signal' => '64-player PS4 controller-only tournament, escalating to best-of-five finals.',
             'url' => '/fifa',
             'register_url' => '/fifa/register',
+            'start_date' => '2026-07-24T09:00:00+06:00',
+            'end_date' => '2026-07-24T18:00:00+06:00',
+            'price' => 200,
         ],
         [
             'code' => '06',
@@ -108,6 +121,9 @@
             'signal' => '32-team path through knockout and double elimination into a LAN grand finale.',
             'url' => '/valorant',
             'register_url' => '/valorant/register',
+            'start_date' => '2026-07-04T00:00:00+06:00',
+            'end_date' => '2026-07-25T18:00:00+06:00',
+            'price' => 600,
         ],
     ];
 
@@ -117,6 +133,93 @@
         'iris' => 'text-iris bg-iris/10',
     ];
 @endphp
+
+@section('title', 'IUT 12th ICT FEST 2026 | Programming, AI, Data, Game Dev & Esports')
+@section('meta_description', 'Join IUT 12th ICT FEST 2026 at Islamic University of Technology: IUPC, Agentic AI Hackathon, Datathon, Gamejam, FIFA, and Valorant competitions for university students.')
+@section('canonical', url('/'))
+@section('og_image', asset('assets/logo-white.png'))
+
+@push('head')
+@php
+    $homeStructuredData = [
+        '@context' => 'https://schema.org',
+        '@graph' => [
+            [
+                '@type' => 'Organization',
+                '@id' => url('/').'#organization',
+                'name' => 'IUT Computer Society',
+                'url' => url('/'),
+                'logo' => asset('assets/logo-white.png'),
+                'sameAs' => [
+                    'https://www.facebook.com/IUTCS/',
+                    'https://bd.linkedin.com/company/iutcs',
+                    'https://www.youtube.com/channel/UCPVwRaP-wK6lSUEqTK7iLng',
+                ],
+            ],
+            [
+                '@type' => 'WebSite',
+                '@id' => url('/').'#website',
+                'name' => config('app.name'),
+                'url' => url('/'),
+                'publisher' => ['@id' => url('/').'#organization'],
+            ],
+            [
+                '@type' => 'Event',
+                '@id' => url('/').'#event',
+                'name' => 'IUT 12th ICT FEST 2026',
+                'description' => 'A university technology festival featuring programming, AI, data science, game development, FIFA, and Valorant competitions.',
+                'url' => url('/'),
+                'image' => [asset('assets/logo-white.png')],
+                'startDate' => '2026-07-24T08:00:00+06:00',
+                'endDate' => '2026-07-25T18:00:00+06:00',
+                'eventStatus' => 'https://schema.org/EventScheduled',
+                'eventAttendanceMode' => 'https://schema.org/MixedEventAttendanceMode',
+                'organizer' => ['@id' => url('/').'#organization'],
+                'location' => [
+                    '@type' => 'Place',
+                    'name' => 'Islamic University of Technology',
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'addressLocality' => 'Gazipur',
+                        'addressCountry' => 'BD',
+                    ],
+                ],
+                'subEvent' => collect($events)->map(fn (array $event): array => [
+                    '@type' => 'Event',
+                    'name' => $event['short'].' - '.$event['name'],
+                    'description' => $event['signal'],
+                    'url' => url($event['url']),
+                    'image' => asset('assets/logos/'.$event['logo']),
+                    'startDate' => $event['start_date'],
+                    'endDate' => $event['end_date'],
+                    'eventStatus' => 'https://schema.org/EventScheduled',
+                    'eventAttendanceMode' => 'https://schema.org/MixedEventAttendanceMode',
+                    'organizer' => ['@id' => url('/').'#organization'],
+                    'location' => [
+                        '@type' => 'Place',
+                        'name' => $event['venue'],
+                        'address' => [
+                            '@type' => 'PostalAddress',
+                            'addressLocality' => 'Gazipur',
+                            'addressCountry' => 'BD',
+                        ],
+                    ],
+                    'offers' => [
+                        '@type' => 'Offer',
+                        'url' => url($event['register_url']),
+                        'price' => $event['price'],
+                        'priceCurrency' => 'BDT',
+                        'availability' => (($eventRecords->get($event['code'])?->is_live ?? false) && ! (($eventRecords->get($event['code'])?->hasSlotLimit() ?? false) && ! $eventRecords->get($event['code'])?->hasAvailableSlots()))
+                            ? 'https://schema.org/InStock'
+                            : 'https://schema.org/SoldOut',
+                    ],
+                ])->values()->all(),
+            ],
+        ],
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($homeStructuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endpush
 
 @push('styles')
 <style>

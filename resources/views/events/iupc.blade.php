@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'IUPC | '.config('app.name'))
+@section('title', 'IUPC 2026 | Inter University Programming Contest at IUT ICT Fest')
+@section('meta_description', 'Register for IUPC at IUT 12th ICT FEST 2026: a three-member Inter University Programming Contest with mock contest, five-hour main contest, and onsite IUT computer lab rounds.')
+@section('canonical', url('/iupc'))
+@section('og_image', asset('assets/logos/iupc.png'))
+
+@push('head')
+    @include('partials.seo.event-jsonld', [
+        'name' => 'Inter University Programming Contest (IUPC) - IUT 12th ICT FEST 2026',
+        'description' => 'A three-member university programming contest with mock and main onsite rounds at Islamic University of Technology.',
+        'url' => url('/iupc'),
+        'image' => asset('assets/logos/iupc.png'),
+        'startDate' => '2026-07-24T15:00:00+06:00',
+        'endDate' => '2026-07-25T17:00:00+06:00',
+        'locationName' => 'IUT Computer Labs',
+        'registrationUrl' => route('iupc.register'),
+        'price' => 5099,
+        'isAvailable' => (bool) ($eventRecord?->is_live ?? false),
+    ])
+@endpush
 
 @section('content')
 @php

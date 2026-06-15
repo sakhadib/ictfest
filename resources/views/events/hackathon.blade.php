@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Agentic AI Hackathon | '.config('app.name'))
+@section('title', 'Agentic AI Hackathon 2026 | IUT ICT Fest')
+@section('meta_description', 'Join the Agentic AI Hackathon at IUT 12th ICT FEST 2026: online preliminary build round followed by an onsite final for 1-3 member university teams.')
+@section('canonical', url('/hackathon'))
+@section('og_image', asset('assets/logos/hackathon.png'))
+
+@push('head')
+    @include('partials.seo.event-jsonld', [
+        'name' => 'Agentic AI Hackathon - IUT 12th ICT FEST 2026',
+        'description' => 'A two-stage agentic AI hackathon with an online preliminary round and onsite final at IUT.',
+        'url' => url('/hackathon'),
+        'image' => asset('assets/logos/hackathon.png'),
+        'startDate' => '2026-07-10T18:00:00+06:00',
+        'endDate' => '2026-07-24T18:00:00+06:00',
+        'locationName' => 'AB2 301, 302 and Auditorium, Islamic University of Technology',
+        'registrationUrl' => route('hackathon.register'),
+        'price' => 0,
+        'isAvailable' => (bool) ($eventRecord?->is_live ?? false),
+    ])
+@endpush
 
 @section('content')
 @php

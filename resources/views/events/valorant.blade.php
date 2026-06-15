@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Valorant | '.config('app.name'))
+@section('title', 'Valorant Tournament 2026 | IUT ICT Fest')
+@section('meta_description', 'Register for Valorant at IUT 12th ICT FEST 2026: 32-team university esports tournament with online brackets and an onsite LAN grand finale.')
+@section('canonical', url('/valorant'))
+@section('og_image', asset('assets/logos/valorant.png'))
+
+@push('head')
+    @include('partials.seo.event-jsonld', [
+        'name' => 'Valorant - IUT 12th ICT FEST 2026',
+        'description' => 'A 32-team Valorant tournament with online knockout rounds, double elimination, and an onsite LAN final.',
+        'url' => url('/valorant'),
+        'image' => asset('assets/logos/valorant.png'),
+        'startDate' => '2026-07-04T00:00:00+06:00',
+        'endDate' => '2026-07-25T18:00:00+06:00',
+        'locationName' => 'Islamic University of Technology',
+        'registrationUrl' => route('valorant.register'),
+        'price' => 600,
+        'isAvailable' => (bool) ($eventRecord?->is_live && $eventRecord?->hasAvailableSlots()),
+    ])
+@endpush
 
 @section('content')
 @php
