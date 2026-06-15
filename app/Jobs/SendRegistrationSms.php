@@ -25,6 +25,7 @@ class SendRegistrationSms implements ShouldQueue
         public string $apiKey,
         public string $senderId,
         public string $url,
+        public string $stage = 'registration_submitted',
     ) {
     }
 
@@ -45,15 +46,7 @@ class SendRegistrationSms implements ShouldQueue
             return;
         }
 
-        $label = $this->registration->event?->code === '01' ? 'Pre-Registration' : 'Registration';
-
-        $message = sprintf(
-            'Thank you for your %s at IUT 12th ICT FEST 2026 @ %s. Check Status at %s. %s-IUTCS',
-            strtolower($label),
-            $this->registration->event?->name ?? 'ICT Fest',
-            route('registration.status', ['code' => $this->registration->registration_code]),
-            "\n -",
-        );
+        $message = $this->message();
 
         Log::info('Registration confirmation SMS dispatch attempt.', [
             'registration_id' => $this->registration->id,
@@ -120,6 +113,50 @@ class SendRegistrationSms implements ShouldQueue
         }
 
         return null;
+    }
+
+    private function message(): string
+    {
+        $event = $this->registration->event?->name ?? 'ICT Fest';
+        $code = $this->registration->registration_code;
+
+        return match ($this->stage) {
+            'final_qualified' => sprintf(
+                'Congratulations! %s is qualified for final round at %s. Submit final details: %s. %s-IUTCS',
+                $code,
+                $event,
+                route('final-registration.show', ['registration_code' => $code]),
+                "\n -",
+            ),
+            'final_payment_confirmed' => sprintf(
+                'Final payment confirmed for %s at %s. Check status: %s. %s-IUTCS',
+                $code,
+                $event,
+                route('registration.status', ['code' => $code]),
+                "\n -",
+            ),
+            'initial_payment_confirmed' => sprintf(
+                'Registration and payment approved for %s at %s. Submit T-shirt details: %s. %s-IUTCS',
+                $code,
+                $event,
+                route('final-registration.show', ['registration_code' => $code]),
+                "\n -",
+            ),
+            'final_intake_confirmed' => sprintf(
+                'Final intake confirmed for %s at %s. Check status: %s. %s-IUTCS',
+                $code,
+                $event,
+                route('registration.status', ['code' => $code]),
+                "\n -",
+            ),
+            default => sprintf(
+                'Thank you for your %s at IUT 12th ICT FEST 2026 @ %s. Check Status at %s. %s-IUTCS',
+                strtolower($this->registration->event?->isFinalRoundPaidType() ? 'Pre-Registration' : 'Registration'),
+                $event,
+                route('registration.status', ['code' => $code]),
+                "\n -",
+            ),
+        };
     }
 
     private function mapProviderCode(string $code): string

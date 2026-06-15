@@ -44,6 +44,22 @@
                         <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
                     @enderror
 
+                    <label class="mt-4 block">
+                        <span class="text-xs font-semibold uppercase tracking-wide text-slate-500">Amount</span>
+                        <input
+                            type="number"
+                            name="amount"
+                            min="0"
+                            value="{{ old('amount', $event->amount ?? 0) }}"
+                            placeholder="0"
+                            class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
+                        >
+                    </label>
+
+                    @error('amount')
+                        <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                    @enderror
+
                     <div class="mt-5 flex flex-wrap items-center gap-3">
                         <button type="submit" name="action" value="save" class="rounded-md border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
                             Save Link

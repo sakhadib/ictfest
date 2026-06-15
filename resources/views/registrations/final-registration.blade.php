@@ -20,7 +20,7 @@
                     Submit your final round details.
                 </h1>
                 <p class="mt-7 max-w-2xl text-base leading-8 text-white/58">
-                    This page is available only after your registration has been approved from the admin panel. Fill in the team transaction ID and shirt sizes for all listed attendees.
+                    This page is available only after your registration has been approved from the admin panel. Fill in the required final details for all listed attendees.
                 </p>
             </div>
 
@@ -74,23 +74,35 @@
                 </div>
             @endif
 
-            <section class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-7">
-                <div class="max-w-2xl">
-                    <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Team Submission</p>
-                    <h2 class="mt-4 text-2xl font-semibold text-white">Final transaction detail</h2>
-                    <p class="mt-3 text-sm leading-7 text-white/56">
-                        Submit the transaction ID for the team payment linked to the final round.
-                    </p>
-                </div>
+            @if($requiresPayment)
+                <section class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-7">
+                    <div class="max-w-2xl">
+                        <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Team Submission</p>
+                        <h2 class="mt-4 text-2xl font-semibold text-white">Final transaction detail</h2>
+                        <p class="mt-3 text-sm leading-7 text-white/56">
+                            Submit the payment method and transaction ID for the team payment linked to the final round.
+                        </p>
+                    </div>
 
-                <div class="mt-6 max-w-xl">
-                    <label>
-                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Transaction ID</span>
-                        <input name="trx_id" value="{{ old('trx_id', $registration->finalRegistration?->trx_id) }}" class="{{ $inputClass }}" placeholder="TRX ID">
-                        @error('trx_id')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
-                    </label>
-                </div>
-            </section>
+                    <div class="mt-6 grid gap-4 md:grid-cols-2">
+                        <label>
+                            <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Payment Method</span>
+                            <select name="payment_method" class="{{ $selectClass }}">
+                                <option value="">Select method</option>
+                                <option value="bkash" @selected(old('payment_method', $registration->payment?->method) === 'bkash')>Bkash</option>
+                                <option value="nagad" @selected(old('payment_method', $registration->payment?->method) === 'nagad')>Nagad</option>
+                            </select>
+                            @error('payment_method')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                        </label>
+
+                        <label>
+                            <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Transaction ID</span>
+                            <input name="trx_id" value="{{ old('trx_id', $registration->payment?->trx_id ?? $registration->finalRegistration?->trx_id) }}" class="{{ $inputClass }}" placeholder="TRX ID">
+                            @error('trx_id')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                        </label>
+                    </div>
+                </section>
+            @endif
 
             <section class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-7">
                 <div class="max-w-2xl">

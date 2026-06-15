@@ -5,6 +5,15 @@
 @section('page-subtitle', 'Review registrations and payment confirmations.')
 
 @section('content')
+    @php
+        $tabs = [
+            'pending' => 'Pending',
+            'final' => 'Awaiting Final',
+            'review' => 'Final Review',
+            'done' => 'Done',
+        ];
+    @endphp
+
     <section class="rounded-lg border border-slate-200 bg-white shadow-sm">
         <div class="border-b border-slate-200 px-5 py-4">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -13,15 +22,13 @@
                     <h2 class="mt-1 text-lg font-semibold">{{ $event->name }}</h2>
                 </div>
 
-                <div class="flex rounded-md border border-slate-200 bg-slate-50 p-1 text-sm">
-                    <a href="{{ route('dashboard.events.registrations.index', ['event' => $event->code, 'tab' => 'pending']) }}" class="rounded px-4 py-2 font-medium {{ $tab === 'pending' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950' }}">
-                        Pending
-                        <span class="ml-2 text-slate-400">{{ $pendingCount }}</span>
-                    </a>
-                    <a href="{{ route('dashboard.events.registrations.index', ['event' => $event->code, 'tab' => 'done']) }}" class="rounded px-4 py-2 font-medium {{ $tab === 'done' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950' }}">
-                        Done
-                        <span class="ml-2 text-slate-400">{{ $doneCount }}</span>
-                    </a>
+                <div class="flex flex-wrap rounded-md border border-slate-200 bg-slate-50 p-1 text-sm">
+                    @foreach($tabs as $tabKey => $tabLabel)
+                        <a href="{{ route('dashboard.events.registrations.index', ['event' => $event->code, 'tab' => $tabKey]) }}" class="rounded px-4 py-2 font-medium {{ $tab === $tabKey ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950' }}">
+                            {{ $tabLabel }}
+                            <span class="ml-2 text-slate-400">{{ $counts[$tabKey] ?? 0 }}</span>
+                        </a>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -38,7 +45,7 @@
                     <tr>
                         <th class="px-5 py-3 font-semibold">Team name</th>
                         <th class="px-5 py-3 font-semibold">Institution</th>
-                        <th class="px-5 py-3 font-semibold">TRX ID</th>
+                        <th class="px-5 py-3 font-semibold">Payment</th>
                         <th class="px-5 py-3 font-semibold">Status</th>
                         <th class="px-5 py-3 text-right font-semibold">Action</th>
                     </tr>
@@ -51,7 +58,13 @@
                                 <p class="mt-1 text-xs text-slate-500">{{ $registration->registration_code }}</p>
                             </td>
                             <td class="px-5 py-4 text-slate-600">{{ $registration->institution }}</td>
-                            <td class="px-5 py-4 font-mono text-sm text-slate-700">{{ $registration->payment?->trx_id ?? '---' }}</td>
+                            <td class="px-5 py-4">
+                                <p class="font-mono text-sm text-slate-700">{{ $registration->payment?->trx_id ?? '---' }}</p>
+                                <p class="mt-1 text-xs capitalize text-slate-500">{{ $registration->payment?->method ?? 'No method' }}</p>
+                                @if($registration->payment)
+                                    <p class="mt-1 text-xs text-slate-500">BDT {{ number_format($registration->payment->amount) }}</p>
+                                @endif
+                            </td>
                             <td class="px-5 py-4">
                                 <div class="flex flex-wrap gap-2">
                                     <span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium capitalize text-slate-700">
@@ -60,18 +73,41 @@
                                     <span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium capitalize text-slate-700">
                                         {{ $registration->payment_status }}
                                     </span>
+                                    @if($registration->finalRegistration)
+                                        <span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium capitalize text-slate-700">
+                                            Final {{ $registration->finalRegistration->status }}
+                                        </span>
+                                    @endif
                                 </div>
                             </td>
                             <td class="px-5 py-4">
-                                <div class="flex justify-end">
-                                    @if ($tab === 'pending')
+                                <div class="flex justify-end gap-2">
+                                    @if ($tab !== 'done')
                                         <form method="POST" action="{{ route('dashboard.events.registrations.approve', ['event' => $event->code, 'registration' => $registration]) }}">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
-                                                Approve
+                                                @if($event->isFinalRoundPaidType() && $registration->status === 'pending')
+                                                    Qualify
+                                                @elseif($event->isFinalRoundPaidType())
+                                                    Approve Payment
+                                                @elseif($registration->status === 'pending')
+                                                    Approve Payment
+                                                @else
+                                                    Approve Intake
+                                                @endif
                                             </button>
                                         </form>
+
+                                        @if($tab === 'review')
+                                            <form method="POST" action="{{ route('dashboard.events.registrations.reject-final', ['event' => $event->code, 'registration' => $registration]) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50">
+                                                    Reject
+                                                </button>
+                                            </form>
+                                        @endif
                                     @else
                                         <form method="POST" action="{{ route('dashboard.events.registrations.unapprove', ['event' => $event->code, 'registration' => $registration]) }}">
                                             @csrf

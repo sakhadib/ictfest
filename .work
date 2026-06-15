@@ -22,3 +22,21 @@ systemctl restart ictfest-queue
 codex resume 019ec450-ae05-7e32-816c-e93512fe1eb1
 
 
+take a firm idea about the project. then let me tell you what I actually want. There are 2 types of mutually exclusive events. 
+1. That are free at preliminary but paid for final round
+2. That are paid at first registration and free at final round. 
+
+the type 1 events are IUPC, Hackathon, GameJam.
+the type 2 events are Datathon, Valorant, Fifa.
+
+you can see them in event seeder. Also notice how we implemented the SMS and Email using db queue job. You will need that.
+
+Now the Flow of what I want is, 
+
+for the type 1 event, registration happens without a transaction ID. then from dashboard someone manually approves the registrations which are qualified for final round. A Email and A SMS will be sent to team leader about this. And you will find a route and contoller of /final-reg/{code} that allowes user to give transaction ids, now these teams will provide Bkash/Nagad marker and the Transaction ID with Tshirt information. Then someone in dashboard approves the payment status. Upon payment status approval a email and an SMS will be sent to the team leader. 
+
+For the type 2 event, registration happens with the Bkash / Nagad Marker and transaction ID. Someone in dashboard approves the registration status and payment status together. Single SMS and Email sent for this with the /final-reg/{code} but here we take the tshirt informations only as payment is already verified. Upon this fillup someone in the dashboard verifies the Tshirt informations and Approves the intake of that team. Final Confirmation Email and SMS arrives at the team lead's mail and phone. 
+
+Now plan for this architecture, how should we build this, and what changes are required 
+
+NB : for any DB change always create new migrations. 

@@ -15,7 +15,7 @@ class FinalRegistrationController extends Controller
 
     public function show(string $registration_code): View|RedirectResponse
     {
-        $registration = $this->approvedRegistration($registration_code);
+        $registration = $this->eligibleRegistration($registration_code);
 
         if (! $registration) {
             return redirect('/');
@@ -24,19 +24,23 @@ class FinalRegistrationController extends Controller
         return view('registrations.final-registration', [
             'registration' => $registration,
             'tshirtSizes' => self::TSHIRT_SIZES,
+            'requiresPayment' => $registration->event?->isFinalRoundPaidType() ?? false,
         ]);
     }
 
     public function store(Request $request, string $registration_code): RedirectResponse
     {
-        $registration = $this->approvedRegistration($registration_code);
+        $registration = $this->eligibleRegistration($registration_code);
 
         if (! $registration) {
             return redirect('/');
         }
 
+        $requiresPayment = $registration->event?->isFinalRoundPaidType() ?? false;
+
         $validated = $request->validate([
-            'trx_id' => ['required', 'string', 'max:255'],
+            'payment_method' => [$requiresPayment ? 'required' : 'nullable', Rule::in(['bkash', 'nagad'])],
+            'trx_id' => [$requiresPayment ? 'required' : 'nullable', 'string', 'max:255'],
             'participants' => ['required', 'array'],
             'participants.*.id' => ['required', 'integer'],
             'participants.*.tshirt_size' => ['required', Rule::in(self::TSHIRT_SIZES)],
@@ -44,10 +48,31 @@ class FinalRegistrationController extends Controller
             'coach.tshirt_size' => ['nullable', 'required_with:coach.id', Rule::in(self::TSHIRT_SIZES)],
         ]);
 
-        DB::transaction(function () use ($registration, $validated): void {
+        DB::transaction(function () use ($registration, $validated, $requiresPayment): void {
+            if ($requiresPayment) {
+                $registration->payment()->updateOrCreate(
+                    ['registration_id' => $registration->id],
+                    [
+                        'amount' => $registration->event?->amount ?? 0,
+                        'method' => $validated['payment_method'],
+                        'trx_id' => $validated['trx_id'],
+                        'status' => 'submitted',
+                        'submitted_at' => now(),
+                        'verified_at' => null,
+                    ],
+                );
+
+                $registration->update([
+                    'payment_status' => 'submitted',
+                ]);
+            }
+
             $registration->finalRegistration()->updateOrCreate(
                 ['registration_id' => $registration->id],
-                ['trx_id' => $validated['trx_id']],
+                [
+                    'trx_id' => $requiresPayment ? $validated['trx_id'] : null,
+                    'status' => 'submitted',
+                ],
             );
 
             foreach ($validated['participants'] as $participantData) {
@@ -72,15 +97,29 @@ class FinalRegistrationController extends Controller
             }
         });
 
-        return back()->with('status', 'Final registration details saved successfully.');
+        return back()->with('status', 'Final registration details submitted successfully.');
     }
 
-    private function approvedRegistration(string $registrationCode): ?Registration
+    private function eligibleRegistration(string $registrationCode): ?Registration
     {
-        return Registration::with(['event', 'participants', 'coach', 'finalRegistration'])
+        $registration = Registration::with(['event', 'participants', 'coach', 'finalRegistration', 'payment'])
             ->where('registration_code', strtoupper(trim($registrationCode)))
-            ->where('status', 'paid')
-            ->where('payment_status', 'confirmed')
             ->first();
+
+        if (! $registration || ! $registration->event) {
+            return null;
+        }
+
+        if ($registration->event->isFinalRoundPaidType()) {
+            return in_array($registration->status, ['verified', 'paid'], true) ? $registration : null;
+        }
+
+        if ($registration->event->isInitialPaidType()) {
+            return $registration->status === 'paid' && $registration->payment_status === 'confirmed'
+                ? $registration
+                : null;
+        }
+
+        return null;
     }
 }

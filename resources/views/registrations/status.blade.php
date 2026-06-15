@@ -12,7 +12,9 @@
     ];
     $registrationStyles = [
         'paid' => ['label' => 'Approved', 'class' => 'border-volt/30 bg-volt/10 text-volt', 'icon' => 'fa-circle-check'],
+        'verified' => ['label' => 'Final Round Qualified', 'class' => 'border-volt/30 bg-volt/10 text-volt', 'icon' => 'fa-circle-check'],
         'pending' => ['label' => 'Pending Review', 'class' => 'border-ember/35 bg-ember/10 text-ember', 'icon' => 'fa-hourglass-half'],
+        'rejected' => ['label' => 'Rejected', 'class' => 'border-red-400/25 bg-red-500/10 text-red-200', 'icon' => 'fa-circle-xmark'],
     ];
     $paymentStatus = $registration?->payment_status;
     $paymentStyle = $paymentStyles[$paymentStatus] ?? ['label' => 'Payment Status Unknown', 'class' => 'border-white/12 bg-white/[.06] text-white/72', 'icon' => 'fa-circle-question'];
@@ -142,6 +144,24 @@
                                     <span class="text-sm text-white/48">Transaction ID</span>
                                     <span class="font-mono text-sm font-semibold text-white">{{ $registration->payment->trx_id }}</span>
                                 </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($registration->finalRegistration)
+                        <div class="rounded-lg border border-white/10 bg-white/[.035] p-5">
+                            <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Final Submission</p>
+                            <div class="mt-5 grid gap-4">
+                                <div class="flex items-center justify-between gap-4">
+                                    <span class="text-sm text-white/48">Status</span>
+                                    <span class="text-sm font-semibold capitalize text-white">{{ $registration->finalRegistration->status }}</span>
+                                </div>
+                                @if($registration->finalRegistration->trx_id)
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="text-sm text-white/48">Transaction ID</span>
+                                        <span class="font-mono text-sm font-semibold text-white">{{ $registration->finalRegistration->trx_id }}</span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     @endif

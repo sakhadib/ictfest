@@ -83,6 +83,16 @@
                 </label>
 
                 <label>
+                    <span class="{{ $labelClass }}">Final registration status</span>
+                    <select name="final_registration_status" class="{{ $inputClass }}">
+                        <option value="">Any</option>
+                        @foreach (['submitted', 'approved', 'rejected'] as $status)
+                            <option value="{{ $status }}" @selected($filters['final_registration_status'] === $status)>{{ ucfirst($status) }}</option>
+                        @endforeach
+                    </select>
+                </label>
+
+                <label>
                     <span class="{{ $labelClass }}">Institution contains</span>
                     <input name="institution" value="{{ $filters['institution'] }}" class="{{ $inputClass }}" placeholder="IUT">
                 </label>

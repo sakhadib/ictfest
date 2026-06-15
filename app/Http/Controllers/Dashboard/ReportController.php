@@ -29,6 +29,7 @@ class ReportController extends Controller
         'payment_method',
         'trx_id',
         'payment_amount',
+        'final_registration_status',
         'participants_count',
         'registered_at',
     ];
@@ -100,6 +101,8 @@ class ReportController extends Controller
             'trx_id' => 'TRX ID',
             'payment_amount' => 'Payment Amount',
             'payment_record_status' => 'Payment Record Status',
+            'final_registration_status' => 'Final Registration Status',
+            'final_registration_trx_id' => 'Final Registration TRX ID',
             'payment_submitted_at' => 'Payment Submitted At',
             'payment_verified_at' => 'Payment Verified At',
             'participants_count' => 'Participants Count',
@@ -140,6 +143,7 @@ class ReportController extends Controller
             'payment_status' => $request->query('payment_status'),
             'payment_method' => $request->query('payment_method'),
             'payment_record_status' => $request->query('payment_record_status'),
+            'final_registration_status' => $request->query('final_registration_status'),
             'has_payment' => $request->query('has_payment'),
             'registered_from' => $request->query('registered_from'),
             'registered_to' => $request->query('registered_to'),
@@ -162,13 +166,14 @@ class ReportController extends Controller
     private function reportQuery(array $filters): Builder
     {
         $query = Registration::query()
-            ->with(['event', 'payment', 'coach', 'participants' => fn ($query) => $query->orderByDesc('is_leader')->orderBy('id')])
+            ->with(['event', 'payment', 'coach', 'finalRegistration', 'participants' => fn ($query) => $query->orderByDesc('is_leader')->orderBy('id')])
             ->withCount('participants');
 
         $query
             ->when($filters['event_id'], fn (Builder $query, string $eventId) => $query->where('event_id', $eventId))
             ->when($filters['registration_status'], fn (Builder $query, string $status) => $query->where('status', $status))
             ->when($filters['payment_status'], fn (Builder $query, string $status) => $query->where('payment_status', $status))
+            ->when($filters['final_registration_status'], fn (Builder $query, string $status) => $query->whereHas('finalRegistration', fn (Builder $query) => $query->where('status', $status)))
             ->when($filters['registered_from'], fn (Builder $query, string $date) => $query->whereDate('created_at', '>=', $date))
             ->when($filters['registered_to'], fn (Builder $query, string $date) => $query->whereDate('created_at', '<=', $date))
             ->when($filters['institution'], fn (Builder $query, string $institution) => $query->where('institution', 'like', "%{$institution}%"));
@@ -266,6 +271,8 @@ class ReportController extends Controller
             'trx_id' => $registration->payment?->trx_id ?? '---',
             'payment_amount' => $registration->payment?->amount,
             'payment_record_status' => $registration->payment?->status,
+            'final_registration_status' => $registration->finalRegistration?->status,
+            'final_registration_trx_id' => $registration->finalRegistration?->trx_id,
             'payment_submitted_at' => $registration->payment?->submitted_at?->format('Y-m-d H:i:s'),
             'payment_verified_at' => $registration->payment?->verified_at?->format('Y-m-d H:i:s'),
             'participants_count' => $registration->participants_count,

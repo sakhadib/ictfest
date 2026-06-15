@@ -21,11 +21,13 @@ class EventStatusController extends Controller
     {
         $validated = $request->validate([
             'rulebook_link' => ['nullable', 'url', 'max:255'],
+            'amount' => ['nullable', 'integer', 'min:0'],
             'action' => ['required', 'in:save,live,down'],
         ]);
 
         $event->update([
             'rulebook_link' => $validated['rulebook_link'] ?? null,
+            'amount' => $validated['amount'] ?? 0,
             'is_live' => match ($validated['action']) {
                 'live' => true,
                 'down' => false,

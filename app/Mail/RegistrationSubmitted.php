@@ -23,7 +23,7 @@ class RegistrationSubmitted extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->registration->event?->code === '01'
+            subject: $this->registration->event?->isFinalRoundPaidType()
                 ? 'Pre-Registration received: '.$this->registration->registration_code
                 : 'Registration received: '.$this->registration->registration_code,
         );

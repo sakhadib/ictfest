@@ -9,9 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable([
     'registration_id',
     'trx_id',
+    'status',
 ])]
 class FinalRegistration extends Model
 {
+    public const STATUS_SUBMITTED = 'submitted';
+
+    public const STATUS_APPROVED = 'approved';
+
+    public const STATUS_REJECTED = 'rejected';
+
     /**
      * Get the registration for this final registration submission.
      */

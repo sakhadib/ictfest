@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/dashboard/event-status/{event:code}', [EventStatusController::class, 'update'])->name('dashboard.event-status.update');
     Route::get('/dashboard/events/{event:code}', [EventRegistrationController::class, 'index'])->name('dashboard.events.registrations.index');
     Route::patch('/dashboard/events/{event:code}/registrations/{registration}/approve', [EventRegistrationController::class, 'approve'])->name('dashboard.events.registrations.approve');
+    Route::patch('/dashboard/events/{event:code}/registrations/{registration}/reject-final', [EventRegistrationController::class, 'rejectFinal'])->name('dashboard.events.registrations.reject-final');
     Route::patch('/dashboard/events/{event:code}/registrations/{registration}/unapprove', [EventRegistrationController::class, 'unapprove'])->name('dashboard.events.registrations.unapprove');
     Route::resource('/dashboard/users', UserController::class)
         ->except(['create', 'show'])
