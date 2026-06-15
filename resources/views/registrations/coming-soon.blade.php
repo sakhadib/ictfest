@@ -9,10 +9,10 @@
             <div>
                 <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Registration</p>
                 <h1 class="mt-6 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                    Registration will be live soon.
+                    {{ $title ?? 'Registration will be live soon.' }}
                 </h1>
                 <p class="mt-7 max-w-2xl text-base leading-8 text-white/58">
-                    {{ $event->name }} registration is not open yet. Please check back once the event team makes this registration live.
+                    {{ $message ?? $event->name.' registration is not open yet. Please check back once the event team makes this registration live.' }}
                 </p>
                 <div class="mt-10">
                     <a href="{{ url()->previous() !== url()->current() ? url()->previous() : url('/') }}" class="inline-flex items-center justify-center rounded-md border border-white/12 bg-white/[.04] px-5 py-3 text-sm font-semibold text-white/72 transition hover:border-white/28 hover:text-white">
@@ -32,7 +32,7 @@
                     <div class="flex items-center justify-between gap-4 border-t border-white/10 pt-4">
                         <span class="text-sm text-white/48">Status</span>
                         <span class="rounded-full border border-white/12 bg-white/[.06] px-3 py-1 text-xs font-semibold text-white/72">
-                            Coming soon
+                            {{ $status ?? 'Coming soon' }}
                         </span>
                     </div>
                 </div>

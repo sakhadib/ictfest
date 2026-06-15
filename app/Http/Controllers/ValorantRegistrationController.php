@@ -30,6 +30,10 @@ class ValorantRegistrationController extends Controller
             return $this->registrationComingSoon($event);
         }
 
+        if (! $event->hasAvailableSlots()) {
+            return $this->registrationSlotsFull($event);
+        }
+
         return view('registrations.valorant-create', [
             'event' => $event,
             'universities' => $this->universitySearchOptions(),
@@ -43,6 +47,7 @@ class ValorantRegistrationController extends Controller
     {
         $event = $this->registrationEvent(self::EVENT_CODE);
         $this->ensureRegistrationIsLive($event);
+        $this->ensureRegistrationHasAvailableSlots($event);
 
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],

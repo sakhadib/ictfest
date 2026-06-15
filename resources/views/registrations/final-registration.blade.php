@@ -77,6 +77,29 @@
                 </div>
             @endif
 
+            <section class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-7">
+                <div class="max-w-2xl">
+                    <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Registration Details</p>
+                    <h2 class="mt-4 text-2xl font-semibold text-white">Team information</h2>
+                    <p class="mt-3 text-sm leading-7 text-white/56">
+                        You can update submitted details here. Institution and university fields are locked.
+                    </p>
+                </div>
+
+                <div class="mt-6 grid gap-4 md:grid-cols-2">
+                    <label>
+                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Team / Player Name</span>
+                        <input name="team_name" value="{{ old('team_name', $registration->team_name) }}" class="{{ $inputClass }}" placeholder="Team / Player name">
+                        @error('team_name')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                    </label>
+
+                    <div class="rounded-lg bg-black/15 p-4">
+                        <p class="text-xs uppercase tracking-[.16em] text-white/32">Institution</p>
+                        <p class="mt-2 text-sm font-semibold text-white">{{ $registration->institution }}</p>
+                    </div>
+                </div>
+            </section>
+
             @if($requiresPayment)
                 <section class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-7">
                     <div class="max-w-2xl">
@@ -118,9 +141,9 @@
             <section class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-7">
                 <div class="max-w-2xl">
                     <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Participants</p>
-                    <h2 class="mt-4 text-2xl font-semibold text-white">Shirt sizes</h2>
+                    <h2 class="mt-4 text-2xl font-semibold text-white">Participant details and shirt sizes</h2>
                     <p class="mt-3 text-sm leading-7 text-white/56">
-                        Every listed participant must have a selected size before you submit.
+                        Every listed participant must have complete details and a selected size before you submit. University cannot be changed from this page.
                     </p>
                 </div>
 
@@ -129,7 +152,7 @@
                         @php($participantIndex = $loop->index)
                         <article class="rounded-lg bg-black/15 p-5">
                             <input type="hidden" name="participants[{{ $participantIndex }}][id]" value="{{ $participant->id }}">
-                            <div class="grid gap-6 lg:grid-cols-[1fr_13rem] lg:items-end">
+                            <div class="grid gap-6">
                                 <div>
                                     <div class="flex flex-wrap items-center gap-3">
                                         <h3 class="text-lg font-semibold text-white">{{ $participant->full_name }}</h3>
@@ -137,9 +160,37 @@
                                             <span class="rounded-full border border-volt/30 px-2.5 py-1 text-xs text-volt">Leader</span>
                                         @endif
                                     </div>
-                                    <p class="mt-2 break-words text-sm leading-6 text-white/50">{{ $participant->email }}</p>
-                                    <p class="text-sm text-white/50">{{ $participant->phone }}</p>
-                                    <p class="mt-2 text-sm text-white/58">{{ $participant->student_id }} | {{ $participant->university }}</p>
+                                </div>
+
+                                <div class="grid gap-4 md:grid-cols-2">
+                                    <label>
+                                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Full Name</span>
+                                        <input name="participants[{{ $participantIndex }}][full_name]" value="{{ old("participants.$participantIndex.full_name", $participant->full_name) }}" class="{{ $inputClass }}" placeholder="Full name">
+                                        @error("participants.$participantIndex.full_name")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                                    </label>
+
+                                    <label>
+                                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Email</span>
+                                        <input type="email" name="participants[{{ $participantIndex }}][email]" value="{{ old("participants.$participantIndex.email", $participant->email) }}" class="{{ $inputClass }}" placeholder="Email">
+                                        @error("participants.$participantIndex.email")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                                    </label>
+
+                                    <label>
+                                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Phone</span>
+                                        <input name="participants[{{ $participantIndex }}][phone]" value="{{ old("participants.$participantIndex.phone", $participant->phone) }}" class="{{ $inputClass }}" placeholder="Phone">
+                                        @error("participants.$participantIndex.phone")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                                    </label>
+
+                                    <label>
+                                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Student ID</span>
+                                        <input name="participants[{{ $participantIndex }}][student_id]" value="{{ old("participants.$participantIndex.student_id", $participant->student_id) }}" class="{{ $inputClass }}" placeholder="Student ID">
+                                        @error("participants.$participantIndex.student_id")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                                    </label>
+
+                                    <div class="rounded-lg bg-black/15 p-4 md:col-span-2">
+                                        <p class="text-xs uppercase tracking-[.16em] text-white/32">University</p>
+                                        <p class="mt-2 text-sm font-semibold text-white">{{ $participant->university }}</p>
+                                    </div>
                                 </div>
 
                                 <div>
@@ -161,15 +212,38 @@
                     @if($registration->coach)
                         <article class="rounded-lg bg-black/15 p-5">
                             <input type="hidden" name="coach[id]" value="{{ $registration->coach->id }}">
-                            <div class="grid gap-6 lg:grid-cols-[1fr_13rem] lg:items-end">
+                            <div class="grid gap-6">
                                 <div>
                                     <div class="flex flex-wrap items-center gap-3">
                                         <h3 class="text-lg font-semibold text-white">{{ $registration->coach->name }}</h3>
                                         <span class="rounded-full border border-white/12 px-2.5 py-1 text-xs text-white/56">Coach</span>
                                     </div>
-                                    <p class="mt-2 text-sm leading-6 text-white/50">{{ $registration->coach->designation }}</p>
-                                    <p class="break-words text-sm leading-6 text-white/50">{{ $registration->coach->official_email }}</p>
-                                    <p class="text-sm text-white/50">{{ $registration->coach->contact_number }}</p>
+                                </div>
+
+                                <div class="grid gap-4 md:grid-cols-2">
+                                    <label>
+                                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Coach Name</span>
+                                        <input name="coach[name]" value="{{ old('coach.name', $registration->coach->name) }}" class="{{ $inputClass }}" placeholder="Coach name">
+                                        @error('coach.name')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                                    </label>
+
+                                    <label>
+                                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Designation</span>
+                                        <input name="coach[designation]" value="{{ old('coach.designation', $registration->coach->designation) }}" class="{{ $inputClass }}" placeholder="Designation">
+                                        @error('coach.designation')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                                    </label>
+
+                                    <label>
+                                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Official Email</span>
+                                        <input type="email" name="coach[official_email]" value="{{ old('coach.official_email', $registration->coach->official_email) }}" class="{{ $inputClass }}" placeholder="Official email">
+                                        @error('coach.official_email')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                                    </label>
+
+                                    <label>
+                                        <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Contact Number</span>
+                                        <input name="coach[contact_number]" value="{{ old('coach.contact_number', $registration->coach->contact_number) }}" class="{{ $inputClass }}" placeholder="Contact number">
+                                        @error('coach.contact_number')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                                    </label>
                                 </div>
 
                                 <div>

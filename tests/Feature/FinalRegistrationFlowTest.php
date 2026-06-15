@@ -61,10 +61,18 @@ class FinalRegistrationFlowTest extends TestCase
         Queue::fake();
 
         $this->post(route('final-registration.store', ['registration_code' => $registration->registration_code]), [
+            'team_name' => 'Team Alpha Updated',
             'payment_method' => 'bkash',
             'trx_id' => 'T1FINAL123',
             'participants' => [
-                ['id' => $participant->id, 'tshirt_size' => 'L'],
+                [
+                    'id' => $participant->id,
+                    'full_name' => 'Updated Lead',
+                    'email' => 'updated@example.test',
+                    'phone' => '01700000000',
+                    'student_id' => 'S-002',
+                    'tshirt_size' => 'L',
+                ],
             ],
         ])->assertRedirect();
 
@@ -75,6 +83,9 @@ class FinalRegistrationFlowTest extends TestCase
         $this->assertSame('bkash', $registration->payment->method);
         $this->assertSame('T1FINAL123', $registration->payment->trx_id);
         $this->assertSame(FinalRegistration::STATUS_SUBMITTED, $registration->finalRegistration->status);
+        $this->assertSame('Team Alpha Updated', $registration->team_name);
+        $this->assertSame('Updated Lead', $participant->refresh()->full_name);
+        $this->assertSame('IUT', $participant->university);
 
         $this->actingAs($admin)
             ->patch(route('dashboard.events.registrations.approve', [$event, $registration]))
@@ -123,7 +134,7 @@ class FinalRegistrationFlowTest extends TestCase
 
         $registration->refresh();
 
-        $this->assertSame('paid', $registration->status);
+        $this->assertSame('pending', $registration->status);
         $this->assertSame('confirmed', $registration->payment_status);
         $this->assertSame('confirmed', $registration->payment->status);
         Mail::assertQueued(RegistrationStageUpdated::class);
@@ -132,9 +143,23 @@ class FinalRegistrationFlowTest extends TestCase
         Mail::fake();
         Queue::fake();
 
+        $this->actingAs($admin)
+            ->patch(route('dashboard.events.registrations.approve', [$event, $registration]))
+            ->assertRedirect();
+
+        $this->assertSame(FinalRegistration::STATUS_INVITED, $registration->refresh()->finalRegistration->status);
+
         $this->post(route('final-registration.store', ['registration_code' => $registration->registration_code]), [
+            'team_name' => 'Team Beta',
             'participants' => [
-                ['id' => $participant->id, 'tshirt_size' => 'M'],
+                [
+                    'id' => $participant->id,
+                    'full_name' => 'Updated Lead',
+                    'email' => 'updated@example.test',
+                    'phone' => '01700000000',
+                    'student_id' => 'S-002',
+                    'tshirt_size' => 'M',
+                ],
             ],
         ])->assertRedirect();
 
@@ -144,6 +169,8 @@ class FinalRegistrationFlowTest extends TestCase
         $this->assertNull($registration->finalRegistration->trx_id);
         $this->assertSame(FinalRegistration::STATUS_SUBMITTED, $registration->finalRegistration->status);
         $this->assertSame('M', $participant->refresh()->tshirt_size);
+        $this->assertSame('Updated Lead', $participant->full_name);
+        $this->assertSame('IUT', $participant->university);
 
         $this->actingAs($admin)
             ->patch(route('dashboard.events.registrations.approve', [$event, $registration]))

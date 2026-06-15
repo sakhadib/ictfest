@@ -19,9 +19,24 @@ abstract class Controller
         return view('registrations.coming-soon', compact('event'));
     }
 
+    protected function registrationSlotsFull(Event $event): View
+    {
+        return view('registrations.coming-soon', [
+            'event' => $event,
+            'title' => 'Registration slots are full.',
+            'message' => $event->name.' registration is currently closed because all available slots are occupied.',
+            'status' => 'Slots full',
+        ]);
+    }
+
     protected function ensureRegistrationIsLive(Event $event): void
     {
         abort_unless($event->is_live, 403, 'Registration is not live yet.');
+    }
+
+    protected function ensureRegistrationHasAvailableSlots(Event $event): void
+    {
+        abort_if($event->hasSlotLimit() && ! $event->hasAvailableSlots(), 403, 'Registration slots are full.');
     }
 
     /**

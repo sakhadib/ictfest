@@ -26,6 +26,7 @@ class SendRegistrationSms implements ShouldQueue
         public string $senderId,
         public string $url,
         public string $stage = 'registration_submitted',
+        public ?string $recipientPhone = null,
     ) {
     }
 
@@ -33,13 +34,14 @@ class SendRegistrationSms implements ShouldQueue
     {
         $this->registration->loadMissing('event');
 
-        $number = $this->normalizePhoneNumber($this->registration->contact_phone);
+        $phone = $this->recipientPhone ?? $this->registration->contact_phone;
+        $number = $this->normalizePhoneNumber($phone);
 
         if (! $this->apiKey || ! $this->senderId || ! $this->url || ! $number) {
             Log::warning('Registration confirmation SMS skipped because configuration or phone number is missing.', [
                 'registration_id' => $this->registration->id,
                 'registration_code' => $this->registration->registration_code,
-                'phone' => $this->registration->contact_phone,
+                'phone' => $phone,
                 'normalized_phone' => $number,
             ]);
 
@@ -130,7 +132,7 @@ class SendRegistrationSms implements ShouldQueue
                     $this->signaturePrefix(),
                 )
                 : sprintf(
-                    'Congratulations! Your team %s is qualified for %s at %s. Payable amount: %s. Submit final details: %s.%s IUTCS',
+                    'Congratulations! Your team %s is qualified for %s. Payable amount: %s. Submit final details: %s.%s IUTCS',
                     $this->registration->team_name,
                     $event,
                     $this->formattedAmount(),

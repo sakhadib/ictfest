@@ -7,7 +7,7 @@
     $facts = [
         ['label' => 'Registration Fee', 'value' => '800 BDT per team', 'icon' => 'fa-ticket'],
         ['label' => 'Team Size', 'value' => '1-4 members', 'icon' => 'fa-users'],
-        ['label' => 'Timeline', 'value' => '18 June - 13 July', 'icon' => 'fa-calendar-days'],
+        ['label' => 'Reg and Preli Round', 'value' => '18 June - 21 July', 'icon' => 'fa-calendar-days'],
         ['label' => 'Final Round', 'value' => '10 AM - 3 PM, 25 July', 'icon' => 'fa-flag-checkered'],
     ];
 

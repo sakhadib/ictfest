@@ -40,16 +40,29 @@ class FinalRegistrationController extends Controller
         $requiresPayment = $registration->event?->isFinalRoundPaidType() ?? false;
 
         $validated = $request->validate([
+            'team_name' => ['required', 'string', 'max:255'],
             'payment_method' => [$requiresPayment ? 'required' : 'nullable', Rule::in(['bkash', 'nagad'])],
             'trx_id' => [$requiresPayment ? 'required' : 'nullable', 'string', 'max:255'],
             'participants' => ['required', 'array'],
             'participants.*.id' => ['required', 'integer'],
+            'participants.*.full_name' => ['required', 'string', 'max:255'],
+            'participants.*.email' => ['required', 'email', 'max:255'],
+            'participants.*.phone' => ['required', 'string', 'max:30'],
+            'participants.*.student_id' => ['required', 'string', 'max:255'],
             'participants.*.tshirt_size' => ['required', Rule::in(self::TSHIRT_SIZES)],
             'coach.id' => ['nullable', 'integer'],
+            'coach.name' => ['nullable', 'required_with:coach.id', 'string', 'max:255'],
+            'coach.designation' => ['nullable', 'required_with:coach.id', 'string', 'max:255'],
+            'coach.official_email' => ['nullable', 'required_with:coach.id', 'email', 'max:255'],
+            'coach.contact_number' => ['nullable', 'required_with:coach.id', 'string', 'max:30'],
             'coach.tshirt_size' => ['nullable', 'required_with:coach.id', Rule::in(self::TSHIRT_SIZES)],
         ]);
 
         DB::transaction(function () use ($registration, $validated, $requiresPayment): void {
+            $registration->update([
+                'team_name' => $validated['team_name'],
+            ]);
+
             if ($requiresPayment) {
                 $registration->payment()->updateOrCreate(
                     ['registration_id' => $registration->id],
@@ -81,8 +94,20 @@ class FinalRegistrationController extends Controller
 
                 if ($participant) {
                     $participant->update([
+                        'full_name' => $participantData['full_name'],
+                        'email' => $participantData['email'],
+                        'phone' => $participantData['phone'],
+                        'student_id' => $participantData['student_id'],
                         'tshirt_size' => $participantData['tshirt_size'],
                     ]);
+
+                    if ($participant->is_leader) {
+                        $registration->update([
+                            'contact_name' => $participantData['full_name'],
+                            'contact_email' => $participantData['email'],
+                            'contact_phone' => $participantData['phone'],
+                        ]);
+                    }
                 }
             }
 
@@ -93,6 +118,10 @@ class FinalRegistrationController extends Controller
                 filled($validated['coach']['tshirt_size'] ?? null)
             ) {
                 $registration->coach->update([
+                    'name' => $validated['coach']['name'],
+                    'designation' => $validated['coach']['designation'],
+                    'official_email' => $validated['coach']['official_email'],
+                    'contact_number' => $validated['coach']['contact_number'],
                     'tshirt_size' => $validated['coach']['tshirt_size'],
                 ]);
             }

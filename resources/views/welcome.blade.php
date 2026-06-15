@@ -197,7 +197,10 @@
         <div class="mt-16 grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
             @foreach($events as $event)
                 @php
-                    $eventIsLive = (bool) ($eventRecords[$event['code']]?->is_live ?? false);
+                    $eventRecord = $eventRecords[$event['code']] ?? null;
+                    $eventIsLive = (bool) ($eventRecord?->is_live ?? false);
+                    $remainingSlots = $eventRecord?->remainingSlots();
+                    $slotLimit = $eventRecord?->slotLimit();
                 @endphp
                 <article class="group flex h-full min-h-[29rem] flex-col rounded-lg border border-white/10 bg-white/[.035] p-5 transition duration-300 hover:-translate-y-1 hover:border-white/24 hover:bg-white/[.055]">
                     <div class="flex items-start gap-4">
@@ -253,7 +256,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-5 grid gap-3 {{ isset($event['register_url']) && $eventIsLive ? 'sm:grid-cols-2' : '' }}">
+                    <div class="mt-5 grid gap-3 {{ isset($event['register_url']) && $eventIsLive && ($remainingSlots === null || $remainingSlots > 0) ? 'sm:grid-cols-2' : '' }}">
                         @if(isset($event['url']))
                             <a href="{{ url($event['url']) }}" class="inline-flex items-center justify-center gap-2 rounded-md border border-white/12 bg-white/[.04] px-4 py-2.5 text-sm font-medium text-white/72 transition hover:border-volt/60 hover:text-white">
                                 Details
@@ -261,10 +264,14 @@
                             </a>
                         @endif
 
-                        @if(isset($event['register_url']) && $eventIsLive)
+                        @if(isset($event['register_url']) && $eventIsLive && ($remainingSlots === null || $remainingSlots > 0))
                             <a href="{{ url($event['register_url']) }}" class="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-volt">
                                 {{ $event['name'] === 'Programming Contest' ? 'Pre-register' : 'Register' }}
                             </a>
+                        @elseif(isset($event['register_url']) && $eventIsLive)
+                            <span class="inline-flex items-center justify-center gap-2 rounded-md border border-white/12 bg-white/[.04] px-4 py-2.5 text-sm font-semibold text-white/58">
+                                Slots full
+                            </span>
                         @endif
                     </div>
                 </article>

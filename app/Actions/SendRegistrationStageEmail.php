@@ -12,9 +12,16 @@ class SendRegistrationStageEmail
 {
     public static function queue(Registration $registration, string $stage): void
     {
+        $registration->loadMissing(['event', 'coach']);
+
         try {
             Mail::to($registration->contact_email, $registration->contact_name)
                 ->queue(new RegistrationStageUpdated($registration, $stage));
+
+            if (self::shouldNotifyCoach($registration)) {
+                Mail::to($registration->coach->official_email, $registration->coach->name)
+                    ->queue(new RegistrationStageUpdated($registration, $stage));
+            }
         } catch (Throwable $exception) {
             Log::error('Registration stage email queueing failed.', [
                 'registration_id' => $registration->id,
@@ -24,5 +31,10 @@ class SendRegistrationStageEmail
                 'exception' => $exception->getMessage(),
             ]);
         }
+    }
+
+    private static function shouldNotifyCoach(Registration $registration): bool
+    {
+        return $registration->event?->code === '01' && filled($registration->coach?->official_email);
     }
 }

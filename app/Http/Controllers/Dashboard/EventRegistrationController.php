@@ -153,6 +153,26 @@ class EventRegistrationController extends Controller
         return back()->with('status', 'Final submission rejected.');
     }
 
+    public function reject(Event $event, Registration $registration): RedirectResponse
+    {
+        $this->ensureRegistrationBelongsToEvent($event, $registration);
+
+        abort_unless($event->hasSlotLimit() && $registration->status === 'pending', 404);
+
+        DB::transaction(function () use ($registration): void {
+            $registration->update([
+                'status' => 'rejected',
+            ]);
+
+            $registration->payment?->update([
+                'status' => 'rejected',
+                'verified_at' => null,
+            ]);
+        });
+
+        return back()->with('status', 'Registration rejected and one slot released.');
+    }
+
     public function unapprove(Event $event, Registration $registration): RedirectResponse
     {
         $this->ensureRegistrationBelongsToEvent($event, $registration);

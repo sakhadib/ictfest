@@ -4,6 +4,9 @@
 
 @section('content')
 @php
+    $remainingSlots = $eventRecord?->remainingSlots();
+    $slotLimit = $eventRecord?->slotLimit();
+
     $facts = [
         ['label' => 'Registration Fee', 'value' => '600 BDT per team', 'icon' => 'fa-ticket'],
         ['label' => 'Registration Window', 'value' => '18 June - 30 June', 'icon' => 'fa-calendar-plus'],
@@ -84,6 +87,17 @@
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
                     A 32-team Valorant tournament moving through online knockout and double elimination rounds before the onsite LAN final.
                 </p>
+                @if($remainingSlots !== null)
+                    <div class="mt-8 inline-flex items-center gap-5 rounded-lg border border-iris/35 bg-iris/10 px-5 py-4">
+                        <span class="grid h-11 w-11 place-items-center rounded-md bg-iris/15 text-iris">
+                            <i class="fa-solid fa-ticket"></i>
+                        </span>
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-[.18em] text-iris/85">Slots Left</p>
+                            <p class="mt-1 text-3xl font-semibold text-white">{{ $remainingSlots }} / {{ $slotLimit }}</p>
+                        </div>
+                    </div>
+                @endif
                 <div class="mt-10">
                     @if(filled($eventRecord?->rulebook_link))
                         <a href="{{ $eventRecord->rulebook_link }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-iris">
@@ -244,11 +258,22 @@
         <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/56">
             Register your university roster and prepare your LAN equipment before the online match window begins.
         </p>
+        @if($remainingSlots !== null)
+            <div class="mx-auto mt-8 max-w-sm rounded-lg border border-iris/35 bg-iris/10 px-5 py-4">
+                <p class="text-xs font-medium uppercase tracking-[.18em] text-iris/85">Available Slots</p>
+                <p class="mt-2 text-4xl font-semibold text-white">{{ $remainingSlots }}</p>
+                <p class="mt-2 text-sm text-white/56">out of {{ $slotLimit }} team slots</p>
+            </div>
+        @endif
         <div class="mt-10 flex justify-center">
-            @if($eventRecord?->is_live)
+            @if($eventRecord?->is_live && $eventRecord?->hasAvailableSlots())
                 <a href="{{ route('valorant.register') }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-iris">
                     Register Now
                 </a>
+            @elseif($eventRecord?->is_live)
+                <span class="inline-flex items-center justify-center gap-3 rounded-md border border-iris/30 bg-iris/10 px-5 py-3 text-sm font-semibold text-iris">
+                    Slots are full
+                </span>
             @else
                 <span class="inline-flex items-center justify-center gap-3 rounded-md border border-white/12 bg-white/[.04] px-5 py-3 text-sm font-semibold text-white/58">
                     Registration will be live soon

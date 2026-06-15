@@ -12,9 +12,16 @@ class SendRegistrationConfirmationEmail
 {
     public static function queue(Registration $registration): void
     {
+        $registration->loadMissing(['event', 'coach']);
+
         try {
             Mail::to($registration->contact_email, $registration->contact_name)
                 ->queue(new RegistrationSubmitted($registration));
+
+            if (self::shouldNotifyCoach($registration)) {
+                Mail::to($registration->coach->official_email, $registration->coach->name)
+                    ->queue(new RegistrationSubmitted($registration));
+            }
         } catch (Throwable $exception) {
             Log::error('Registration confirmation email queueing failed.', [
                 'registration_id' => $registration->id,
@@ -23,5 +30,10 @@ class SendRegistrationConfirmationEmail
                 'exception' => $exception->getMessage(),
             ]);
         }
+    }
+
+    private static function shouldNotifyCoach(Registration $registration): bool
+    {
+        return $registration->event?->code === '01' && filled($registration->coach?->official_email);
     }
 }

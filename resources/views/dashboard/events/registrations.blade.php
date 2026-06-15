@@ -94,6 +94,16 @@
                                                 @endif
                                             </button>
                                         </form>
+
+                                        @if($event->hasSlotLimit())
+                                            <form method="POST" action="{{ route('dashboard.events.registrations.reject', ['event' => $event->code, 'registration' => $registration]) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50">
+                                                    Reject
+                                                </button>
+                                            </form>
+                                        @endif
                                     @elseif($tab === 'review')
                                         @if($event->isInitialPaidType() && $registration->finalRegistration?->status === \App\Models\FinalRegistration::STATUS_INVITED)
                                             <span class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-500">
