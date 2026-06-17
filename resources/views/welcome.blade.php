@@ -77,7 +77,7 @@
             'accent' => 'volt',
             'fee' => 'Free preliminary, 700 BDT final',
             'team' => '1-3 members',
-            'window' => '18 June - 10 July',
+            'window' => '17 June - 10 July',
             'date' => 'Online: 14-19 July, Final: 25 July',
             'venue' => 'Onsite showcase',
             'signal' => 'Online build round selects 15 teams for the final onsite showcase.',

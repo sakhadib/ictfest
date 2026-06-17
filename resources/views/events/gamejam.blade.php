@@ -31,12 +31,12 @@
 
     $timeline = [
         [
-            'date' => '18 June - 17 July',
+            'date' => '17 June - 10 July',
             'label' => 'Registration',
             'accent' => 'volt',
             'icon' => 'fa-pen-to-square',
             'items' => [
-                ['value' => '18 June', 'label' => 'Opens', 'icon' => 'fa-door-open'],
+                ['value' => '17 June', 'label' => 'Opens', 'icon' => 'fa-door-open'],
                 ['value' => '10 July', 'label' => 'Closes', 'icon' => 'fa-lock'],
             ],
         ],
