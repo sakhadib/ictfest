@@ -95,20 +95,24 @@
 
             <div class="mt-12">
                 <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Payment</p>
+                @include('registrations.partials.payment-instructions', [
+                    'amount' => '200 BDT',
+                    'number' => '01339562347',
+                ])
                 <div class="mt-6 grid gap-5 sm:grid-cols-2">
                     <div>
                         <span class="{{ $labelClass }}">Method</span>
                         <div class="mt-2 grid grid-cols-2 gap-3">
                             <label class="cursor-pointer">
                                 <input type="radio" name="payment_method" value="bkash" class="peer sr-only" @checked(old('payment_method') === 'bkash')>
-                                <span class="flex items-center justify-center rounded-md border border-white/10 bg-white/[.035] px-4 py-3 text-sm font-semibold text-white/58 transition peer-checked:border-ember/60 peer-checked:bg-ember/10 peer-checked:text-white hover:border-white/24">
-                                    bKash
+                                <span class="flex min-h-16 items-center justify-center rounded-md border border-white/10 bg-white/[.035] px-4 py-3 transition peer-checked:border-ember/60 peer-checked:bg-ember/10 hover:border-white/24">
+                                    <img src="{{ asset('assets/bkash.webp') }}" alt="bKash" class="h-8 w-auto">
                                 </span>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="payment_method" value="nagad" class="peer sr-only" @checked(old('payment_method') === 'nagad')>
-                                <span class="flex items-center justify-center rounded-md border border-white/10 bg-white/[.035] px-4 py-3 text-sm font-semibold text-white/58 transition peer-checked:border-ember/60 peer-checked:bg-ember/10 peer-checked:text-white hover:border-white/24">
-                                    Nagad
+                                <span class="flex min-h-16 items-center justify-center rounded-md border border-white/10 bg-white/[.035] px-4 py-3 transition peer-checked:border-ember/60 peer-checked:bg-ember/10 hover:border-white/24">
+                                    <img src="{{ asset('assets/nagad.png') }}" alt="Nagad" class="h-8 w-auto">
                                 </span>
                             </label>
                         </div>

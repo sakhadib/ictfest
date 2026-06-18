@@ -7,8 +7,12 @@
     $inputClass = 'mt-2 w-full rounded-md border border-white/10 bg-white/[.035] px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/24 focus:border-volt/50';
     $selectedPaymentMethod = old('payment_method', $registration->payment?->method);
     $selectedCoachSize = old('coach.tshirt_size', $registration->coach?->tshirt_size);
+    $paymentInfo = [
+        '02' => ['amount' => '1500 BDT', 'number' => '01746145346'],
+        '04' => ['amount' => '700 BDT', 'number' => '01941435623'],
+    ][$registration->event?->code] ?? null;
 
-    $amount = 'BDT '.number_format((int) ($registration->event?->amount ?? 0));
+    $amount = $paymentInfo['amount'] ?? 'BDT '.number_format((int) ($registration->event?->amount ?? 0));
 @endphp
 
 <section class="px-4 pb-20 pt-36 sm:px-6 lg:px-8">
@@ -115,14 +119,18 @@
                         <p class="mt-3 text-4xl font-semibold text-white">{{ $amount }}</p>
                     </div>
 
+                    @if($paymentInfo)
+                        @include('registrations.partials.payment-instructions', $paymentInfo)
+                    @endif
+
                     <div class="mt-6 grid gap-4 md:grid-cols-2">
                         <div>
                             <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">Payment Method</span>
                             <div class="mt-3 grid gap-3 sm:grid-cols-2">
                                 @foreach (['bkash' => 'Bkash', 'nagad' => 'Nagad'] as $value => $label)
-                                    <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/[.035] px-4 py-3 text-sm text-white transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10">
-                                        <input type="radio" name="payment_method" value="{{ $value }}" @checked($selectedPaymentMethod === $value) class="h-4 w-4 border-white/30 bg-transparent text-volt focus:ring-volt/50">
-                                        <span class="font-medium">{{ $label }}</span>
+                                    <label class="flex min-h-16 cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/[.035] px-4 py-3 transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10 hover:border-white/24">
+                                        <input type="radio" name="payment_method" value="{{ $value }}" @checked($selectedPaymentMethod === $value) class="sr-only">
+                                        <img src="{{ asset($value === 'bkash' ? 'assets/bkash.webp' : 'assets/nagad.png') }}" alt="{{ $label }}" class="h-8 w-auto">
                                     </label>
                                 @endforeach
                             </div>
