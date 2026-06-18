@@ -25,18 +25,18 @@
     $facts = [
         ['label' => 'Registration Fee', 'value' => '800 BDT per team', 'icon' => 'fa-ticket'],
         ['label' => 'Team Size', 'value' => '1-4 members', 'icon' => 'fa-users'],
-        ['label' => 'Reg and Preli Round', 'value' => '18 June - 21 July', 'icon' => 'fa-calendar-days'],
+        ['label' => 'Reg and Preli Round', 'value' => '19 June - 21 July', 'icon' => 'fa-calendar-days'],
         ['label' => 'Final Round', 'value' => '10 AM - 3 PM, 25 July', 'icon' => 'fa-flag-checkered'],
     ];
 
     $timeline = [
         [
-            'date' => '18-30 June',
+            'date' => '19-30 June',
             'label' => 'First Stage Registration',
             'accent' => 'iris',
             'icon' => 'fa-pen-to-square',
             'items' => [
-                ['value' => '18 June', 'label' => 'Opens', 'icon' => 'fa-door-open'],
+                ['value' => '19 June', 'label' => 'Opens', 'icon' => 'fa-door-open'],
                 ['value' => '30 June', 'label' => 'First Deadline', 'icon' => 'fa-lock'],
             ],
         ],

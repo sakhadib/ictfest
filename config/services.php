@@ -41,4 +41,10 @@ return [
         'sender_id' => env('SMS_API_SENDER_ID'),
     ],
 
+    'telegram' => [
+        'api_url' => env('TG_API_URL', 'https://api.telegram.org'),
+        'bot_token' => env('TG_BOT_TOKEN'),
+        'chat_id' => env('TG_CHAT_ID'),
+    ],
+
 ];

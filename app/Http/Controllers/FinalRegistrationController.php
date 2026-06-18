@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SendRegistrationTelegramNotification;
 use App\Models\Registration;
 use App\Models\FinalRegistration;
 use Illuminate\Http\RedirectResponse;
@@ -126,6 +127,9 @@ class FinalRegistrationController extends Controller
                 ]);
             }
         });
+
+        $registration->refresh();
+        SendRegistrationTelegramNotification::queue($registration, 'final_registration_submitted');
 
         return back()->with('status', 'Final registration details submitted successfully.');
     }

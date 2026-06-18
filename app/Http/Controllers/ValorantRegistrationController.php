@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\SendRegistrationConfirmationEmail;
 use App\Actions\SendRegistrationConfirmationSms;
+use App\Actions\SendRegistrationTelegramNotification;
 use App\Models\Event;
 use App\Models\Payment;
 use App\Models\Registration;
@@ -103,6 +104,7 @@ class ValorantRegistrationController extends Controller
 
         SendRegistrationConfirmationEmail::queue($registration);
         SendRegistrationConfirmationSms::queue($registration);
+        SendRegistrationTelegramNotification::queue($registration);
 
         return redirect()->route('valorant.register.success', ['code' => $registration->registration_code]);
     }

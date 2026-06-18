@@ -75,3 +75,15 @@ so high level confirmation of flow of type 2 events
 
 1. In home page cards, if the is_live is false then instead of hiding the registration button hang a notice there for "Reg Coming Soon" disabled button.
 2. in the status page (that is auto opened after registration only) hang a prominent notice something like you will get an SMS and Email within 24 hours, If you have not then contact us. Here contact us is a link to /contact page.
+
+
+==================
+
+
+in the .env i have `TG_BOT_TOKEN` and `TG_CHAT_ID`. i hope you know how to send a bot message
+  programatically. so skipping any docs. I need you to utilize queue worker and whenever a registration
+  happens / final registration happens a clearly formatted information packed msg will be sent to this chat by
+  the bot. is it possible, if yes implement please. be sure and certain. Every registration and final
+  registration trigures this message through queue. with all the informations a registration have including
+  payment informations prominently. ALSO no markdown / html message. simple spaced text message. Participants
+  personal details is not needed.
