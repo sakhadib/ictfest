@@ -8,6 +8,7 @@
         $seoImage = trim($__env->yieldContent('og_image', asset('assets/logo-white.png')));
         $seoType = trim($__env->yieldContent('og_type', 'website'));
         $seoRobots = trim($__env->yieldContent('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'));
+        $gaMeasurementId = config('services.google_analytics.measurement_id');
     @endphp
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,6 +36,20 @@
     <meta name="twitter:description" content="{{ $seoDescription }}">
     <meta name="twitter:image" content="{{ $seoImage }}">
     <meta name="twitter:image:alt" content="{{ $seoTitle }}">
+
+    @if(filled($gaMeasurementId))
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaMeasurementId }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ $gaMeasurementId }}', {
+                page_title: @json($seoTitle),
+                page_path: window.location.pathname,
+                transport_type: 'beacon',
+            });
+        </script>
+    @endif
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -225,6 +240,114 @@
             });
         })();
     </script>
+    @if(filled($gaMeasurementId))
+        <script>
+            (() => {
+                const pageContext = {!! \Illuminate\Support\Js::from([
+                    'app_name' => config('app.name'),
+                    'page_title' => $seoTitle,
+                    'page_type' => request()->route()?->getName() ?? 'public',
+                    'path' => request()->path(),
+                ]) !!};
+
+                const sendEvent = (name, params = {}) => {
+                    if (typeof window.gtag !== 'function') {
+                        return;
+                    }
+
+                    window.gtag('event', name, {
+                        transport_type: 'beacon',
+                        page_path: window.location.pathname,
+                        page_title: pageContext.page_title,
+                        page_type: pageContext.page_type,
+                        ...params,
+                    });
+                };
+
+                const safeUrl = (href) => {
+                    try {
+                        const url = new URL(href, window.location.origin);
+                        return url.origin === window.location.origin ? url.pathname : `${url.origin}${url.pathname}`;
+                    } catch (error) {
+                        return '';
+                    }
+                };
+
+                const linkCategory = (link) => {
+                    const href = link.getAttribute('href') || '';
+                    const label = (link.textContent || link.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ');
+
+                    if (href.startsWith('mailto:')) return 'email';
+                    if (href.startsWith('tel:') || href.includes('wa.me') || href.includes('whatsapp')) return 'phone';
+                    if (href.includes('/register')) return 'registration_cta';
+                    if (href.includes('/status')) return 'status';
+                    if (href.includes('facebook.com') || href.includes('linkedin.com') || href.includes('youtube.com')) return 'social';
+                    if (href.includes('/assets/') || /\.(pdf|csv|xlsx?|docx?|zip)$/i.test(href)) return 'download';
+                    if ((link.closest('header') || link.closest('[data-mobile-nav-panel]')) && href) return 'navigation';
+                    if (link.closest('footer')) return 'footer';
+                    if (label.toLowerCase().includes('rulebook')) return 'rulebook';
+
+                    return link.hostname && link.hostname !== window.location.hostname ? 'external' : 'internal';
+                };
+
+                sendEvent('public_page_context', pageContext);
+
+                document.addEventListener('click', (event) => {
+                    const link = event.target.closest('a[href]');
+
+                    if (!link) {
+                        return;
+                    }
+
+                    sendEvent('link_click', {
+                        link_category: linkCategory(link),
+                        link_text: (link.textContent || link.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ').slice(0, 120),
+                        link_url: safeUrl(link.href),
+                    });
+                }, {capture: true});
+
+                document.addEventListener('submit', (event) => {
+                    const form = event.target;
+
+                    if (!(form instanceof HTMLFormElement)) {
+                        return;
+                    }
+
+                    const action = safeUrl(form.action || window.location.href);
+                    const isRegistration = action.includes('/register');
+                    const isFinalRegistration = action.includes('/final-registration');
+                    const isStatusLookup = action.includes('/status');
+
+                    sendEvent('form_submit', {
+                        form_category: isFinalRegistration ? 'final_registration' : (isRegistration ? 'registration' : (isStatusLookup ? 'status_lookup' : 'public_form')),
+                        form_action: action,
+                        form_method: (form.method || 'get').toUpperCase(),
+                    });
+                }, {capture: true});
+
+                const scrollMarks = new Set();
+                const trackScrollDepth = () => {
+                    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+
+                    if (scrollable <= 0) {
+                        return;
+                    }
+
+                    const percent = Math.round((window.scrollY / scrollable) * 100);
+
+                    [25, 50, 75, 90].forEach((mark) => {
+                        if (percent >= mark && !scrollMarks.has(mark)) {
+                            scrollMarks.add(mark);
+                            sendEvent('scroll_depth', {percent_scrolled: mark});
+                        }
+                    });
+                };
+
+                window.addEventListener('scroll', trackScrollDepth, {passive: true});
+                trackScrollDepth();
+            })();
+        </script>
+    @endif
     @stack('scripts')
 </body>
 </html>

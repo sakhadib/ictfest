@@ -47,4 +47,8 @@ return [
         'chat_id' => env('TG_CHAT_ID'),
     ],
 
+    'google_analytics' => [
+        'measurement_id' => env('GA_MEASUREMENT_ID', 'G-TFZHC02D4P'),
+    ],
+
 ];
