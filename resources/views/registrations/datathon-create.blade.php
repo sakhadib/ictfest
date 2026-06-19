@@ -100,7 +100,7 @@
                                     @error("participants.$index.full_name")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                                 </label>
                                 <label>
-                                    <span class="{{ $labelClass }}">Email</span>
+                                    <span class="{{ $labelClass }}">Kaggle Associated Email</span>
                                     <input data-member-input="{{ $index }}" @disabled(! $visible) type="email" name="participants[{{ $index }}][email]" value="{{ old("participants.$index.email") }}" class="{{ $inputClass }}" placeholder="name@example.com">
                                     @error("participants.$index.email")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                                 </label>
