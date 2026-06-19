@@ -18,7 +18,7 @@ use RuntimeException;
 class DatathonRegistrationController extends Controller
 {
     private const EVENT_CODE = '03';
-    private const FEE = 800;
+    private const FEE = 600;
 
     /**
      * Show the Datathon registration form.

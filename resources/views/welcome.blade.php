@@ -56,7 +56,7 @@
             'logo' => 'datathon.png',
             'icon' => 'fa-chart-line',
             'accent' => 'iris',
-            'fee' => '800 BDT per team',
+            'fee' => '600 BDT per team',
             'team' => '1-4 members',
             'window' => '19 June - 13 July',
             'date' => 'Final: 10 AM - 3 PM, 25 July',
@@ -66,7 +66,7 @@
             'register_url' => '/datathon/register',
             'start_date' => '2026-07-01T00:00:00+06:00',
             'end_date' => '2026-07-25T15:00:00+06:00',
-            'price' => 800,
+            'price' => 600,
         ],
         [
             'code' => '04',

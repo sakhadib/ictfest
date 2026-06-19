@@ -15,7 +15,7 @@
         'endDate' => '2026-07-25T15:00:00+06:00',
         'locationName' => 'Islamic University of Technology',
         'registrationUrl' => route('datathon.register'),
-        'price' => 800,
+        'price' => 600,
         'isAvailable' => (bool) ($eventRecord?->is_live ?? false),
     ])
 @endpush
@@ -23,7 +23,7 @@
 @section('content')
 @php
     $facts = [
-        ['label' => 'Registration Fee', 'value' => '800 BDT per team', 'icon' => 'fa-ticket'],
+        ['label' => 'Registration Fee', 'value' => '600 BDT per team', 'icon' => 'fa-ticket'],
         ['label' => 'Team Size', 'value' => '1-4 members', 'icon' => 'fa-users'],
         ['label' => 'Reg and Preli Round', 'value' => '19 June - 21 July', 'icon' => 'fa-calendar-days'],
         ['label' => 'Final Round', 'value' => '10 AM - 3 PM, 25 July', 'icon' => 'fa-flag-checkered'],

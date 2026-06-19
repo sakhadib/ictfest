@@ -44,7 +44,7 @@
                     <div class="grid h-10 w-10 place-items-center rounded-md bg-iris/10 text-iris"><i class="fa-solid fa-ticket"></i></div>
                     <div>
                         <p class="text-xs uppercase tracking-[.16em] text-white/32">Fee</p>
-                        <p class="mt-1 text-sm font-medium text-white">800 BDT</p>
+                        <p class="mt-1 text-sm font-medium text-white">600 BDT</p>
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
             <div class="mt-12">
                 <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Payment</p>
                 @include('registrations.partials.payment-instructions', [
-                    'amount' => '800 BDT',
+                    'amount' => '600 BDT',
                     'number' => '01552382540',
                 ])
                 <div class="mt-6 grid gap-5 sm:grid-cols-2">
