@@ -87,6 +87,7 @@ class TelegramWebhookController extends Controller
             'pending', '/pending' => $summary->pendingText(),
             'payments', '/payments' => $summary->paymentsText(),
             'finals', '/finals' => $summary->finalsText(),
+            'ca', '/ca' => $summary->caText(),
             default => null,
         };
     }

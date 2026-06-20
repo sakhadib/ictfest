@@ -37,6 +37,11 @@ finals
 Shows final registration pipeline counts grouped by event:
 invited, submitted, approved, and rejected.
 
+ca
+/ca
+Shows registration counts grouped by Campus Ambassador name.
+Blank CA values are shown as Unassigned.
+
 event <code>
 /event <code>
 Shows a focused summary for one event.

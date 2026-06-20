@@ -23,6 +23,7 @@ class RegistrationSummaryService
             'pending' => 'Pending registration review counts grouped by event.',
             'payments' => 'Submitted payment counts waiting for confirmation.',
             'finals' => 'Final registration pipeline counts grouped by event.',
+            'ca' => 'Registration counts grouped by Campus Ambassador.',
             'event <code>' => 'Detailed summary for one event, for example: event 03.',
         ];
     }
@@ -246,6 +247,35 @@ class RegistrationSummaryService
                 number_format((int) $event->approved_count),
                 number_format((int) $event->rejected_count),
             );
+        }
+
+        return implode("\n", $lines);
+    }
+
+    public function caText(): string
+    {
+        $rows = Registration::query()
+            ->select([
+                DB::raw("COALESCE(NULLIF(TRIM(ca), ''), 'Unassigned') as ca_name"),
+                DB::raw('COUNT(*) as registrations_count'),
+            ])
+            ->groupBy(DB::raw("COALESCE(NULLIF(TRIM(ca), ''), 'Unassigned')"))
+            ->orderByDesc('registrations_count')
+            ->orderBy('ca_name')
+            ->get();
+
+        $lines = [
+            config('app.name').' Campus Ambassador Registrations',
+            now()->format('d M Y, h:i A'),
+            '',
+        ];
+
+        if ($rows->isEmpty()) {
+            $lines[] = 'No registrations found.';
+        }
+
+        foreach ($rows as $row) {
+            $lines[] = $row->ca_name.': '.number_format((int) $row->registrations_count).' registrations';
         }
 
         return implode("\n", $lines);
