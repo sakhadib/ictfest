@@ -23,6 +23,10 @@
             <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
                 Register solo or with up to two teammates. Member 1 will be treated as the leader and primary contact.
             </p>
+            <div class="mt-8 rounded-lg border border-ember/30 bg-ember/10 p-5">
+                <p class="text-sm font-semibold text-white">Cross-institution teams are allowed.</p>
+                <p class="mt-2 text-sm leading-6 text-white/60">If the system does not show your institution name in suggestions, do not panic. Write the full name yourself.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -66,11 +70,6 @@
                         <span class="{{ $labelClass }}">Team Name</span>
                         <input name="team_name" value="{{ old('team_name') }}" class="{{ $inputClass }}" placeholder="Team name">
                         @error('team_name')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
-                    </label>
-                    <label>
-                        <span class="{{ $labelClass }}">Institution</span>
-                        <input id="teamInstitution" data-university-search name="institution" value="{{ old('institution') }}" class="{{ $inputClass }}" placeholder="Institution name" autocomplete="off" spellcheck="false">
-                        @error('institution')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                     </label>
                 </div>
             </div>
@@ -145,29 +144,8 @@
 @push('scripts')
 <script>
     (() => {
-        const institution = document.getElementById('teamInstitution');
-        const universities = Array.from(document.querySelectorAll('[data-participant-university]'));
         const addButton = document.getElementById('addMember');
         const sections = Array.from(document.querySelectorAll('[data-member-section]'));
-
-        let previousInstitution = institution?.value.trim() ?? '';
-
-        const syncUniversities = () => {
-            const nextInstitution = institution.value.trim();
-
-            universities.forEach((field) => {
-                const current = field.value.trim();
-
-                if (current === '' || current === previousInstitution) {
-                    field.value = nextInstitution;
-                }
-            });
-
-            previousInstitution = nextInstitution;
-        };
-
-        institution?.addEventListener('input', syncUniversities);
-        institution?.addEventListener('change', syncUniversities);
 
         const visibleSections = () => sections.filter((section) => !section.classList.contains('hidden'));
         const updateAddButton = () => {
@@ -193,12 +171,6 @@
             }
 
             setSectionState(section, true);
-            const university = section.querySelector('[data-participant-university]');
-
-            if (university) {
-                university.value = institution.value.trim();
-            }
-
             updateAddButton();
         });
 

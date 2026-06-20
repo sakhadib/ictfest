@@ -10,7 +10,7 @@
         'name' => 'Datathon - IUT 12th ICT FEST 2026',
         'description' => 'A university data science competition with code, notebooks, reports, presentations, and an onsite final round.',
         'url' => url('/datathon'),
-        'image' => asset('assets/logos/datathon.png'),
+        'image' => asset('assets/logos/datathon_sponsor.png'),
         'startDate' => '2026-07-01T00:00:00+06:00',
         'endDate' => '2026-07-25T15:00:00+06:00',
         'locationName' => 'Islamic University of Technology',
@@ -119,7 +119,7 @@
             </div>
 
             <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
-                <img src="{{ asset('assets/logos/datathon.png') }}" alt="Datathon" class="w-full max-w-sm object-contain">
+                <img src="{{ asset('assets/logos/datathon_sponsor.png') }}" alt="Datathon" class="w-full max-w-sm object-contain">
             </div>
         </div>
     </div>

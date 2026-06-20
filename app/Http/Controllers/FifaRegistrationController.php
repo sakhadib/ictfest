@@ -51,7 +51,6 @@ class FifaRegistrationController extends Controller
         $this->ensureRegistrationHasAvailableSlots($event);
 
         $validated = $request->validate([
-            'institution' => ['required', 'string', 'max:255'],
             'payment_method' => ['required', Rule::in(['bkash', 'nagad'])],
             'trx_id' => ['required', 'string', 'max:255'],
             'participant.full_name' => ['required', 'string', 'max:255'],
@@ -68,7 +67,7 @@ class FifaRegistrationController extends Controller
                 'registration_code' => $this->generateRegistrationCode(),
                 'event_id' => $event->id,
                 'team_name' => $participant['full_name'],
-                'institution' => $validated['institution'],
+                'institution' => $participant['university'],
                 'contact_name' => $participant['full_name'],
                 'contact_email' => $participant['email'],
                 'contact_phone' => $participant['phone'],

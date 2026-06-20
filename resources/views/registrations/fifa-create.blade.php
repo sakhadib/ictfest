@@ -80,14 +80,10 @@
                         <input name="participant[student_id]" value="{{ old('participant.student_id') }}" class="{{ $inputClass }}" placeholder="Student ID">
                         @error('participant.student_id')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                     </label>
-                    <label>
-                        <span class="{{ $labelClass }}">Institution</span>
-                        <input id="institution" data-university-search name="institution" value="{{ old('institution') }}" class="{{ $inputClass }}" placeholder="Institution name" autocomplete="off" spellcheck="false">
-                        @error('institution')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
-                    </label>
-                    <label>
-                        <span class="{{ $labelClass }}">University</span>
+                    <label class="sm:col-span-2">
+                        <span class="{{ $labelClass }}">University / College</span>
                         <input id="university" data-university-search name="participant[university]" value="{{ old('participant.university') }}" class="{{ $inputClass }}" placeholder="University name" autocomplete="off" spellcheck="false">
+                        <p class="mt-2 text-xs leading-5 text-white/42">If your institution does not appear in suggestions, write the full name yourself.</p>
                         @error('participant.university')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                     </label>
                 </div>
@@ -134,29 +130,5 @@
         </form>
     </div>
 </section>
-
-@push('scripts')
-<script>
-    (() => {
-        const institution = document.getElementById('institution');
-        const university = document.getElementById('university');
-        let previousInstitution = institution?.value.trim() ?? '';
-
-        const syncUniversity = () => {
-            const nextInstitution = institution.value.trim();
-            const currentUniversity = university.value.trim();
-
-            if (currentUniversity === '' || currentUniversity === previousInstitution) {
-                university.value = nextInstitution;
-            }
-
-            previousInstitution = nextInstitution;
-        };
-
-        institution?.addEventListener('input', syncUniversity);
-        institution?.addEventListener('change', syncUniversity);
-    })();
-</script>
-@endpush
 @include('registrations.partials.university-search', ['universities' => $universities])
 @endsection

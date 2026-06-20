@@ -44,7 +44,6 @@ class HackathonRegistrationController extends Controller
 
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
-            'institution' => ['required', 'string', 'max:255'],
             'participants' => ['required', 'array', 'min:1', 'max:3'],
             'participants.*.full_name' => ['required', 'string', 'max:255'],
             'participants.*.email' => ['required', 'email', 'max:255'],
@@ -67,7 +66,7 @@ class HackathonRegistrationController extends Controller
                 'registration_code' => $this->generateRegistrationCode(),
                 'event_id' => $event->id,
                 'team_name' => $validated['team_name'],
-                'institution' => $validated['institution'],
+                'institution' => $leader['university'],
                 'contact_name' => $leader['full_name'],
                 'contact_email' => $leader['email'],
                 'contact_phone' => $leader['phone'],
