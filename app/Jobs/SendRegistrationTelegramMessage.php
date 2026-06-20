@@ -3,13 +3,13 @@
 namespace App\Jobs;
 
 use App\Models\Registration;
+use App\Services\TelegramBotClient;
 use DateTimeInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class SendRegistrationTelegramMessage implements ShouldQueue
@@ -27,11 +27,10 @@ class SendRegistrationTelegramMessage implements ShouldQueue
     ) {
     }
 
-    public function handle(): void
+    public function handle(TelegramBotClient $telegram): void
     {
         $botToken = (string) config('services.telegram.bot_token');
         $chatId = (string) config('services.telegram.chat_id');
-        $apiUrl = rtrim((string) config('services.telegram.api_url', 'https://api.telegram.org'), '/');
 
         $this->registration->loadMissing([
             'event',
@@ -53,11 +52,7 @@ class SendRegistrationTelegramMessage implements ShouldQueue
             return;
         }
 
-        $response = Http::timeout(20)->asForm()->post($apiUrl.'/bot'.$botToken.'/sendMessage', [
-            'chat_id' => $chatId,
-            'text' => $this->message(),
-            'disable_web_page_preview' => true,
-        ]);
+        $response = $telegram->sendMessage($chatId, $this->message());
 
         Log::info('Registration Telegram notification API response.', [
             'registration_id' => $this->registration->id,

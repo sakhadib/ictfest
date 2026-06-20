@@ -13,6 +13,7 @@ use App\Http\Controllers\FifaRegistrationController;
 use App\Http\Controllers\FinalRegistrationController;
 use App\Http\Controllers\GamejamRegistrationController;
 use App\Http\Controllers\RegistrationStatusController;
+use App\Http\Controllers\TelegramWebhookController;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ValorantRegistrationController;
@@ -86,6 +87,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/status', [RegistrationStatusController::class, 'index'])->name('registration.status');
+Route::post('/telegram/webhook', TelegramWebhookController::class)->name('telegram.webhook');
 Route::get('/final-reg/{registration_code}', [FinalRegistrationController::class, 'show'])->name('final-registration.show');
 Route::post('/final-reg/{registration_code}', [FinalRegistrationController::class, 'store'])->name('final-registration.store');
 

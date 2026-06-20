@@ -45,6 +45,7 @@ return [
         'api_url' => env('TG_API_URL', 'https://api.telegram.org'),
         'bot_token' => env('TG_BOT_TOKEN'),
         'chat_id' => env('TG_CHAT_ID'),
+        'webhook_secret' => env('TG_WEBHOOK_SECRET'),
     ],
 
     'google_analytics' => [

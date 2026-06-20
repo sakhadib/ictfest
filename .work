@@ -11,8 +11,9 @@ php artisan optimize
 systemctl restart ictfest-queue
 
 
+# DB Backup
 
-
+pg_dump -h 127.0.0.1 -U ictfest -Fc ictfest > /root/backups/ictfest_$(date +%Y%m%d_%H%M%S).dump
 
 
 
@@ -102,3 +103,39 @@ in the .env i have `TG_BOT_TOKEN` and `TG_CHAT_ID`. i hope you know how to send 
   do new migration for anything like this always. and bedure to not hamper existing data in any ways. 
 
   you may need to update query and results and UI in reports page in dashboard.
+
+
+
+====================
+
+
+Implement Telegram webhook command handling for the existing ICT Fest Telegram bot.
+
+The bot already sends registration notifications to the Telegram group. Extend it so that it can also receive commands through a Telegram webhook.
+
+Requirements:
+
+- Use Telegram webhooks, not polling.
+
+- Add a webhook endpoint and all required routing/configuration.
+
+- Ignore messages from bots.
+
+- When someone sends:
+  
+  - /status
+  - status
+  
+  reply in the same group with a live registration summary.
+
+The summary should include:
+
+- Total registrations with participant count
+- Today's registrations with participant count
+- Registration and participant counts grouped by event 
+
+Use the existing models, services, configuration, and Telegram integration already present in the project. Follow existing project conventions and architecture.
+
+Also provide the command needed to register the Telegram webhook with BotFather/Telegram after deployment.
+
+ABSOLUTELY NO DB CHANGE
