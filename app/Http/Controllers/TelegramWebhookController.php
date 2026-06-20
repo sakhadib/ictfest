@@ -34,14 +34,21 @@ class TelegramWebhookController extends Controller
         $chatId = data_get($message, 'chat.id');
         $text = trim((string) data_get($message, 'text', ''));
 
-        if (! $chatId || ! $this->isAllowedChat($chatId) || ! $this->isStatusCommand($text)) {
+        if (! $chatId || ! $this->isAllowedChat($chatId)) {
             return response()->json(['ok' => true]);
         }
 
-        $response = $telegram->sendMessage($chatId, $summary->telegramText());
+        $reply = $this->replyFor($text, $summary);
 
-        Log::info('Telegram webhook status command response sent.', [
+        if (! $reply) {
+            return response()->json(['ok' => true]);
+        }
+
+        $response = $telegram->sendMessage($chatId, $reply);
+
+        Log::info('Telegram webhook command response sent.', [
             'chat_id' => $chatId,
+            'command' => $this->normalizedCommand($text),
             'status' => $response->status(),
             'body' => $response->body(),
         ]);
@@ -60,11 +67,28 @@ class TelegramWebhookController extends Controller
         return hash_equals($secret, (string) $request->header('X-Telegram-Bot-Api-Secret-Token'));
     }
 
-    private function isStatusCommand(string $text): bool
+    private function replyFor(string $text, RegistrationSummaryService $summary): ?string
     {
-        $text = strtolower(trim($text));
+        $command = $this->normalizedCommand($text);
 
-        return $text === 'status' || $text === '/status' || str_starts_with($text, '/status@');
+        if ($command === '') {
+            return null;
+        }
+
+        if (preg_match('/^\/?event\s+([0-9]{1,2})$/', $command, $matches)) {
+            return $summary->eventText($matches[1]);
+        }
+
+        return match ($command) {
+            'help', 'commands', '/help', '/commands' => $summary->helpText(),
+            'status', '/status' => $summary->telegramText(),
+            'today', '/today' => $summary->todayText(),
+            'events', '/events', 'live', '/live' => $summary->eventsText(),
+            'pending', '/pending' => $summary->pendingText(),
+            'payments', '/payments' => $summary->paymentsText(),
+            'finals', '/finals' => $summary->finalsText(),
+            default => null,
+        };
     }
 
     private function isAllowedChat(mixed $chatId): bool
@@ -72,5 +96,13 @@ class TelegramWebhookController extends Controller
         $allowedChatId = (string) config('services.telegram.chat_id');
 
         return $allowedChatId === '' || (string) $chatId === $allowedChatId;
+    }
+
+    private function normalizedCommand(string $text): string
+    {
+        $text = strtolower(trim($text));
+        $text = preg_replace('/\s+/', ' ', $text) ?? '';
+
+        return preg_replace('/^\/([a-z]+)@[a-z0-9_]+/i', '/$1', $text) ?? '';
     }
 }

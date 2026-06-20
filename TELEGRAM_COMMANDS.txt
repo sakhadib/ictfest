@@ -1,0 +1,45 @@
+ICT Fest Telegram Bot Commands
+
+All commands work in the configured Telegram group through webhook updates.
+Slash commands and plain text variants are supported where noted.
+
+help
+/help
+commands
+/commands
+Shows the list of available commands.
+
+status
+/status
+Shows the overall registration summary:
+total registrations, total participants, today's registrations, today's participants, and counts grouped by event.
+
+today
+/today
+Shows today's registrations and participant counts grouped by event.
+
+events
+/events
+live
+/live
+Shows each event's live/taken-down status and slot availability where a slot limit exists.
+
+pending
+/pending
+Shows pending registration review counts grouped by event.
+
+payments
+/payments
+Shows submitted payment counts waiting for confirmation, grouped by event.
+
+finals
+/finals
+Shows final registration pipeline counts grouped by event:
+invited, submitted, approved, and rejected.
+
+event <code>
+/event <code>
+Shows a focused summary for one event.
+Examples:
+event 01
+/event 03
