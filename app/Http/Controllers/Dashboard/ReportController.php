@@ -17,6 +17,7 @@ class ReportController extends Controller
         'event',
         'team_name',
         'institution',
+        'ca',
         'contact_name',
         'contact_email',
         'contact_phone',
@@ -88,6 +89,7 @@ class ReportController extends Controller
             'event' => 'Event',
             'team_name' => 'Team Name',
             'institution' => 'Institution',
+            'ca' => 'Campus Ambassador',
             'contact_name' => 'Team Lead Name',
             'contact_email' => 'Team Lead Email',
             'contact_phone' => 'Team Lead Phone',
@@ -154,6 +156,7 @@ class ReportController extends Controller
             'amount_min' => $request->query('amount_min'),
             'amount_max' => $request->query('amount_max'),
             'institution' => trim((string) $request->query('institution')),
+            'ca' => trim((string) $request->query('ca')),
             'search' => trim((string) $request->query('search')),
             'sort' => $request->query('sort', 'registered_at_desc'),
         ];
@@ -176,13 +179,15 @@ class ReportController extends Controller
             ->when($filters['final_registration_status'], fn (Builder $query, string $status) => $query->whereHas('finalRegistration', fn (Builder $query) => $query->where('status', $status)))
             ->when($filters['registered_from'], fn (Builder $query, string $date) => $query->whereDate('created_at', '>=', $date))
             ->when($filters['registered_to'], fn (Builder $query, string $date) => $query->whereDate('created_at', '<=', $date))
-            ->when($filters['institution'], fn (Builder $query, string $institution) => $query->where('institution', 'like', "%{$institution}%"));
+            ->when($filters['institution'], fn (Builder $query, string $institution) => $query->where('institution', 'like', "%{$institution}%"))
+            ->when($filters['ca'], fn (Builder $query, string $ca) => $query->where('ca', 'like', "%{$ca}%"));
 
         if ($filters['search']) {
             $search = $filters['search'];
             $query->where(function (Builder $query) use ($search): void {
                 $query->where('registration_code', strtoupper($search))
                     ->orWhere('team_name', 'like', "%{$search}%")
+                    ->orWhere('ca', 'like', "%{$search}%")
                     ->orWhere('contact_email', 'like', "%{$search}%")
                     ->orWhere('contact_phone', 'like', "%{$search}%")
                     ->orWhereHas('coach', fn (Builder $query) => $query
@@ -258,6 +263,7 @@ class ReportController extends Controller
             'event' => $registration->event?->name,
             'team_name' => $registration->team_name,
             'institution' => $registration->institution,
+            'ca' => $registration->ca,
             'contact_name' => $registration->contact_name,
             'contact_email' => $registration->contact_email,
             'contact_phone' => $registration->contact_phone,

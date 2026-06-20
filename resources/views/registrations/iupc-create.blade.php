@@ -63,6 +63,11 @@
                         <input id="teamInstitution" data-university-search name="institution" value="{{ old('institution') }}" class="{{ $inputClass }}" placeholder="Institution name" autocomplete="off" spellcheck="false">
                         @error('institution')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                     </label>
+                    <label class="sm:col-span-2">
+                        <span class="{{ $labelClass }}">Campus Ambassador Name <span class="normal-case tracking-normal text-white/28">(optional)</span></span>
+                        <input name="ca" value="{{ old('ca') }}" class="{{ $inputClass }}" placeholder="CA name, if any">
+                        @error('ca')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                    </label>
                 </div>
             </div>
 

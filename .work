@@ -87,3 +87,18 @@ in the .env i have `TG_BOT_TOKEN` and `TG_CHAT_ID`. i hope you know how to send 
   registration trigures this message through queue. with all the informations a registration have including
   payment informations prominently. ALSO no markdown / html message. simple spaced text message. Participants
   personal details is not needed.
+
+
+
+
+
+
+==============
+
+  in registration table i need a field called `ca` this is basically Campus Ambassador Name. 
+
+  in the registration pages, so you have to include the CA field which is clearly mentioned as optional.
+
+  do new migration for anything like this always. and bedure to not hamper existing data in any ways. 
+
+  you may need to update query and results and UI in reports page in dashboard.

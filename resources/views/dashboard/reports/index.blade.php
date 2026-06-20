@@ -98,8 +98,13 @@
                 </label>
 
                 <label>
+                    <span class="{{ $labelClass }}">Campus ambassador contains</span>
+                    <input name="ca" value="{{ $filters['ca'] }}" class="{{ $inputClass }}" placeholder="CA name">
+                </label>
+
+                <label>
                     <span class="{{ $labelClass }}">Search</span>
-                    <input name="search" value="{{ $filters['search'] }}" class="{{ $inputClass }}" placeholder="Code, team, lead, phone, trx">
+                    <input name="search" value="{{ $filters['search'] }}" class="{{ $inputClass }}" placeholder="Code, team, CA, lead, phone, trx">
                 </label>
 
                 <label>
@@ -203,6 +208,9 @@
                             <td class="px-5 py-4">
                                 <p class="font-semibold">{{ $registration->team_name }}</p>
                                 <p class="mt-1 text-xs text-coal/50">{{ $registration->institution }}</p>
+                                @if($registration->ca)
+                                    <p class="mt-1 text-xs text-coal/50">CA: {{ $registration->ca }}</p>
+                                @endif
                             </td>
                             <td class="px-5 py-4">
                                 <p class="font-semibold">{{ $registration->contact_name }}</p>

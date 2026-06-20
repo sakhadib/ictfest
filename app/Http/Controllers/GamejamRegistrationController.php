@@ -44,6 +44,7 @@ class GamejamRegistrationController extends Controller
 
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
+            'ca' => ['nullable', 'string', 'max:255'],
             'participants' => ['required', 'array', 'min:1', 'max:3'],
             'participants.*.full_name' => ['required', 'string', 'max:255'],
             'participants.*.email' => ['required', 'email', 'max:255'],
@@ -61,6 +62,7 @@ class GamejamRegistrationController extends Controller
                 'event_id' => $event->id,
                 'team_name' => $validated['team_name'],
                 'institution' => $leader['university'],
+                'ca' => $validated['ca'] ?? null,
                 'contact_name' => $leader['full_name'],
                 'contact_email' => $leader['email'],
                 'contact_phone' => $leader['phone'],

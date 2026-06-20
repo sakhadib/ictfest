@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
     'event_id',
     'team_name',
     'institution',
+    'ca',
     'contact_name',
     'contact_email',
     'contact_phone',

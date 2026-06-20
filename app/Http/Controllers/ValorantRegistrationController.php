@@ -52,6 +52,7 @@ class ValorantRegistrationController extends Controller
 
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
+            'ca' => ['nullable', 'string', 'max:255'],
             'payment_method' => ['required', Rule::in(['bkash', 'nagad'])],
             'trx_id' => ['required', 'string', 'max:255'],
             'participants' => ['required', 'array', 'min:5', 'max:7'],
@@ -71,6 +72,7 @@ class ValorantRegistrationController extends Controller
                 'event_id' => $event->id,
                 'team_name' => $validated['team_name'],
                 'institution' => $leader['university'],
+                'ca' => $validated['ca'] ?? null,
                 'contact_name' => $leader['full_name'],
                 'contact_email' => $leader['email'],
                 'contact_phone' => $leader['phone'],

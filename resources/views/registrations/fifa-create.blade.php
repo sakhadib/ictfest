@@ -80,6 +80,11 @@
                         <input name="participant[student_id]" value="{{ old('participant.student_id') }}" class="{{ $inputClass }}" placeholder="Student ID">
                         @error('participant.student_id')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                     </label>
+                    <label>
+                        <span class="{{ $labelClass }}">Campus Ambassador Name <span class="normal-case tracking-normal text-white/28">(optional)</span></span>
+                        <input name="ca" value="{{ old('ca') }}" class="{{ $inputClass }}" placeholder="CA name, if any">
+                        @error('ca')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
+                    </label>
                     <label class="sm:col-span-2">
                         <span class="{{ $labelClass }}">University / College</span>
                         <input id="university" data-university-search name="participant[university]" value="{{ old('participant.university') }}" class="{{ $inputClass }}" placeholder="University name" autocomplete="off" spellcheck="false">

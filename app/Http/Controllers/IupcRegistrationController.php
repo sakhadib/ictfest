@@ -44,6 +44,7 @@ class IupcRegistrationController extends Controller
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
             'institution' => ['required', 'string', 'max:255'],
+            'ca' => ['nullable', 'string', 'max:255'],
             'coach.name' => ['required', 'string', 'max:255'],
             'coach.designation' => ['required', 'string', 'max:255'],
             'coach.official_email' => ['required', 'email', 'max:255'],
@@ -64,6 +65,7 @@ class IupcRegistrationController extends Controller
                 'event_id' => $event->id,
                 'team_name' => $validated['team_name'],
                 'institution' => $validated['institution'],
+                'ca' => $validated['ca'] ?? null,
                 'contact_name' => $leader['full_name'],
                 'contact_email' => $leader['email'],
                 'contact_phone' => $leader['phone'],
