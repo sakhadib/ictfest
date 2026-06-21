@@ -19,7 +19,7 @@ class TelegramBotClient
 
     public function sendPhoto(string|int $chatId, string $photoPath, ?string $caption = null): Response
     {
-        $handle = fopen($photoPath, 'r');
+        $handle = fopen($photoPath, 'rb');
 
         if (! $handle) {
             throw new RuntimeException('Could not open Telegram photo file.');

@@ -52,6 +52,19 @@ class SendUniversityDistributionChart implements ShouldQueue
 
             $response = $telegram->sendPhoto($this->chatId, $path, $chart['title']);
 
+            if ($response->failed()) {
+                Log::warning('Telegram rejected university distribution chart.', [
+                    'chat_id' => $this->chatId,
+                    'telegram_status' => $response->status(),
+                    'response_size' => strlen($response->body()),
+                    'chart_size' => file_exists($path) ? filesize($path) : null,
+                ]);
+
+                $telegram->sendMessage($this->chatId, 'The university distribution chart was generated, but Telegram rejected the upload. Please try again.');
+
+                return;
+            }
+
             Log::info('Telegram university distribution chart sent.', [
                 'chat_id' => $this->chatId,
                 'telegram_status' => $response->status(),

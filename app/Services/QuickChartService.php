@@ -97,72 +97,96 @@ class QuickChartService
      */
     public function barChartPng(array $labels, array $data, string $title, string $datasetLabel): string
     {
-        $width = min(4200, max(1400, count($labels) * 150));
-        $fontSize = count($labels) > 24 ? 8 : (count($labels) > 14 ? 9 : 11);
+        $labels = array_map(fn (string $label) => $this->compactLabel($label), $labels);
+        $fontSize = count($labels) > 18 ? 8 : (count($labels) > 12 ? 9 : 11);
 
-        $response = Http::timeout(30)->post('https://quickchart.io/chart', [
-            'format' => 'png',
-            'width' => $width,
-            'height' => 850,
-            'backgroundColor' => 'white',
-            'chart' => [
-                'type' => 'bar',
-                'data' => [
-                    'labels' => array_map(fn (string $label) => $this->compactLabel($label), $labels),
-                    'datasets' => [[
-                        'label' => $datasetLabel,
-                        'data' => $data,
-                        'backgroundColor' => '#d4574e',
-                        'borderColor' => '#b9423a',
-                        'borderWidth' => 1,
-                    ]],
-                ],
-                'options' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => $title,
-                        'fontSize' => 22,
+        try {
+            $imageBytes = $this->requestChartPng([
+                'format' => 'png',
+                'version' => '2',
+                'width' => 1200,
+                'height' => 780,
+                'backgroundColor' => 'white',
+                'chart' => [
+                    'type' => 'bar',
+                    'data' => [
+                        'labels' => $labels,
+                        'datasets' => [[
+                            'label' => $datasetLabel,
+                            'data' => $data,
+                            'backgroundColor' => '#d4574e',
+                            'borderColor' => '#b9423a',
+                            'borderWidth' => 1,
+                        ]],
                     ],
-                    'legend' => [
-                        'display' => true,
-                        'position' => 'bottom',
-                    ],
-                    'layout' => [
-                        'padding' => [
-                            'bottom' => 20,
+                    'options' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => $title,
+                            'fontSize' => 20,
+                        ],
+                        'legend' => [
+                            'display' => false,
+                        ],
+                        'layout' => [
+                            'padding' => [
+                                'bottom' => 12,
+                                'left' => 8,
+                                'right' => 8,
+                            ],
+                        ],
+                        'scales' => [
+                            'xAxes' => [[
+                                'ticks' => [
+                                    'autoSkip' => false,
+                                    'minRotation' => 0,
+                                    'maxRotation' => 0,
+                                    'fontSize' => $fontSize,
+                                ],
+                            ]],
+                            'yAxes' => [[
+                                'ticks' => [
+                                    'beginAtZero' => true,
+                                    'stepSize' => 1,
+                                ],
+                            ]],
                         ],
                     ],
-                    'scales' => [
-                        'xAxes' => [[
-                            'scaleLabel' => [
-                                'display' => true,
-                                'labelString' => 'University',
-                            ],
-                            'ticks' => [
-                                'autoSkip' => false,
-                                'minRotation' => 0,
-                                'maxRotation' => 0,
-                                'fontSize' => $fontSize,
-                            ],
-                        ]],
-                        'yAxes' => [[
-                            'scaleLabel' => [
-                                'display' => true,
-                                'labelString' => 'Participant Count',
-                            ],
-                            'ticks' => [
-                                'beginAtZero' => true,
-                                'precision' => 0,
-                            ],
+                ],
+            ], 'university distribution');
+        } catch (RuntimeException $exception) {
+            Log::warning('Retrying university distribution chart with fallback config', [
+                'universities' => count($labels),
+            ]);
+
+            $imageBytes = $this->requestChartPng([
+                'format' => 'png',
+                'version' => '2',
+                'width' => 1000,
+                'height' => 700,
+                'backgroundColor' => 'white',
+                'chart' => [
+                    'type' => 'bar',
+                    'data' => [
+                        'labels' => $labels,
+                        'datasets' => [[
+                            'label' => $datasetLabel,
+                            'data' => $data,
+                            'backgroundColor' => '#d4574e',
                         ]],
                     ],
+                    'options' => [
+                        'title' => [
+                            'display' => true,
+                            'text' => $title,
+                        ],
+                        'legend' => [
+                            'display' => false,
+                        ],
+                    ],
                 ],
-            ],
-        ]);
-
-        $this->ensurePngResponse($response, 'university distribution');
-
-        $imageBytes = $response->body();
+            ], 'university distribution fallback');
+        }
 
         Log::info('University distribution chart generated', [
             'universities' => count($labels),
@@ -172,10 +196,22 @@ class QuickChartService
         return $this->storePng($imageBytes, 'ictfest-univ-');
     }
 
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function requestChartPng(array $payload, string $chartType): string
+    {
+        $response = Http::timeout(30)->post('https://quickchart.io/chart', $payload);
+
+        $this->ensurePngResponse($response, $chartType);
+
+        return $response->body();
+    }
+
     private function compactLabel(string $label): string
     {
-        $label = trim($label);
-        $limit = 28;
+        $label = trim($this->cleanText($label));
+        $limit = 22;
 
         if ((function_exists('mb_strlen') ? mb_strlen($label) : strlen($label)) <= $limit) {
             return $label;
@@ -186,6 +222,21 @@ class QuickChartService
         }
 
         return rtrim(substr($label, 0, $limit - 1)).'...';
+    }
+
+    private function cleanText(string $value): string
+    {
+        if (function_exists('iconv')) {
+            $converted = iconv('UTF-8', 'UTF-8//IGNORE', $value);
+
+            if ($converted !== false) {
+                $value = $converted;
+            }
+        }
+
+        $cleaned = preg_replace('/[^\P{C}\t\r\n]+/u', ' ', $value);
+
+        return trim($cleaned ?? $value);
     }
 
     private function ensurePngResponse(Response $response, string $chartType): void

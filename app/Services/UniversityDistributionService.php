@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class UniversityDistributionService
 {
-    private const MAX_CHART_BUCKETS = 35;
+    private const MAX_CHART_BUCKETS = 20;
 
     /**
      * @return array<string, mixed>
