@@ -107,11 +107,50 @@ class RegistrationCardService
             'title' => $title,
             'generated_at' => now()->format('d M Y, h:i A'),
             'assets' => [
-                'ictfest_logo' => public_path('assets/logo_black.png'),
-                'iutcs_logo' => public_path('assets/iutcs.png'),
-                'cse_logo' => public_path('assets/cse.png'),
+                'ictfest_logo' => $this->pdfLogoDataUri(public_path('assets/logo_black.jpg'), 'ICT FEST', '2026'),
+                'iutcs_logo' => $this->pdfLogoDataUri(public_path('assets/iutcs.jpg'), 'IUTCS'),
+                'cse_logo' => $this->pdfLogoDataUri(public_path('assets/cse.jpg'), 'CSE'),
             ],
             'registrations' => $registrations,
         ];
+    }
+
+    private function pdfLogoDataUri(string $path, string $label, ?string $subLabel = null): ?string
+    {
+        if (is_file($path) && in_array(mime_content_type($path), ['image/jpeg', 'image/jpg'], true)) {
+            return $this->imageDataUri($path);
+        }
+
+        return $this->svgLogoDataUri($label, $subLabel);
+    }
+
+    private function imageDataUri(string $path): ?string
+    {
+        if (! is_file($path)) {
+            return null;
+        }
+
+        $mime = mime_content_type($path) ?: 'image/png';
+        $contents = file_get_contents($path);
+
+        if ($contents === false) {
+            return null;
+        }
+
+        return 'data:'.$mime.';base64,'.base64_encode($contents);
+    }
+
+    private function svgLogoDataUri(string $label, ?string $subLabel = null): string
+    {
+        $subLabel ??= '';
+
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="120" viewBox="0 0 240 120">'
+            .'<rect width="240" height="120" rx="18" fill="#ffffff"/>'
+            .'<rect x="8" y="8" width="224" height="104" rx="15" fill="none" stroke="#d4574e" stroke-width="5"/>'
+            .'<text x="120" y="'.($subLabel ? '58' : '70').'" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">'.e($label).'</text>'
+            .($subLabel ? '<text x="120" y="86" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="22" font-weight="700" fill="#d4574e">'.e($subLabel).'</text>' : '')
+            .'</svg>';
+
+        return 'data:image/svg+xml;base64,'.base64_encode($svg);
     }
 }

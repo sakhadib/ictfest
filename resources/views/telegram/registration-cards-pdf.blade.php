@@ -214,7 +214,9 @@
             <table class="brand-table">
                 <tr>
                     <td class="left-logos">
-                        <img src="{{ $report['assets']['ictfest_logo'] }}" class="ict-logo" alt="ICT Fest">
+                        @if ($report['assets']['ictfest_logo'])
+                            <img src="{{ $report['assets']['ictfest_logo'] }}" class="ict-logo" alt="ICT Fest">
+                        @endif
                     </td>
                     <td class="center-title">
                         <p class="society">IUT COMPUTER SOCIETY</p>
@@ -223,8 +225,12 @@
                         <p class="university">Islamic University of Technology</p>
                     </td>
                     <td class="right-logos">
-                        <img src="{{ $report['assets']['iutcs_logo'] }}" class="org-logo" alt="IUTCS">
-                        <img src="{{ $report['assets']['cse_logo'] }}" class="org-logo" alt="CSE">
+                        @if ($report['assets']['iutcs_logo'])
+                            <img src="{{ $report['assets']['iutcs_logo'] }}" class="org-logo" alt="IUTCS">
+                        @endif
+                        @if ($report['assets']['cse_logo'])
+                            <img src="{{ $report['assets']['cse_logo'] }}" class="org-logo" alt="CSE">
+                        @endif
                     </td>
                 </tr>
             </table>
