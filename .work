@@ -60,7 +60,6 @@ A few Fixes are needed.
 
 
 
-
 ===============
 
 
@@ -148,3 +147,13 @@ ABSOLUTELY NO DB CHANGE
 now as we have successfully shipped `/status` command on deployment. and it worked. why not we build more
   essential commands for telegram. as you know our workflow and DB, you can decide what commands will be
   useful. make them. and a small text file at root for command and its description you built.
+
+
+
+====================
+
+can we make a chart of university wise distribution ? Y axis will be participant count (not registration) and x axis will be university.
+
+university name can be huge, so make name perfectly horizontal. and it'll be a barchart. clearly mention in chart title that its participant count.
+
+/univ is the command for this.

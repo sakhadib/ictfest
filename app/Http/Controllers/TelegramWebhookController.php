@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendRegistrationTrendChart;
+use App\Jobs\SendUniversityDistributionChart;
 use App\Services\RegistrationSummaryService;
 use App\Services\TelegramBotClient;
 use Illuminate\Http\JsonResponse;
@@ -41,7 +42,7 @@ class TelegramWebhookController extends Controller
 
         $reply = $this->replyFor($text, $summary, $chatId);
 
-        if ($reply === '__trend_dispatched__') {
+        if ($reply === '__chart_dispatched__') {
             return response()->json(['ok' => true]);
         }
 
@@ -87,7 +88,13 @@ class TelegramWebhookController extends Controller
         if (preg_match('/^\/?trend\s+(all|[0-9]{1,2})$/', $command, $matches)) {
             SendRegistrationTrendChart::dispatch($chatId, $matches[1]);
 
-            return '__trend_dispatched__';
+            return '__chart_dispatched__';
+        }
+
+        if (in_array($command, ['univ', '/univ'], true)) {
+            SendUniversityDistributionChart::dispatch($chatId);
+
+            return '__chart_dispatched__';
         }
 
         return match ($command) {

@@ -59,3 +59,8 @@ trend 02
 trend all
 /trend all
 Queues and sends a PNG line chart with cumulative registration curves for all events.
+
+univ
+/univ
+Queues and sends a PNG bar chart of university-wise distribution.
+Y-axis is participant count and X-axis is university.
