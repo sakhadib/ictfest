@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\EventStatusController;
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\Dashboard\StatusLookupController;
 use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\EventRulebookController;
 use App\Http\Controllers\IupcRegistrationController;
 use App\Http\Controllers\HackathonRegistrationController;
 use App\Http\Controllers\DatathonRegistrationController;
@@ -39,6 +40,12 @@ Route::get('/sitemap.xml', function () {
         ['url' => url('/gamejam'), 'priority' => '0.9', 'changefreq' => 'weekly'],
         ['url' => url('/fifa'), 'priority' => '0.9', 'changefreq' => 'weekly'],
         ['url' => url('/valorant'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['url' => route('events.rulebook', ['eventSlug' => 'iupc']), 'priority' => '0.6', 'changefreq' => 'weekly'],
+        ['url' => route('events.rulebook', ['eventSlug' => 'hackathon']), 'priority' => '0.6', 'changefreq' => 'weekly'],
+        ['url' => route('events.rulebook', ['eventSlug' => 'datathon']), 'priority' => '0.6', 'changefreq' => 'weekly'],
+        ['url' => route('events.rulebook', ['eventSlug' => 'gamejam']), 'priority' => '0.6', 'changefreq' => 'weekly'],
+        ['url' => route('events.rulebook', ['eventSlug' => 'fifa']), 'priority' => '0.6', 'changefreq' => 'weekly'],
+        ['url' => route('events.rulebook', ['eventSlug' => 'valorant']), 'priority' => '0.6', 'changefreq' => 'weekly'],
         ['url' => route('registration.status'), 'priority' => '0.5', 'changefreq' => 'weekly'],
         ['url' => route('contact'), 'priority' => '0.4', 'changefreq' => 'monthly'],
         ['url' => route('about'), 'priority' => '0.4', 'changefreq' => 'monthly'],
@@ -134,6 +141,10 @@ Route::get('/test-sms', function () {
         ], 500);
     }
 });
+
+Route::get('/{eventSlug}/rulebook', EventRulebookController::class)
+    ->whereIn('eventSlug', ['iupc', 'hackathon', 'datathon', 'gamejam', 'fifa', 'valorant'])
+    ->name('events.rulebook');
 
 Route::get('/iupc', function () {
     return view('events.iupc', ['eventRecord' => \App\Models\Event::where('code', '01')->firstOrFail()]);

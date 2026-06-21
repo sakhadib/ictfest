@@ -11,7 +11,7 @@
         'description' => 'A two-stage agentic AI hackathon with an online preliminary round and onsite final at IUT.',
         'url' => url('/hackathon'),
         'image' => asset('assets/logos/hackathon.png'),
-        'startDate' => '2026-07-10T18:00:00+06:00',
+        'startDate' => '2026-07-09T18:00:00+06:00',
         'endDate' => '2026-07-24T18:00:00+06:00',
         'locationName' => 'AB2 301, 302 and Auditorium, Islamic University of Technology',
         'registrationUrl' => route('hackathon.register'),
@@ -41,13 +41,14 @@
             ],
         ],
         [
-            'date' => '10 July',
+            'date' => '9 July',
             'label' => 'Preliminary Round',
             'accent' => 'volt',
             'icon' => 'fa-laptop-code',
             'items' => [
                 ['value' => '4h', 'label' => 'Build Window', 'icon' => 'fa-hourglass-half'],
                 ['value' => '6:00 PM', 'label' => 'Problem Release', 'icon' => 'fa-code-branch'],
+                ['value' => '10:00 PM', 'label' => 'Submission Deadline', 'icon' => 'fa-flag-checkered'],
             ],
         ],
         [
@@ -91,18 +92,12 @@
                     Build an agent that solves a real problem under pressure.
                 </h1>
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                    A two-stage hackathon beginning online with a 4-hour build round, then moving selected teams into an onsite final at {{ config('app.name') }}.
+                    A two-stage hackathon beginning online on 9 July, 2026 from 6:00 PM to 10:00 PM Bangladesh Standard Time, then moving selected teams into an onsite final at {{ config('app.name') }}.
                 </p>
                 <div class="mt-10">
-                    @if(filled($eventRecord?->rulebook_link))
-                        <a href="{{ $eventRecord->rulebook_link }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-ember">
-                            See Rulebook
-                        </a>
-                    @else
-                        <span class="inline-flex items-center justify-center gap-3 rounded-md border border-white/12 bg-white/[.04] px-5 py-3 text-sm font-semibold text-white/58">
-                            Rulebook will come soon
-                        </span>
-                    @endif
+                    <a href="{{ route('events.rulebook', ['eventSlug' => 'hackathon']) }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-ember">
+                        See Rulebook
+                    </a>
                 </div>
             </div>
 

@@ -106,15 +106,9 @@
                     A university-level data competition where teams move from analysis and modeling to paper, codebase, report, slides, and an onsite final.
                 </p>
                 <div class="mt-10">
-                    @if(filled($eventRecord?->rulebook_link))
-                        <a href="{{ $eventRecord->rulebook_link }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-iris">
-                            See Rulebook
-                        </a>
-                    @else
-                        <span class="inline-flex items-center justify-center gap-3 rounded-md border border-white/12 bg-white/[.04] px-5 py-3 text-sm font-semibold text-white/58">
-                            Rulebook will come soon
-                        </span>
-                    @endif
+                    <a href="{{ route('events.rulebook', ['eventSlug' => 'datathon']) }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-iris">
+                        See Rulebook
+                    </a>
                 </div>
             </div>
 

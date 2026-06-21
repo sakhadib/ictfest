@@ -240,3 +240,15 @@ now this will be accessible via telegram. commands are
 \regcard event <code> : only registrayion cards of that event.
 \regcard team <registration-code> : only one reg card of the provided reg code.
 \regcard all : sequentially sends reg cards of each event one file per event.
+
+
+
+
+
+===========================
+
+
+Requirement Update
+
+1. Hackathon preli is 9 July, 2026 6 PM to 10 PM Bangladesh Standerd Time. Need update / addition in UI of hackathon page.
+2. i need routes like <event>/rulebook such as : iupc/rulebook , hackathon/rulebook, datathon/rulebook, gamejam/rulebook, fifa/rulebook, valorant/rulebook. these will be pages. utilize the event table and single page template. where you will open the rulebook link stored in event using an iframe. if rulebook link is not present then hang a notice that rulebook is not published yet. in the event desc pages, the rulebook link will be these now. over the iframe there will be button with a heading that if the rulebook is not visible open in new tab. where it will take directly to provided rulebook url in event table. match the core theme. keep header and footer same and reuse components as much as possible. 
