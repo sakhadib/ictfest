@@ -2,9 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Services\QuickChartService;
 use App\Services\TelegramBotClient;
 use App\Services\UniversityDistributionService;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -29,13 +30,12 @@ class SendUniversityDistributionChart implements ShouldQueue
 
     public function handle(
         UniversityDistributionService $distribution,
-        QuickChartService $charts,
         TelegramBotClient $telegram,
     ): void {
-        $chart = $distribution->participantCounts();
+        $report = $distribution->participantCountTable();
 
-        if (! $chart['ok']) {
-            $telegram->sendMessage($this->chatId, $chart['message']);
+        if (! $report['ok']) {
+            $telegram->sendMessage($this->chatId, $report['message']);
 
             return;
         }
@@ -43,44 +43,81 @@ class SendUniversityDistributionChart implements ShouldQueue
         $path = null;
 
         try {
-            $path = $charts->barChartPng(
-                labels: $chart['labels'],
-                data: $chart['data'],
-                title: $chart['title'],
-                datasetLabel: 'Participant Count',
-            );
+            $path = $this->generatePdf($report);
 
-            $response = $telegram->sendPhoto($this->chatId, $path, $chart['title']);
+            $response = $telegram->sendDocument($this->chatId, $path, $report['title']);
 
             if ($response->failed()) {
-                Log::warning('Telegram rejected university distribution chart.', [
+                Log::warning('Telegram rejected university distribution report.', [
                     'chat_id' => $this->chatId,
                     'telegram_status' => $response->status(),
                     'response_size' => strlen($response->body()),
-                    'chart_size' => file_exists($path) ? filesize($path) : null,
+                    'pdf_size' => file_exists($path) ? filesize($path) : null,
                 ]);
 
-                $telegram->sendMessage($this->chatId, 'The university distribution chart was generated, but Telegram rejected the upload. Please try again.');
+                $telegram->sendMessage($this->chatId, 'The university distribution PDF was generated, but Telegram rejected the upload. Please try again.');
 
                 return;
             }
 
-            Log::info('Telegram university distribution chart sent.', [
+            Log::info('Telegram university distribution report sent.', [
                 'chat_id' => $this->chatId,
                 'telegram_status' => $response->status(),
-                'chart_size' => file_exists($path) ? filesize($path) : null,
+                'pdf_size' => file_exists($path) ? filesize($path) : null,
             ]);
         } catch (Throwable $exception) {
-            Log::error('Telegram university distribution chart failed.', [
+            Log::error('Telegram university distribution report failed.', [
                 'chat_id' => $this->chatId,
                 'exception_class' => $exception::class,
             ]);
 
-            $telegram->sendMessage($this->chatId, 'Could not generate the university distribution chart right now. Please try again later.');
+            $telegram->sendMessage($this->chatId, 'Could not generate the university distribution PDF right now. Please try again later.');
         } finally {
             if ($path && file_exists($path)) {
                 @unlink($path);
             }
         }
+    }
+
+    /**
+     * @param array<string, mixed> $report
+     */
+    private function generatePdf(array $report): string
+    {
+        $html = view('telegram.university-distribution-pdf', [
+            'report' => $report,
+        ])->render();
+
+        $options = new Options();
+        $options->set('defaultFont', 'DejaVu Sans');
+        $options->set('isRemoteEnabled', false);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('a4', 'portrait');
+        $dompdf->render();
+
+        $path = tempnam(sys_get_temp_dir(), 'ictfest-univ-');
+
+        if (! $path) {
+            throw new \RuntimeException('Could not create a temporary university report file.');
+        }
+
+        $pdfPath = $path.'.pdf';
+        rename($path, $pdfPath);
+
+        $bytesWritten = file_put_contents($pdfPath, $dompdf->output());
+
+        if ($bytesWritten === false) {
+            throw new \RuntimeException('Could not write the temporary university report file.');
+        }
+
+        Log::info('University distribution PDF generated', [
+            'rows' => $report['rows']->count(),
+            'size' => $bytesWritten,
+            'path' => basename($pdfPath),
+        ]);
+
+        return $pdfPath;
     }
 }

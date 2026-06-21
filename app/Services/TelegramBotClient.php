@@ -38,6 +38,27 @@ class TelegramBotClient
         }
     }
 
+    public function sendDocument(string|int $chatId, string $documentPath, ?string $caption = null): Response
+    {
+        $handle = fopen($documentPath, 'rb');
+
+        if (! $handle) {
+            throw new RuntimeException('Could not open Telegram document file.');
+        }
+
+        try {
+            $request = Http::timeout(30)
+                ->attach('document', $handle, basename($documentPath));
+
+            return $request->post($this->endpoint('sendDocument'), array_filter([
+                'chat_id' => $chatId,
+                'caption' => $caption,
+            ], fn ($value) => $value !== null && $value !== ''));
+        } finally {
+            fclose($handle);
+        }
+    }
+
     private function endpoint(string $method): string
     {
         $apiUrl = rtrim((string) config('services.telegram.api_url', 'https://api.telegram.org'), '/');

@@ -62,5 +62,5 @@ Queues and sends a PNG line chart with cumulative registration curves for all ev
 
 univ
 /univ
-Queues and sends a PNG bar chart of university-wise distribution.
-Y-axis is participant count and X-axis is university.
+Queues and sends a PDF report of university-wise participant counts by event.
+Columns: university, IUPC, Hackathon, Datathon, Gamejam, FIFA, Valorant, total.

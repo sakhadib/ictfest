@@ -187,3 +187,24 @@ After fixing, clear the log and verify:
 - /trend all works
 - /univ works
 - laravel.log contains only readable text and no PNG binary data.
+
+
+
+======================
+
+
+dompdf is installed. now, on the /univ command. instead of sending a chart generate a pdf with a table in a4 pages. on multipage table span.
+
+cols will be
+- university
+- iupc
+- hackathon
+- datathon
+- gamejam
+- fifa
+- valorant
+- total
+
+and university col will hold university name and each cell will give participant count of that university in that event. on report header clearly tell that this is participant count. 
+
+once the pdf is sent, delete the temporary file. 

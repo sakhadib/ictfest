@@ -27,7 +27,7 @@ class RegistrationSummaryService
             'event <code>' => 'Detailed summary for one event, for example: event 03.',
             'trend <code>' => 'Send a cumulative registration trend chart for one event.',
             'trend all' => 'Send cumulative registration trend curves for all events.',
-            'univ' => 'Send a university-wise participant count bar chart.',
+            'univ' => 'Send a university-wise participant count PDF report.',
         ];
     }
 
