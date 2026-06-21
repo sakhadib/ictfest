@@ -48,3 +48,14 @@ Shows a focused summary for one event.
 Examples:
 event 01
 /event 03
+
+trend <code>
+/trend <code>
+Queues and sends a PNG line chart with cumulative registrations for one event.
+Examples:
+trend 02
+/trend 05
+
+trend all
+/trend all
+Queues and sends a PNG line chart with cumulative registration curves for all events.

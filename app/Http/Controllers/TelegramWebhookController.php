@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendRegistrationTrendChart;
 use App\Services\RegistrationSummaryService;
 use App\Services\TelegramBotClient;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +39,11 @@ class TelegramWebhookController extends Controller
             return response()->json(['ok' => true]);
         }
 
-        $reply = $this->replyFor($text, $summary);
+        $reply = $this->replyFor($text, $summary, $chatId);
+
+        if ($reply === '__trend_dispatched__') {
+            return response()->json(['ok' => true]);
+        }
 
         if (! $reply) {
             return response()->json(['ok' => true]);
@@ -67,7 +72,7 @@ class TelegramWebhookController extends Controller
         return hash_equals($secret, (string) $request->header('X-Telegram-Bot-Api-Secret-Token'));
     }
 
-    private function replyFor(string $text, RegistrationSummaryService $summary): ?string
+    private function replyFor(string $text, RegistrationSummaryService $summary, string|int $chatId): ?string
     {
         $command = $this->normalizedCommand($text);
 
@@ -77,6 +82,12 @@ class TelegramWebhookController extends Controller
 
         if (preg_match('/^\/?event\s+([0-9]{1,2})$/', $command, $matches)) {
             return $summary->eventText($matches[1]);
+        }
+
+        if (preg_match('/^\/?trend\s+(all|[0-9]{1,2})$/', $command, $matches)) {
+            SendRegistrationTrendChart::dispatch($chatId, $matches[1]);
+
+            return '__trend_dispatched__';
         }
 
         return match ($command) {

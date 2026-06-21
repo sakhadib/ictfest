@@ -25,6 +25,8 @@ class RegistrationSummaryService
             'finals' => 'Final registration pipeline counts grouped by event.',
             'ca' => 'Registration counts grouped by Campus Ambassador.',
             'event <code>' => 'Detailed summary for one event, for example: event 03.',
+            'trend <code>' => 'Send a cumulative registration trend chart for one event.',
+            'trend all' => 'Send cumulative registration trend curves for all events.',
         ];
     }
 
