@@ -157,3 +157,33 @@ can we make a chart of university wise distribution ? Y axis will be participant
 university name can be huge, so make name perfectly horizontal. and it'll be a barchart. clearly mention in chart title that its participant count.
 
 /univ is the command for this.
+
+
+
+
+================
+
+
+The /univ feature is logging raw PNG binary data into laravel.log (IHDR/IEND appears in logs).
+
+Find and remove any logging of:
+- image bytes
+- QuickChart response bodies
+- downloaded PNG contents
+- temporary image file contents
+
+Only log metadata, e.g.:
+
+Log::info('Trend chart generated', [
+    'event' => $eventCode,
+    'size' => strlen($imageBytes),
+]);
+
+Never log binary data.
+
+Also investigate why /univ fails after /trend. Ensure chart generation, temporary files, Telegram sendPhoto, and HTTP responses are properly handled and cleaned up.
+
+After fixing, clear the log and verify:
+- /trend all works
+- /univ works
+- laravel.log contains only readable text and no PNG binary data.

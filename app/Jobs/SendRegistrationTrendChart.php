@@ -52,12 +52,19 @@ class SendRegistrationTrendChart implements ShouldQueue
                 title: $trend['title'],
             );
 
-            $telegram->sendPhoto($this->chatId, $path, $trend['title']);
+            $response = $telegram->sendPhoto($this->chatId, $path, $trend['title']);
+
+            Log::info('Telegram registration trend chart sent.', [
+                'scope' => $this->scope,
+                'chat_id' => $this->chatId,
+                'telegram_status' => $response->status(),
+                'chart_size' => file_exists($path) ? filesize($path) : null,
+            ]);
         } catch (Throwable $exception) {
             Log::error('Telegram registration trend chart failed.', [
                 'scope' => $this->scope,
                 'chat_id' => $this->chatId,
-                'exception' => $exception->getMessage(),
+                'exception_class' => $exception::class,
             ]);
 
             $telegram->sendMessage($this->chatId, 'Could not generate the registration trend chart right now. Please try again later.');

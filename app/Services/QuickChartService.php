@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 class QuickChartService
@@ -76,11 +78,17 @@ class QuickChartService
             ],
         ]);
 
-        if ($response->failed() || ! str_contains((string) $response->header('Content-Type'), 'image/png')) {
-            throw new RuntimeException('QuickChart returned an invalid response: '.$response->status().' '.$response->body());
-        }
+        $this->ensurePngResponse($response, 'trend');
 
-        return $this->storePng($response->body(), 'ictfest-trend-');
+        $imageBytes = $response->body();
+
+        Log::info('Trend chart generated', [
+            'datasets' => count($datasets),
+            'points' => count($labels),
+            'size' => strlen($imageBytes),
+        ]);
+
+        return $this->storePng($imageBytes, 'ictfest-trend-');
     }
 
     /**
@@ -89,8 +97,8 @@ class QuickChartService
      */
     public function barChartPng(array $labels, array $data, string $title, string $datasetLabel): string
     {
-        $wrappedLabels = array_map(fn (string $label) => $this->wrapLabel($label), $labels);
         $width = min(4200, max(1400, count($labels) * 150));
+        $fontSize = count($labels) > 24 ? 8 : (count($labels) > 14 ? 9 : 11);
 
         $response = Http::timeout(30)->post('https://quickchart.io/chart', [
             'format' => 'png',
@@ -100,7 +108,7 @@ class QuickChartService
             'chart' => [
                 'type' => 'bar',
                 'data' => [
-                    'labels' => $wrappedLabels,
+                    'labels' => array_map(fn (string $label) => $this->compactLabel($label), $labels),
                     'datasets' => [[
                         'label' => $datasetLabel,
                         'data' => $data,
@@ -134,7 +142,7 @@ class QuickChartService
                                 'autoSkip' => false,
                                 'minRotation' => 0,
                                 'maxRotation' => 0,
-                                'fontSize' => count($labels) > 18 ? 9 : 11,
+                                'fontSize' => $fontSize,
                             ],
                         ]],
                         'yAxes' => [[
@@ -152,27 +160,51 @@ class QuickChartService
             ],
         ]);
 
-        if ($response->failed() || ! str_contains((string) $response->header('Content-Type'), 'image/png')) {
-            throw new RuntimeException('QuickChart returned an invalid response: '.$response->status().' '.$response->body());
-        }
+        $this->ensurePngResponse($response, 'university distribution');
 
-        return $this->storePng($response->body(), 'ictfest-univ-');
+        $imageBytes = $response->body();
+
+        Log::info('University distribution chart generated', [
+            'universities' => count($labels),
+            'size' => strlen($imageBytes),
+        ]);
+
+        return $this->storePng($imageBytes, 'ictfest-univ-');
     }
 
-    /**
-     * @return string|list<string>
-     */
-    private function wrapLabel(string $label): string|array
+    private function compactLabel(string $label): string
     {
         $label = trim($label);
+        $limit = 28;
 
-        $length = function_exists('mb_strlen') ? mb_strlen($label) : strlen($label);
-
-        if ($length <= 18) {
+        if ((function_exists('mb_strlen') ? mb_strlen($label) : strlen($label)) <= $limit) {
             return $label;
         }
 
-        return explode("\n", wordwrap($label, 18, "\n", false));
+        if (function_exists('mb_substr')) {
+            return rtrim(mb_substr($label, 0, $limit - 1)).'...';
+        }
+
+        return rtrim(substr($label, 0, $limit - 1)).'...';
+    }
+
+    private function ensurePngResponse(Response $response, string $chartType): void
+    {
+        $contentType = (string) $response->header('Content-Type');
+        $bodySize = strlen($response->body());
+
+        if (! $response->failed() && str_contains($contentType, 'image/png')) {
+            return;
+        }
+
+        Log::warning('QuickChart returned an invalid response', [
+            'chart_type' => $chartType,
+            'status' => $response->status(),
+            'content_type' => $contentType,
+            'body_size' => $bodySize,
+        ]);
+
+        throw new RuntimeException('QuickChart returned an invalid '.$chartType.' chart response.');
     }
 
     private function storePng(string $contents, string $prefix): string
@@ -185,7 +217,17 @@ class QuickChartService
 
         $pngPath = $path.'.png';
         rename($path, $pngPath);
-        file_put_contents($pngPath, $contents);
+        $bytesWritten = file_put_contents($pngPath, $contents);
+
+        if ($bytesWritten === false) {
+            throw new RuntimeException('Could not write the temporary chart file.');
+        }
+
+        Log::info('Temporary chart file written', [
+            'prefix' => $prefix,
+            'path' => basename($pngPath),
+            'size' => $bytesWritten,
+        ]);
 
         return $pngPath;
     }

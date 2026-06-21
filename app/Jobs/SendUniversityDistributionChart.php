@@ -50,11 +50,17 @@ class SendUniversityDistributionChart implements ShouldQueue
                 datasetLabel: 'Participant Count',
             );
 
-            $telegram->sendPhoto($this->chatId, $path, $chart['title']);
+            $response = $telegram->sendPhoto($this->chatId, $path, $chart['title']);
+
+            Log::info('Telegram university distribution chart sent.', [
+                'chat_id' => $this->chatId,
+                'telegram_status' => $response->status(),
+                'chart_size' => file_exists($path) ? filesize($path) : null,
+            ]);
         } catch (Throwable $exception) {
             Log::error('Telegram university distribution chart failed.', [
                 'chat_id' => $this->chatId,
-                'exception' => $exception->getMessage(),
+                'exception_class' => $exception::class,
             ]);
 
             $telegram->sendMessage($this->chatId, 'Could not generate the university distribution chart right now. Please try again later.');

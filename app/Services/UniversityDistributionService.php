@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class UniversityDistributionService
 {
+    private const MAX_CHART_BUCKETS = 35;
+
     /**
      * @return array<string, mixed>
      */
@@ -27,6 +29,18 @@ class UniversityDistributionService
                 'ok' => false,
                 'message' => 'No participant university data found yet.',
             ];
+        }
+
+        if ($rows->count() > self::MAX_CHART_BUCKETS) {
+            $visible = $rows->take(self::MAX_CHART_BUCKETS - 1)->values();
+            $otherCount = $rows
+                ->slice(self::MAX_CHART_BUCKETS - 1)
+                ->sum(fn ($row) => (int) $row->participants_count);
+
+            $rows = $visible->push((object) [
+                'university_name' => 'Other universities',
+                'participants_count' => $otherCount,
+            ]);
         }
 
         return [
