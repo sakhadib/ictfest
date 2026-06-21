@@ -130,6 +130,9 @@
                             <li>Teams will pitch and demo the exact game submitted during the online round.</li>
                             <li>Preliminary scores used to select the Top 15 will not carry over to the onsite round, except the video pitch submission score.</li>
                         </ul>
+                        <div class="mt-5 rounded-lg border border-ember/30 bg-ember/10 p-5 text-sm font-semibold leading-7 text-white">
+                            For onsite round, you don't have to make any new game and you can't update your previously submitted game. Here, you will have to present the game you already submitted in online round to the judges.
+                        </div>
                     </div>
                 </div>
             </section>
