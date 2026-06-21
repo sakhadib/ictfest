@@ -74,3 +74,19 @@ fullreport-force
 /fullreport-force
 Queues and tries to send the complete registration PDF report as one file.
 If Telegram refuses the upload, the bot points admins to /fullreport and the dashboard PDF download.
+
+regcard all
+/regcard all
+Queues and sends registration cards as one PDF per event.
+
+regcard force
+/regcard force
+Queues and tries to send all registration cards in one PDF.
+
+regcard event <code>
+/regcard event <code>
+Queues and sends registration cards for one event, for example: /regcard event 01.
+
+regcard team <registration-code>
+/regcard team <registration-code>
+Queues and sends a single team registration card.

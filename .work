@@ -208,3 +208,35 @@ cols will be
 and university col will hold university name and each cell will give participant count of that university in that event. on report header clearly tell that this is participant count. 
 
 once the pdf is sent, delete the temporary file. 
+
+
+
+
+
+===================
+
+
+now we need registration cards. each A4 page will haveone team's registration card. 
+
+lets give you a rough template. 
+- on top left there will be ict fest logo : public/assets/logo_black.png
+- right beside that there will be event logo of the registerd event - can be found in public/assets/logos/ folder
+- on top right there will be side by side iutcs logo (public/assets/iutcs.png) and cse logo (public/assets/cse.png)
+- top center will declare :
+  - IUT COMPUTER SOCIETY
+  - IUT 12th ICT FEST 2026
+  - Department of Computer Science and Engineering
+  - Islamic University of technology
+- Under the logo and branding layer now a big "Registration Card"
+- Event name under "Registration Card
+- In a beautiful way, team information underneath. everything that a registration has excluding time marks of say paid at, verified at etc. All the informations a registration card should have. with participant informations, coach if it is iupc.
+- at the bottom a subtle notice about "auto generated at <time>
+
+
+The document has to be the all information point of that team in our campus. they show the paper, and instantly we have all required informations about them. so each page is a registration card for a team. 
+
+now this will be accessible via telegram. commands are
+\regcard force : that sends all registration cards in a single pdf document.
+\regcard event <code> : only registrayion cards of that event.
+\regcard team <registration-code> : only one reg card of the provided reg code.
+\regcard all : sequentially sends reg cards of each event one file per event.

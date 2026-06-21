@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendRegistrationTrendChart;
 use App\Jobs\SendCompleteRegistrationReport;
+use App\Jobs\SendRegistrationCards;
 use App\Jobs\SendUniversityDistributionChart;
 use App\Services\RegistrationSummaryService;
 use App\Services\TelegramBotClient;
@@ -92,6 +93,30 @@ class TelegramWebhookController extends Controller
             return '__job_dispatched__';
         }
 
+        if (preg_match('/^\/?regcard\s+force$/', $command)) {
+            SendRegistrationCards::dispatch($chatId, 'force');
+
+            return '__job_dispatched__';
+        }
+
+        if (preg_match('/^\/?regcard\s+all$/', $command)) {
+            SendRegistrationCards::dispatch($chatId, 'all');
+
+            return '__job_dispatched__';
+        }
+
+        if (preg_match('/^\/?regcard\s+event\s+([0-9]{1,2})$/', $command, $matches)) {
+            SendRegistrationCards::dispatch($chatId, 'event', $matches[1]);
+
+            return '__job_dispatched__';
+        }
+
+        if (preg_match('/^\/?regcard\s+team\s+([a-z0-9_-]+)$/', $command, $matches)) {
+            SendRegistrationCards::dispatch($chatId, 'team', $matches[1]);
+
+            return '__job_dispatched__';
+        }
+
         if (in_array($command, ['univ', '/univ'], true)) {
             SendUniversityDistributionChart::dispatch($chatId);
 
@@ -133,6 +158,7 @@ class TelegramWebhookController extends Controller
     private function normalizedCommand(string $text): string
     {
         $text = strtolower(trim($text));
+        $text = str_starts_with($text, '\\') ? '/'.ltrim($text, '\\') : $text;
         $text = preg_replace('/\s+/', ' ', $text) ?? '';
 
         return preg_replace('/^\/([a-z0-9_-]+)@[a-z0-9_]+/i', '/$1', $text) ?? '';

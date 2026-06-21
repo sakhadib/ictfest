@@ -30,6 +30,10 @@ class RegistrationSummaryService
             'univ' => 'Send a university-wise participant count PDF report.',
             'fullreport' => 'Send the complete registration PDF report in parts.',
             'fullreport-force' => 'Try sending the complete registration PDF report as one file.',
+            'regcard all' => 'Send registration cards as one PDF per event.',
+            'regcard force' => 'Try sending all registration cards in one PDF.',
+            'regcard event <code>' => 'Send registration cards for one event.',
+            'regcard team <code>' => 'Send one team registration card.',
         ];
     }
 
