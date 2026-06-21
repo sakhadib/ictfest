@@ -42,6 +42,13 @@ class EventRulebookController extends Controller
             ]);
         }
 
+        if ($eventSlug === 'fifa') {
+            return view('events.rulebooks.fifa', [
+                'eventSlug' => $eventSlug,
+                'eventRecord' => Event::where('code', self::SLUG_TO_CODE[$eventSlug])->firstOrFail(),
+            ]);
+        }
+
         if ($eventSlug === 'valorant') {
             return view('events.rulebooks.valorant', [
                 'eventSlug' => $eventSlug,
