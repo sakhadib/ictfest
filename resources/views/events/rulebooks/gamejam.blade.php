@@ -335,6 +335,13 @@
                     </div>
                 </div>
 
+                <div class="mt-6 rounded-lg border border-volt/30 bg-volt/10 p-5">
+                    <p class="text-xs font-semibold uppercase tracking-[.18em] text-volt/80">Competition Link</p>
+                    <a href="https://itch.io/jam/12th-iut-ict-fest-2026-gamejam" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex break-all text-lg font-semibold leading-7 text-white transition hover:text-volt">
+                        https://itch.io/jam/12th-iut-ict-fest-2026-gamejam
+                    </a>
+                </div>
+
                 <div class="mt-6 max-w-full overflow-x-auto rounded-lg border border-white/10">
                     <table class="w-full divide-y divide-white/10 text-left text-sm">
                         <tbody class="divide-y divide-white/10 text-white/64">
@@ -344,7 +351,7 @@
                             </tr>
                             <tr>
                                 <td class="px-5 py-4 font-semibold text-white">Competition Link</td>
-                                <td class="px-5 py-4">12th IUT ICT FEST 2026 GameJam - itch.io</td>
+                                <td class="px-5 py-4"><a href="https://itch.io/jam/12th-iut-ict-fest-2026-gamejam" target="_blank" rel="noopener noreferrer" class="break-all font-semibold text-volt transition hover:text-white">12th IUT ICT FEST 2026 GameJam - itch.io</a></td>
                             </tr>
                             <tr>
                                 <td class="px-5 py-4 font-semibold text-white">Discord Link</td>
