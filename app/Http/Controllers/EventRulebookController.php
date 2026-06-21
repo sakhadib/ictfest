@@ -28,13 +28,6 @@ class EventRulebookController extends Controller
             ]);
         }
 
-        if ($eventSlug === 'datathon') {
-            return view('events.rulebooks.datathon', [
-                'eventSlug' => $eventSlug,
-                'eventRecord' => Event::where('code', self::SLUG_TO_CODE[$eventSlug])->firstOrFail(),
-            ]);
-        }
-
         if ($eventSlug === 'gamejam') {
             return view('events.rulebooks.gamejam', [
                 'eventSlug' => $eventSlug,

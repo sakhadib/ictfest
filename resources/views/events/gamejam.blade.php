@@ -57,7 +57,7 @@
             'icon' => 'fa-circle-play',
             'items' => [
                 ['value' => 'YouTube', 'label' => 'Video Submission', 'icon' => 'fa-circle-play'],
-                ['value' => 'Duration', 'label' => 'Under 5 Min', 'icon' => 'fa-clock'],
+                ['value' => '21 July, 11:59 PM', 'label' => 'Bangladesh Time Deadline', 'icon' => 'fa-clock'],
             ],
         ],
         [

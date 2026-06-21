@@ -150,6 +150,7 @@
                         <tbody class="divide-y divide-white/10 text-white/64">
                             <tr><td class="px-5 py-4 font-semibold text-white">Registration</td><td class="px-5 py-4">17th June to the end of the online round</td></tr>
                             <tr><td class="px-5 py-4 font-semibold text-white">Online Round</td><td class="px-5 py-4">Approximately July 14 - July 20, 2026</td></tr>
+                            <tr><td class="px-5 py-4 font-semibold text-white">Video Submission Deadline</td><td class="px-5 py-4">21st July, 2026, 11:59 PM Bangladesh time</td></tr>
                             <tr><td class="px-5 py-4 font-semibold text-white">Onsite Round</td><td class="px-5 py-4">July 25, 2026 at Islamic University of Technology</td></tr>
                         </tbody>
                     </table>
@@ -199,7 +200,7 @@
                         <ul class="mt-4 space-y-3 text-sm leading-7 text-white/62">
                             <li>Participants must submit their game within the deadline with proper information.</li>
                             <li>Participants must submit a short video explaining the submitted game.</li>
-                            <li>The deadline for video submission may be extended.</li>
+                            <li>The GameJam video submission deadline is <strong class="text-white">21st July, 2026, 11:59 PM Bangladesh time</strong>.</li>
                             <li>Participants must maintain a git repository of their game.</li>
                         </ul>
                     </div>
@@ -247,6 +248,7 @@
                     <ul class="mt-4 space-y-3 text-sm leading-7 text-white/62">
                         <li>Participants must create a short gameplay video and explain the game.</li>
                         <li>The video must be uploaded to YouTube or Drive and submitted as a link.</li>
+                        <li>The deadline is <strong class="text-white">21st July, 2026, 11:59 PM Bangladesh time</strong>.</li>
                         <li>The video may be used to showcase the game on social media.</li>
                         <li>The video name must follow this format: <strong class="text-white">TeamName_GameName</strong>.</li>
                     </ul>
