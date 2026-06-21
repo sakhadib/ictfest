@@ -17,6 +17,7 @@
         ['id' => 'submission', 'label' => 'Submission'],
         ['id' => 'judging', 'label' => 'Judging'],
         ['id' => 'evaluation', 'label' => 'Evaluation'],
+        ['id' => 'contact', 'label' => 'Contact'],
     ];
 @endphp
 
@@ -302,6 +303,55 @@
                             <li><strong class="text-white">Judge Discretion:</strong> Judges may consider innovation, technical polish, and overall polish.</li>
                         </ul>
                     </div>
+                </div>
+            </section>
+
+            <section id="contact" class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-8">
+                <h2 class="text-2xl font-semibold text-white">Reach Us</h2>
+                <p class="mt-5 text-sm leading-8 text-white/62">For registration, competition links, Discord, and event queries, use the following official contact points.</p>
+
+                <div class="mt-6 grid gap-5 md:grid-cols-2">
+                    <div class="rounded-lg border border-white/10 bg-black/15 p-5">
+                        <p class="text-lg font-semibold text-white">MD. Nazmus Sadiq</p>
+                        <p class="mt-2 text-sm text-white/62">Contact for GameJam queries</p>
+                        <div class="mt-4 grid gap-2 text-sm">
+                            <a href="mailto:nazmussadiq@iut-dhaka.edu" class="break-all font-semibold text-volt transition hover:text-white">nazmussadiq@iut-dhaka.edu</a>
+                            <a href="tel:01881117072" class="inline-flex items-center gap-2 font-semibold text-volt transition hover:text-white">
+                                <i class="fa-solid fa-phone text-xs"></i>
+                                01881117072
+                            </a>
+                        </div>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-black/15 p-5">
+                        <p class="text-lg font-semibold text-white">Khan Mahi Al Atahar</p>
+                        <p class="mt-2 text-sm text-white/62">Contact for GameJam queries</p>
+                        <div class="mt-4 grid gap-2 text-sm">
+                            <a href="mailto:mahiatahar@iut-dhaka.edu" class="break-all font-semibold text-volt transition hover:text-white">mahiatahar@iut-dhaka.edu</a>
+                            <a href="tel:01982628872" class="inline-flex items-center gap-2 font-semibold text-volt transition hover:text-white">
+                                <i class="fa-solid fa-phone text-xs"></i>
+                                01982628872
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 max-w-full overflow-x-auto rounded-lg border border-white/10">
+                    <table class="w-full divide-y divide-white/10 text-left text-sm">
+                        <tbody class="divide-y divide-white/10 text-white/64">
+                            <tr>
+                                <td class="px-5 py-4 font-semibold text-white">Registration form</td>
+                                <td class="px-5 py-4"><a href="https://iutictfest26.tech/gamejam" class="break-all font-semibold text-volt transition hover:text-white">iutictfest26.tech/gamejam</a></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-4 font-semibold text-white">Competition Link</td>
+                                <td class="px-5 py-4">12th IUT ICT FEST 2026 GameJam - itch.io</td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-4 font-semibold text-white">Discord Link</td>
+                                <td class="px-5 py-4"><a href="https://discord.gg/kXEfDVcRx" target="_blank" rel="noopener noreferrer" class="break-all font-semibold text-volt transition hover:text-white">https://discord.gg/kXEfDVcRx</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
         </article>
