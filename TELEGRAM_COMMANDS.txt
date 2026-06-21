@@ -64,3 +64,13 @@ univ
 /univ
 Queues and sends a PDF report of university-wise participant counts by event.
 Columns: university, IUPC, Hackathon, Datathon, Gamejam, FIFA, Valorant, total.
+
+fullreport
+/fullreport
+Queues and sends the complete registration PDF report in parts.
+Includes event overview, status summaries, CA summary, university participant counts, daily trend tables, registrations, participants, coaches, payment records, and final registration records.
+
+fullreport-force
+/fullreport-force
+Queues and tries to send the complete registration PDF report as one file.
+If Telegram refuses the upload, the bot points admins to /fullreport and the dashboard PDF download.

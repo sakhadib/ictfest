@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/status', [StatusLookupController::class, 'index'])->name('dashboard.status.index');
     Route::get('/dashboard/reports', [ReportController::class, 'index'])->name('dashboard.reports.index');
     Route::get('/dashboard/reports/download', [ReportController::class, 'download'])->name('dashboard.reports.download');
+    Route::get('/dashboard/reports/complete-pdf', [ReportController::class, 'completePdf'])->name('dashboard.reports.complete-pdf');
     Route::get('/dashboard/event-status', [EventStatusController::class, 'index'])->name('dashboard.event-status.index');
     Route::patch('/dashboard/event-status/{event:code}', [EventStatusController::class, 'update'])->name('dashboard.event-status.update');
     Route::get('/dashboard/events/{event:code}', [EventRegistrationController::class, 'index'])->name('dashboard.events.registrations.index');

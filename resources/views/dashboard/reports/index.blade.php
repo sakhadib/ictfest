@@ -166,9 +166,14 @@
                     <h2 class="text-lg font-semibold">CSV Columns</h2>
                     <p class="mt-1 text-sm text-coal/55">Participant fields are summarized into one cell per registration to avoid duplicate rows.</p>
                 </div>
-                <button type="submit" formaction="{{ route('dashboard.reports.download') }}" class="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/15 transition hover:bg-[#bd453d]">
-                    Download Report
-                </button>
+                <div class="flex flex-col gap-2 sm:flex-row">
+                    <a href="{{ route('dashboard.reports.complete-pdf') }}" class="rounded-lg border border-primary/20 bg-white px-4 py-2.5 text-center text-sm font-semibold text-primary shadow-sm transition hover:bg-primary/5">
+                        Download Complete PDF
+                    </a>
+                    <button type="submit" formaction="{{ route('dashboard.reports.download') }}" class="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/15 transition hover:bg-[#bd453d]">
+                        Download CSV
+                    </button>
+                </div>
             </div>
 
             <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

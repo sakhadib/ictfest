@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Registration;
+use App\Services\CompleteRegistrationReportService;
+use App\Services\CompleteReportPdfService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -76,6 +78,19 @@ class ReportController extends Controller
         }, $fileName, [
             'Content-Type' => 'text/csv; charset=UTF-8',
         ]);
+    }
+
+    public function completePdf(
+        CompleteRegistrationReportService $reports,
+        CompleteReportPdfService $pdfs,
+    ) {
+        $report = $reports->build(includeDetails: true);
+        $path = $pdfs->renderToTempFile($report);
+        $fileName = 'complete-registration-report-'.now()->format('Y-m-d-His').'.pdf';
+
+        return response()
+            ->download($path, $fileName, ['Content-Type' => 'application/pdf'])
+            ->deleteFileAfterSend(true);
     }
 
     /**

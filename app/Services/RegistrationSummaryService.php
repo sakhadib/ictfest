@@ -28,6 +28,8 @@ class RegistrationSummaryService
             'trend <code>' => 'Send a cumulative registration trend chart for one event.',
             'trend all' => 'Send cumulative registration trend curves for all events.',
             'univ' => 'Send a university-wise participant count PDF report.',
+            'fullreport' => 'Send the complete registration PDF report in parts.',
+            'fullreport-force' => 'Try sending the complete registration PDF report as one file.',
         ];
     }
 

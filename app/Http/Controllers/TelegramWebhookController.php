@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendRegistrationTrendChart;
+use App\Jobs\SendCompleteRegistrationReport;
 use App\Jobs\SendUniversityDistributionChart;
 use App\Services\RegistrationSummaryService;
 use App\Services\TelegramBotClient;
@@ -42,7 +43,7 @@ class TelegramWebhookController extends Controller
 
         $reply = $this->replyFor($text, $summary, $chatId);
 
-        if ($reply === '__chart_dispatched__') {
+        if ($reply === '__job_dispatched__') {
             return response()->json(['ok' => true]);
         }
 
@@ -88,13 +89,25 @@ class TelegramWebhookController extends Controller
         if (preg_match('/^\/?trend\s+(all|[0-9]{1,2})$/', $command, $matches)) {
             SendRegistrationTrendChart::dispatch($chatId, $matches[1]);
 
-            return '__chart_dispatched__';
+            return '__job_dispatched__';
         }
 
         if (in_array($command, ['univ', '/univ'], true)) {
             SendUniversityDistributionChart::dispatch($chatId);
 
-            return '__chart_dispatched__';
+            return '__job_dispatched__';
+        }
+
+        if (in_array($command, ['fullreport', '/fullreport'], true)) {
+            SendCompleteRegistrationReport::dispatch($chatId);
+
+            return '__job_dispatched__';
+        }
+
+        if (in_array($command, ['fullreport-force', '/fullreport-force'], true)) {
+            SendCompleteRegistrationReport::dispatch($chatId, true);
+
+            return '__job_dispatched__';
         }
 
         return match ($command) {
@@ -122,6 +135,6 @@ class TelegramWebhookController extends Controller
         $text = strtolower(trim($text));
         $text = preg_replace('/\s+/', ' ', $text) ?? '';
 
-        return preg_replace('/^\/([a-z]+)@[a-z0-9_]+/i', '/$1', $text) ?? '';
+        return preg_replace('/^\/([a-z0-9_-]+)@[a-z0-9_]+/i', '/$1', $text) ?? '';
     }
 }
