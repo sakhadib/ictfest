@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('title', 'FIFA EA FC 26 Tournament 2026 | IUT ICT Fest')
-@section('meta_description', 'Register for FIFA EA FC 26 at IUT 12th ICT FEST 2026: a 64-player PS4 controller-only tournament with knockout rounds and best-of finals.')
+@section('meta_description', 'Register for FIFA EA FC 26 at IUT 12th ICT FEST 2026: a 64-player PC controller-only tournament with knockout rounds and best-of finals.')
 @section('canonical', url('/fifa'))
 @section('og_image', asset('assets/logos/fifa.png'))
 
 @push('head')
     @include('partials.seo.event-jsonld', [
         'name' => 'FIFA EA FC 26 - IUT 12th ICT FEST 2026',
-        'description' => 'A 64-player individual EA FC 26 tournament on PS4 with knockout rounds and best-of series.',
+        'description' => 'A 64-player individual EA FC 26 tournament on PC with knockout rounds and best-of series.',
         'url' => url('/fifa'),
         'image' => asset('assets/logos/fifa.png'),
         'startDate' => '2026-07-24T09:00:00+06:00',
@@ -57,7 +57,7 @@
     ];
 
     $format = [
-        'EA FC 26 will be played on PS4.',
+        'EA FC 26 will be played on PC.',
         'Only controllers are allowed.',
         'The tournament consists of 64 players.',
         'Round of 64 and Round of 32 are direct knockout rounds.',
@@ -70,6 +70,11 @@
         'Any undergraduate university or college student can register.',
         'There are no rank limits.',
         'The tournament format features head-to-head matches between individual players.',
+    ];
+
+    $prizes = [
+        ['label' => 'Champion', 'value' => '15,000 BDT'],
+        ['label' => 'Runner-up', 'value' => '9,000 BDT'],
     ];
 @endphp
 
@@ -85,7 +90,7 @@
                     One controller. One bracket. No second screen.
                 </h1>
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                    A 64-player individual EA FC 26 tournament on PS4, moving from direct knockout rounds into best-of series and a best-of-five final.
+                    A 64-player individual EA FC 26 tournament on PC, moving from direct knockout rounds into best-of series and a best-of-five final.
                 </p>
                 {{-- @if($remainingSlots !== null)
                     <div class="mt-8 inline-flex items-center gap-5 rounded-lg border border-ember/35 bg-ember/10 px-5 py-4">
@@ -128,6 +133,25 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+    </div>
+</section>
+
+<section class="px-4 pb-20 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl rounded-lg border border-ember/25 bg-ember/10 p-6 sm:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+                <p class="text-xs font-medium uppercase tracking-[.22em] text-ember/80">Prize Pool</p>
+                <h2 class="mt-3 text-3xl font-semibold text-white">24,000 BDT</h2>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2 lg:flex-1">
+                @foreach($prizes as $prize)
+                    <div class="rounded-lg border border-white/10 bg-black/15 p-5">
+                        <p class="text-xs uppercase tracking-[.16em] text-white/38">{{ $prize['label'] }}</p>
+                        <p class="mt-2 text-2xl font-semibold text-white">{{ $prize['value'] }}</p>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
 </section>

@@ -49,7 +49,7 @@ class FinalRegistrationController extends Controller
             'participants.*.full_name' => ['required', 'string', 'max:255'],
             'participants.*.email' => ['required', 'email', 'max:255'],
             'participants.*.phone' => ['required', 'string', 'max:30'],
-            'participants.*.student_id' => ['required', 'string', 'max:255'],
+            'participants.*.student_id' => ['nullable', 'string', 'max:255'],
             'participants.*.tshirt_size' => ['required', Rule::in(self::TSHIRT_SIZES)],
             'coach.id' => ['nullable', 'integer'],
             'coach.name' => ['nullable', 'required_with:coach.id', 'string', 'max:255'],
@@ -98,7 +98,7 @@ class FinalRegistrationController extends Controller
                         'full_name' => $participantData['full_name'],
                         'email' => $participantData['email'],
                         'phone' => $participantData['phone'],
-                        'student_id' => $participantData['student_id'],
+                        'student_id' => $this->participantStudentId($participantData['student_id'] ?? null),
                         'tshirt_size' => $participantData['tshirt_size'],
                     ]);
 

@@ -12,6 +12,7 @@
         ['id' => 'guidelines', 'label' => 'Guidelines'],
         ['id' => 'lobby', 'label' => 'Lobby Protocol'],
         ['id' => 'format', 'label' => 'Format'],
+        ['id' => 'prize', 'label' => 'Prize Pool'],
         ['id' => 'bracket', 'label' => 'Bracket Flow'],
         ['id' => 'match', 'label' => 'Match Rules'],
         ['id' => 'conduct', 'label' => 'Conduct'],
@@ -107,7 +108,7 @@
                 <h2 class="text-2xl font-semibold text-white">Registration and Team Formation</h2>
                 <ul class="mt-5 space-y-3 text-sm leading-7 text-white/62">
                     <li>Registration fee for each team is 600 BDT.</li>
-                    <li>Any undergraduate university student or college student can register and form a team.</li>
+                    <li>Any college (Higher Secondary), undergraduate, or postgraduate student can register and form a team.</li>
                     <li>Cross-institute teams are allowed.</li>
                     <li>Each team must consist of at least 5 players and no more than 7 players including substitutes.</li>
                     <li>Each team can have a coach, but it is not mandatory.</li>
@@ -167,6 +168,28 @@
                 <p class="mt-5 text-sm leading-8 text-white/62">
                     The tournament consists of 32 teams and will be played in a double elimination format. There will be an upper bracket and a lower bracket. Teams that lose in the upper bracket are sent to the lower bracket for another chance. Teams that lose in the lower bracket are eliminated from the tournament.
                 </p>
+            </section>
+
+            <section id="prize" class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-8">
+                <h2 class="text-2xl font-semibold text-white">Prize Pool</h2>
+                <div class="mt-6 rounded-lg border border-iris/25 bg-iris/10 p-5">
+                    <p class="text-xs font-semibold uppercase tracking-[.18em] text-iris/80">Total Prize Pool</p>
+                    <p class="mt-2 text-3xl font-semibold text-white">50,000 BDT</p>
+                </div>
+                <div class="mt-5 grid gap-4 sm:grid-cols-3">
+                    <div class="rounded-lg border border-white/10 bg-black/15 p-5">
+                        <p class="text-xs uppercase tracking-[.16em] text-white/38">Champions</p>
+                        <p class="mt-2 text-2xl font-semibold text-white">30,000 BDT</p>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-black/15 p-5">
+                        <p class="text-xs uppercase tracking-[.16em] text-white/38">Runner-up</p>
+                        <p class="mt-2 text-2xl font-semibold text-white">15,000 BDT</p>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-black/15 p-5">
+                        <p class="text-xs uppercase tracking-[.16em] text-white/38">MVP</p>
+                        <p class="mt-2 text-2xl font-semibold text-white">5,000 BDT</p>
+                    </div>
+                </div>
             </section>
 
             <section id="bracket" class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-8">

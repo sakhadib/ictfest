@@ -67,7 +67,7 @@
     ];
 
     $teamRules = [
-        'Any undergraduate university or college student can register and form a team.',
+        'Any college (Higher Secondary), undergraduate, or postgraduate student can register and form a team.',
         'Cross-institution teams are allowed.',
         'Each team must have at least 5 players and no more than 7 players including substitutes.',
         'A team may have a coach, but it is not mandatory.',
@@ -89,6 +89,12 @@
         ['title' => 'Keyboard', 'text' => 'Teams must bring their own keyboard for LAN participation.', 'icon' => 'fa-keyboard'],
         ['title' => 'Mouse and Mousepad', 'text' => 'Teams must bring mouse and mousepad for the LAN event.', 'icon' => 'fa-computer-mouse'],
         ['title' => 'Headset', 'text' => 'Teams must bring their own headset.', 'icon' => 'fa-headset'],
+    ];
+
+    $prizes = [
+        ['label' => 'Champions', 'value' => '30,000 BDT'],
+        ['label' => 'Runner-up', 'value' => '15,000 BDT'],
+        ['label' => 'MVP', 'value' => '5,000 BDT'],
     ];
 @endphp
 
@@ -147,6 +153,25 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+    </div>
+</section>
+
+<section class="px-4 pb-20 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl rounded-lg border border-iris/25 bg-iris/10 p-6 sm:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+                <p class="text-xs font-medium uppercase tracking-[.22em] text-iris/80">Prize Pool</p>
+                <h2 class="mt-3 text-3xl font-semibold text-white">50,000 BDT</h2>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-3 lg:flex-1">
+                @foreach($prizes as $prize)
+                    <div class="rounded-lg border border-white/10 bg-black/15 p-5">
+                        <p class="text-xs uppercase tracking-[.16em] text-white/38">{{ $prize['label'] }}</p>
+                        <p class="mt-2 text-2xl font-semibold text-white">{{ $prize['value'] }}</p>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
 </section>
@@ -269,7 +294,7 @@
         <p class="text-xs font-medium uppercase tracking-[.22em] text-iris/80">Valorant Registration</p>
         <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">Ready for the bracket?</h2>
         <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/56">
-            Register your university roster and prepare your LAN equipment before the online match window begins.
+            Register your roster and prepare your LAN equipment before the online match window begins.
         </p>
         {{-- @if($remainingSlots !== null)
             <div class="mx-auto mt-8 max-w-sm rounded-lg border border-iris/35 bg-iris/10 px-5 py-4">

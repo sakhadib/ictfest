@@ -18,7 +18,7 @@
                 Valorant Registration
             </div>
             <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                Register your university roster.
+                Register your roster.
             </h1>
             <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
                 Start with five required players and add up to two substitute slots if needed. Player 1 will be treated as the team leader and primary contact.
@@ -114,13 +114,13 @@
                                     @error("participants.$index.phone")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                                 </label>
                                 <label>
-                                    <span class="{{ $labelClass }}">Student ID</span>
-                                    <input data-member-input="{{ $index }}" @disabled(! $visible) name="participants[{{ $index }}][student_id]" value="{{ old("participants.$index.student_id") }}" class="{{ $inputClass }}" placeholder="Student ID">
+                                    <span class="{{ $labelClass }}">Student ID <span class="normal-case tracking-normal text-white/28">(if applicable)</span></span>
+                                    <input data-member-input="{{ $index }}" @disabled(! $visible) name="participants[{{ $index }}][student_id]" value="{{ old("participants.$index.student_id") }}" class="{{ $inputClass }}" placeholder="Student ID, if applicable">
                                     @error("participants.$index.student_id")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                                 </label>
                                 <label class="sm:col-span-2">
-                                    <span class="{{ $labelClass }}">University</span>
-                                    <input data-member-input="{{ $index }}" data-participant-university data-university-search @disabled(! $visible) name="participants[{{ $index }}][university]" value="{{ old("participants.$index.university") }}" class="{{ $inputClass }}" placeholder="University name" autocomplete="off" spellcheck="false">
+                                    <span class="{{ $labelClass }}">Institute / Institution Name</span>
+                                    <input data-member-input="{{ $index }}" data-participant-university data-university-search @disabled(! $visible) name="participants[{{ $index }}][university]" value="{{ old("participants.$index.university") }}" class="{{ $inputClass }}" placeholder="Institute / institution name" autocomplete="off" spellcheck="false">
                                     @error("participants.$index.university")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                                 </label>
                             </div>

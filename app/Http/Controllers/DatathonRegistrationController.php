@@ -54,7 +54,7 @@ class DatathonRegistrationController extends Controller
             'participants.*.full_name' => ['required', 'string', 'max:255'],
             'participants.*.email' => ['required', 'email', 'max:255'],
             'participants.*.phone' => ['required', 'string', 'max:30'],
-            'participants.*.student_id' => ['required', 'string', 'max:255'],
+            'participants.*.student_id' => ['nullable', 'string', 'max:255'],
             'participants.*.university' => ['required', 'string', 'max:255'],
         ]);
 
@@ -80,7 +80,7 @@ class DatathonRegistrationController extends Controller
                     'full_name' => $participant['full_name'],
                     'email' => $participant['email'],
                     'phone' => $participant['phone'],
-                    'student_id' => $participant['student_id'],
+                    'student_id' => $this->participantStudentId($participant['student_id'] ?? null),
                     'university' => $participant['university'],
                     'is_leader' => $index === 0,
                 ]);

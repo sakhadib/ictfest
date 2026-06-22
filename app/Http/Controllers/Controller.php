@@ -39,6 +39,11 @@ abstract class Controller
         abort_if($event->hasSlotLimit() && ! $event->hasAvailableSlots(), 403, 'Registration slots are full.');
     }
 
+    protected function participantStudentId(?string $studentId): string
+    {
+        return filled($studentId) ? trim($studentId) : 'N/A';
+    }
+
     /**
      * @return Collection<int, array<string, mixed>>
      */

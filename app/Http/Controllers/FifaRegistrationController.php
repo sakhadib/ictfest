@@ -57,7 +57,7 @@ class FifaRegistrationController extends Controller
             'participant.full_name' => ['required', 'string', 'max:255'],
             'participant.email' => ['required', 'email', 'max:255'],
             'participant.phone' => ['required', 'string', 'max:30'],
-            'participant.student_id' => ['required', 'string', 'max:255'],
+            'participant.student_id' => ['nullable', 'string', 'max:255'],
             'participant.university' => ['required', 'string', 'max:255'],
         ]);
 
@@ -81,7 +81,7 @@ class FifaRegistrationController extends Controller
                 'full_name' => $participant['full_name'],
                 'email' => $participant['email'],
                 'phone' => $participant['phone'],
-                'student_id' => $participant['student_id'],
+                'student_id' => $this->participantStudentId($participant['student_id'] ?? null),
                 'university' => $participant['university'],
                 'is_leader' => true,
             ]);

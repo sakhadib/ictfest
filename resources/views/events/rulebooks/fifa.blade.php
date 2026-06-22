@@ -12,6 +12,7 @@
         ['id' => 'schedule', 'label' => 'Schedule'],
         ['id' => 'guidelines', 'label' => 'Guidelines'],
         ['id' => 'game', 'label' => 'Game Settings'],
+        ['id' => 'prize', 'label' => 'Prize Pool'],
         ['id' => 'format', 'label' => 'Format'],
         ['id' => 'match', 'label' => 'Match Rules'],
         ['id' => 'conduct', 'label' => 'Conduct'],
@@ -138,7 +139,7 @@
                         <h3 class="text-lg font-semibold text-white">Core Setup</h3>
                         <ul class="mt-4 space-y-3 text-sm leading-7 text-white/62">
                             <li><strong class="text-white">Game:</strong> EA FC 26</li>
-                            <li><strong class="text-white">Platform:</strong> PS4 / PS5 / PC</li>
+                            <li><strong class="text-white">Platform:</strong> PC</li>
                             <li><strong class="text-white">Device:</strong> Only controllers are allowed.</li>
                             <li><strong class="text-white">Team Selection:</strong> Participants may play with any available team.</li>
                         </ul>
@@ -168,6 +169,24 @@
                         <li>Custom formations are forbidden. Only standard formations are allowed.</li>
                         <li>If a match ends in a draw after regulation time, extra time and penalties will follow to determine the winner.</li>
                     </ul>
+                </div>
+            </section>
+
+            <section id="prize" class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-8">
+                <h2 class="text-2xl font-semibold text-white">Prize Pool</h2>
+                <div class="mt-6 rounded-lg border border-ember/25 bg-ember/10 p-5">
+                    <p class="text-xs font-semibold uppercase tracking-[.18em] text-ember/80">Total Prize Pool</p>
+                    <p class="mt-2 text-3xl font-semibold text-white">24,000 BDT</p>
+                </div>
+                <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                    <div class="rounded-lg border border-white/10 bg-black/15 p-5">
+                        <p class="text-xs uppercase tracking-[.16em] text-white/38">Champion</p>
+                        <p class="mt-2 text-2xl font-semibold text-white">15,000 BDT</p>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-black/15 p-5">
+                        <p class="text-xs uppercase tracking-[.16em] text-white/38">Runner-up</p>
+                        <p class="mt-2 text-2xl font-semibold text-white">9,000 BDT</p>
+                    </div>
                 </div>
             </section>
 

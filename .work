@@ -252,3 +252,19 @@ Requirement Update
 
 1. Hackathon preli is 9 July, 2026 6 PM to 10 PM Bangladesh Standerd Time. Need update / addition in UI of hackathon page.
 2. i need routes like <event>/rulebook such as : iupc/rulebook , hackathon/rulebook, datathon/rulebook, gamejam/rulebook, fifa/rulebook, valorant/rulebook. these will be pages. utilize the event table and single page template. where you will open the rulebook link stored in event using an iframe. if rulebook link is not present then hang a notice that rulebook is not published yet. in the event desc pages, the rulebook link will be these now. over the iframe there will be button with a heading that if the rulebook is not visible open in new tab. where it will take directly to provided rulebook url in event table. match the core theme. keep header and footer same and reuse components as much as possible. 
+
+
+
+
+=================
+
+
+1. Change in Valorant rulebook in website: “Any college (Higher Secondary), undergraduate, or postgraduate student can register and form a team.”
+2. ⁠Change in Fifa rulebook in website: “Platform: PC” (previously PS4 / PS5 / PC)
+3. ⁠Change in Fifa event details in fifa website page (not in the rulebook): “EA FC 26 will be played on PC” (previously PS4)
+4. ⁠FIFA prizepool 24k (15k for Champion and 9k for Runner-up)
+5. ⁠Valorant prizepool 50k (30k for Champions, 15k for Runner-Up, 5k for MVP)
+6. Change in FIFA website home page (all mentions of PS4 / PS5 must be changed. PC only)
+7. In valorant registration page, instead of "register your university roster" should only be "register your roster"
+8. In valorant registration page, instead of "university name" make it "institute name / institution name"
+9. in all registration page on every participant "student id" include "if applicable" note in brackets. and as a mandetory field in db, if not inputted by user save "N/A" in db. 

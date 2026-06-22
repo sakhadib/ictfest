@@ -116,8 +116,8 @@
                                     @error("participants.$index.phone")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                                 </label>
                                 <label>
-                                    <span class="{{ $labelClass }}">Student ID</span>
-                                    <input data-member-input="{{ $index }}" @disabled(! $visible) name="participants[{{ $index }}][student_id]" value="{{ old("participants.$index.student_id") }}" class="{{ $inputClass }}" placeholder="Student ID">
+                                    <span class="{{ $labelClass }}">Student ID <span class="normal-case tracking-normal text-white/28">(if applicable)</span></span>
+                                    <input data-member-input="{{ $index }}" @disabled(! $visible) name="participants[{{ $index }}][student_id]" value="{{ old("participants.$index.student_id") }}" class="{{ $inputClass }}" placeholder="Student ID, if applicable">
                                     @error("participants.$index.student_id")<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                                 </label>
                                 <label class="sm:col-span-2">

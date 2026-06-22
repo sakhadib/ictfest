@@ -76,8 +76,8 @@
                         @error('participant.phone')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                     </label>
                     <label>
-                        <span class="{{ $labelClass }}">Student ID</span>
-                        <input name="participant[student_id]" value="{{ old('participant.student_id') }}" class="{{ $inputClass }}" placeholder="Student ID">
+                        <span class="{{ $labelClass }}">Student ID <span class="normal-case tracking-normal text-white/28">(if applicable)</span></span>
+                        <input name="participant[student_id]" value="{{ old('participant.student_id') }}" class="{{ $inputClass }}" placeholder="Student ID, if applicable">
                         @error('participant.student_id')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                     </label>
                     <label>

@@ -99,7 +99,7 @@
             'window' => '18 June - 3 July',
             'date' => '24 July, 9 AM - 6 PM',
             'venue' => 'Auditorium',
-            'signal' => '64-player PS4 controller-only tournament, escalating to best-of-five finals.',
+            'signal' => '64-player PC controller-only tournament, escalating to best-of-five finals.',
             'url' => '/fifa',
             'register_url' => '/fifa/register',
             'start_date' => '2026-07-24T09:00:00+06:00',
