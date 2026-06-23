@@ -24,6 +24,11 @@ jobs:
             git pull origin main
 
             php artisan optimize:clear
+            mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache
+            chmod -R ug+rwX storage bootstrap/cache
+            php artisan view:clear
             php artisan optimize
+            php artisan view:cache
+            chmod -R ug+rwX storage bootstrap/cache
 
             systemctl restart ictfest-queue

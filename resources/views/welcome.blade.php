@@ -271,20 +271,20 @@
 
         <div class="mt-24 grid grid-cols-2 gap-6 py-8 sm:grid-cols-3 lg:grid-cols-6 lg:gap-8">
             @foreach([
-                ['file' => 'iupc.png', 'alt' => 'IUPC'],
-                ['file' => 'hackathon.png', 'alt' => 'Agentic AI Hackathon'],
-                ['file' => 'datathon.png', 'alt' => 'Datathon'],
-                ['file' => 'gamejam.png', 'alt' => 'Game Jam'],
-                ['file' => 'fifa.png', 'alt' => 'FIFA'],
-                ['file' => 'valorant.png', 'alt' => 'Valorant'],
+                ['file' => 'iupc.png', 'alt' => 'IUPC', 'url' => '/iupc'],
+                ['file' => 'hackathon.png', 'alt' => 'Agentic AI Hackathon', 'url' => '/hackathon'],
+                ['file' => 'datathon.png', 'alt' => 'Datathon', 'url' => '/datathon'],
+                ['file' => 'gamejam.png', 'alt' => 'Game Jam', 'url' => '/gamejam'],
+                ['file' => 'fifa.png', 'alt' => 'FIFA', 'url' => '/fifa'],
+                ['file' => 'valorant.png', 'alt' => 'Valorant', 'url' => '/valorant'],
             ] as $logo)
-                <div class="flex items-center justify-center px-3 py-4">
+                <a href="{{ url($logo['url']) }}" aria-label="View {{ $logo['alt'] }} details" class="flex items-center justify-center px-3 py-4 opacity-78 transition hover:-translate-y-0.5 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
                     <img
                         src="{{ asset('assets/logos/' . $logo['file']) }}"
                         alt="{{ $logo['alt'] }}"
                         class="h-12 w-full max-w-[8.5rem] object-contain sm:h-14 lg:h-16"
                     >
-                </div>
+                </a>
             @endforeach
         </div>
     </div>
