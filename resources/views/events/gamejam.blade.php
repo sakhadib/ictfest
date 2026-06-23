@@ -111,7 +111,7 @@
                     Build a game, then bring it to the floor.
                 </h1>
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                    A game development challenge with an online creation round, a finalist selection, and an onsite showcase for the selected teams.
+                    A game development challenge with an online creation round, a finalist selection, and an onsite showcase for the selected teams. IUT ICT FEST 26 Gamejam powered by <a href="https://batterylowglobal.com/en" style="color:#c94045">Battery Low Interactive Limited</a>
                 </p>
                 <div class="mt-10">
                     <a href="{{ route('events.rulebook', ['eventSlug' => 'gamejam']) }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-volt">
@@ -121,7 +121,7 @@
             </div>
 
             <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
-                <img src="{{ asset('assets/logos/gamejam.png') }}" alt="Gamejam" class="w-full max-w-sm object-contain">
+                <img src="{{ asset('assets/logos/gamejam_sponsor.png') }}" alt="Gamejam" class="w-full max-w-sm object-contain">
             </div>
         </div>
     </div>
