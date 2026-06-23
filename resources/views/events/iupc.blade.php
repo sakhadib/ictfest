@@ -24,7 +24,7 @@
 @php
     $facts = [
         ['label' => 'Registration Fee', 'value' => '5099 BDT per team', 'icon' => 'fa-ticket'],
-        ['label' => 'Pre-registration Window', 'value' => '15 June - 25 June', 'icon' => 'fa-calendar-plus'],
+        ['label' => 'Pre-registration Window', 'value' => '15 June - 30 June', 'icon' => 'fa-calendar-plus'],
         ['label' => 'Team Size', 'value' => '3 members', 'icon' => 'fa-users'],
         ['label' => 'Venue', 'value' => 'IUT Computer Labs', 'icon' => 'fa-location-dot'],
     ];
@@ -179,7 +179,7 @@
         <p class="text-xs font-medium uppercase tracking-[.22em] text-volt/80">IUPC Pre-registration</p>
         <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">Ready for the contest floor?</h2>
         <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/56">
-            Keep your team details, payment, and valid student identification ready before pre-registration closes on 25 June.
+            Keep your team details, payment, and valid student identification ready before pre-registration closes on 30 June.
         </p>
         <div class="mt-10 flex justify-center">
             @if($eventRecord?->is_live)
