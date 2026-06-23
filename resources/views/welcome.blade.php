@@ -263,7 +263,7 @@
 
             <div class="order-1 relative flex justify-center lg:order-2 lg:justify-end">
                 <div class="relative w-full max-w-xl rounded-[2rem] px-10 py-12">
-                    <img src="{{ asset('assets/logo-white.png') }}" alt="{{ config('app.name') }}" class="mx-auto w-full max-w-md drop-shadow-[0_24px_80px_rgba(255,255,255,.10)]">
+                    <img src="{{ asset('assets/main_sp.png') }}" alt="{{ config('app.name') }}" class="mx-auto w-full max-w-md drop-shadow-[0_24px_80px_rgba(255,255,255,.10)]">
                     <!-- <p class="mt-8 text-center text-xs font-medium uppercase tracking-[.22em] text-white/42">{{ config('app.name') }}</p> -->
                 </div>
             </div>

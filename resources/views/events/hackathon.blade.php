@@ -92,7 +92,7 @@
                     Build an agent that solves a real problem under pressure.
                 </h1>
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                    A two-stage hackathon beginning online on 9 July, 2026 from 6:00 PM to 10:00 PM Bangladesh Standard Time, then moving selected teams into an onsite final at {{ config('app.name') }}.
+                    A focused agent-building challenge where teams turn a released problem into a working AI workflow, starting with an online preliminary on 9 July, 2026 from 6:00 PM to 10:00 PM Bangladesh Standard Time and leading selected teams to the onsite final at {{ config('app.name') }} Hackathon powered by <a href="https://openai.com/codex/" target="_blank" rel="noopener noreferrer" class="font-semibold text-[#d9b8b4] transition hover:text-ember">OpenAI Codex</a>.
                 </p>
                 <div class="mt-10">
                     <a href="{{ route('events.rulebook', ['eventSlug' => 'hackathon']) }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-ember">
@@ -102,7 +102,7 @@
             </div>
 
             <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
-                <img src="{{ asset('assets/logos/hackathon.png') }}" alt="Agentic AI Hackathon" class="w-full max-w-sm object-contain">
+                <img src="{{ asset('assets/logos/hackathon_sponsor.png') }}" alt="Agentic AI Hackathon" class="w-full max-w-sm object-contain">
             </div>
         </div>
     </div>
