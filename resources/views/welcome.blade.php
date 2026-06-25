@@ -132,15 +132,69 @@
         'ember' => 'text-ember bg-ember/10',
         'iris' => 'text-iris bg-iris/10',
     ];
+
+    $prizePools = [
+        [
+            'code' => '01',
+            'name' => 'IUPC',
+            'logo' => 'iupc.png',
+            'amount' => '175K BDT',
+            'detail' => 'Across top 15 teams',
+            'accent' => 'volt',
+        ],
+        [
+            'code' => '02',
+            'name' => 'Agentic AI Hackathon',
+            'logo' => 'hackathon.png',
+            'amount' => '100K BDT',
+            'detail' => 'Plus a serious pool of Codex usage credits, kept under wraps for now.',
+            'accent' => 'ember',
+            'featured' => true,
+        ],
+        [
+            'code' => '03',
+            'name' => 'Datathon',
+            'logo' => 'datathon.png',
+            'amount' => '120K BDT',
+            'detail' => 'Across top 5 teams',
+            'accent' => 'iris',
+        ],
+        [
+            'code' => '04',
+            'name' => 'Gamejam',
+            'logo' => 'gamejam.png',
+            'amount' => '75K BDT',
+            'detail' => 'Across top 3 teams',
+            'accent' => 'volt',
+        ],
+        [
+            'code' => '05',
+            'name' => 'FIFA',
+            'logo' => 'fifa.png',
+            'amount' => '30K BDT',
+            'detail' => 'Across top 3 players',
+            'accent' => 'ember',
+        ],
+        [
+            'code' => '06',
+            'name' => 'Valorant',
+            'logo' => 'valorant.png',
+            'amount' => '50K BDT',
+            'detail' => 'For the winning esports roster',
+            'accent' => 'iris',
+        ],
+    ];
 @endphp
 
 @section('title', 'IUT 12th ICT FEST 2026 | Programming, AI, Data, Game Dev & Esports')
-@section('meta_description', 'Join IUT 12th ICT FEST 2026 at Islamic University of Technology: IUPC, Agentic AI Hackathon, Datathon, Gamejam, FIFA, and Valorant competitions for university students.')
+@section('meta_description', 'Join IUT 12th ICT FEST 2026 at Islamic University of Technology: six university competitions with 550K+ BDT prize pool, Codex credits, and onsite finals.')
 @section('canonical', url('/'))
 @section('og_image', asset('assets/logo-white.png'))
 
 @push('head')
 @php
+    $prizePoolLookup = collect($prizePools)->keyBy('code');
+
     $homeStructuredData = [
         '@context' => 'https://schema.org',
         '@graph' => [
@@ -190,6 +244,7 @@
                     'description' => $event['signal'],
                     'url' => url($event['url']),
                     'image' => asset('assets/logos/'.$event['logo']),
+                    'award' => trim(data_get($prizePoolLookup->get($event['code']), 'amount', '').' '.data_get($prizePoolLookup->get($event['code']), 'detail', '')),
                     'startDate' => $event['start_date'],
                     'endDate' => $event['end_date'],
                     'eventStatus' => 'https://schema.org/EventScheduled',
@@ -212,6 +267,25 @@
                         'availability' => (($eventRecords->get($event['code'])?->is_live ?? false) && ! (($eventRecords->get($event['code'])?->hasSlotLimit() ?? false) && ! $eventRecords->get($event['code'])?->hasAvailableSlots()))
                             ? 'https://schema.org/InStock'
                             : 'https://schema.org/SoldOut',
+                    ],
+                ])->values()->all(),
+            ],
+            [
+                '@type' => 'ItemList',
+                '@id' => url('/').'#prize-pool',
+                'name' => 'IUT 12th ICT FEST 2026 Prize Pool',
+                'description' => '550K+ BDT total prize money across IUPC, Agentic AI Hackathon, Datathon, Gamejam, FIFA, and Valorant, plus Codex usage credits for the Hackathon.',
+                'url' => url('/#prize-pool'),
+                'numberOfItems' => count($prizePools),
+                'itemListElement' => collect($prizePools)->map(fn (array $pool, int $index): array => [
+                    '@type' => 'ListItem',
+                    'position' => $index + 1,
+                    'name' => $pool['name'].' Prize Pool',
+                    'item' => [
+                        '@type' => 'Thing',
+                        'name' => $pool['name'],
+                        'image' => asset('assets/logos/'.$pool['logo']),
+                        'description' => trim($pool['amount'].' '.$pool['detail']),
                     ],
                 ])->values()->all(),
             ],
@@ -380,6 +454,72 @@
                                 Reg Coming Soon
                             </span>
                         @endif
+                    </div>
+                </article>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+<section id="prize-pool" class="relative z-10 overflow-hidden px-4 py-28 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        <div class="grid gap-10 lg:grid-cols-[.82fr_1.18fr] lg:items-end">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[.24em] text-[#ff9a92]">Prize Pool</p>
+                <h2 class="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+                    550K+ BDT, credits, and serious campus bragging rights.
+                </h2>
+                <!-- <p class="mt-6 max-w-xl text-base leading-8 text-white/62">
+                    Every track has a focused reward pool, from deep team ladders to individual esports finishes. The Agentic AI Hackathon adds Codex usage credits on top, with the exact scale staying undisclosed for now.
+                </p> -->
+            </div>
+
+            <div class="rounded-lg border border-[#d4574e]/35 bg-[#d4574e]/10 p-6 shadow-[0_30px_110px_rgba(212,87,78,.22)] sm:p-8">
+                <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[.22em] text-white/48">Cash Pool</p>
+                        <p class="mt-3 text-5xl font-semibold leading-none text-white sm:text-6xl">550K</p>
+                        <p class="mt-3 text-sm font-semibold uppercase tracking-[.2em] text-[#ffb0aa]">BDT total prize money</p>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-black/20 px-5 py-4">
+                        <p class="text-sm leading-6 text-white/70">
+                            + Codex credits for Hackathon winners
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            @foreach($prizePools as $pool)
+                @php
+                    $accent = $pool['accent'] === 'ember'
+                        ? 'border-[#d4574e]/35 bg-[#d4574e]/12 text-[#ffaaa3]'
+                        : ($pool['accent'] === 'iris'
+                            ? 'border-iris/30 bg-iris/10 text-iris'
+                            : 'border-volt/30 bg-volt/10 text-volt');
+                @endphp
+                <article class="group relative overflow-hidden rounded-lg border border-white/10 bg-white/[.04] p-5 transition hover:-translate-y-1 hover:border-white/24 hover:bg-white/[.06] sm:p-6">
+                    <div class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/5 blur-2xl transition group-hover:bg-[#d4574e]/15"></div>
+                    <div class="relative flex items-start justify-between gap-5">
+                        <div class="grid h-14 w-14 shrink-0 place-items-center rounded-md bg-white/[.06] p-2">
+                            <img src="{{ asset('assets/logos/' . $pool['logo']) }}" alt="{{ $pool['name'] }}" class="h-full w-full object-contain">
+                        </div>
+                        <span class="{{ $accent }} rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[.16em]">
+                            Prize
+                        </span>
+                    </div>
+
+                    <div class="relative mt-8">
+                        <h3 class="text-xl font-semibold text-white">{{ $pool['name'] }}</h3>
+                        <p class="mt-5 text-4xl font-semibold leading-none text-white sm:text-5xl">{{ $pool['amount'] }}</p>
+                        @if($pool['featured'] ?? false)
+                            <p class="mt-4 inline-flex w-fit items-center gap-2 rounded-md border border-[#d4574e]/30 bg-[#d4574e]/12 px-3 py-2 text-sm font-semibold text-[#ffb0aa]">
+                                <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                                + Mystery Codex credits
+                            </p>
+                        @endif
+                        <p class="mt-5 text-sm leading-7 text-white/58">{{ $pool['detail'] }}</p>
                     </div>
                 </article>
             @endforeach

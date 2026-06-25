@@ -147,6 +147,42 @@
     </div>
 </section>
 
+<section class="px-4 pb-20 sm:px-6 lg:px-8">
+    <div class="mx-auto grid max-w-6xl gap-5 md:grid-cols-2">
+        <a href="https://itch.io/jam/12th-iut-ict-fest-2026-gamejam" target="_blank" rel="noopener noreferrer" class="group rounded-lg border border-volt/25 bg-volt/10 p-6 transition hover:-translate-y-0.5 hover:border-volt/45 hover:bg-volt/15 sm:p-7">
+            <div class="flex items-start justify-between gap-5">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[.2em] text-volt/85">Competition Link</p>
+                    <h2 class="mt-4 text-2xl font-semibold text-white">Submit on itch.io</h2>
+                    <p class="mt-3 max-w-xl text-sm leading-7 text-white/62">
+                        Open the official GameJam page for submissions, updates, and online round materials.
+                    </p>
+                </div>
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-white/10 text-volt transition group-hover:bg-volt group-hover:text-ink">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </span>
+            </div>
+            <p class="mt-6 break-all text-sm font-semibold text-white">itch.io/jam/12th-iut-ict-fest-2026-gamejam</p>
+        </a>
+
+        <a href="https://discord.gg/kXEfDVcRx2" target="_blank" rel="noopener noreferrer" class="group rounded-lg border border-white/10 bg-white/[.035] p-6 transition hover:-translate-y-0.5 hover:border-iris/35 hover:bg-white/[.055] sm:p-7">
+            <div class="flex items-start justify-between gap-5">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[.2em] text-iris/85">Discord</p>
+                    <h2 class="mt-4 text-2xl font-semibold text-white">Join the GameJam server</h2>
+                    <p class="mt-3 max-w-xl text-sm leading-7 text-white/62">
+                        Use the Discord server for announcements, coordination, and submission support.
+                    </p>
+                </div>
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-white/10 text-iris transition group-hover:bg-iris group-hover:text-white">
+                    <i class="fa-brands fa-discord"></i>
+                </span>
+            </div>
+            <p class="mt-6 break-all text-sm font-semibold text-white">discord.gg/kXEfDVcRx2</p>
+        </a>
+    </div>
+</section>
+
 <section class="px-4 py-20 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-6xl">
         <div class="grid gap-16 lg:grid-cols-[.75fr_1.25fr]">

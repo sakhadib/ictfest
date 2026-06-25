@@ -268,3 +268,32 @@ Requirement Update
 7. In valorant registration page, instead of "register your university roster" should only be "register your roster"
 8. In valorant registration page, instead of "university name" make it "institute name / institution name"
 9. in all registration page on every participant "student id" include "if applicable" note in brackets. and as a mandetory field in db, if not inputted by user save "N/A" in db. 
+
+
+
+
+
+
+=====================
+
+
+In gameJam details page : itch competition link and discord link to be present in prominent way.
+
+In Fifa prizepool is 30k taka. break down is 15k, 10k, 5k. update where needed please
+
+
+=====================
+
+In homepage, under events section make the most lurative section of the entire website for the PRIZE POOL
+
+IUPC : 175k BDT (accross top 15 teams)
+
+Hackathon : 100k BDT + Lots of Codex usage credits (make this credits lucrative but we dont want to publish how much now. so keep mysterious)
+
+Datathon : 120k BDT (accross top 5 teams)
+
+Gamejam : 75k BDT (accross top 3 Teams)
+
+FIFA : 30k BDT (accross top 3 players)
+
+Valorant : 50k BDT

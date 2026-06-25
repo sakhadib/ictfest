@@ -360,7 +360,7 @@
                             </tr>
                             <tr>
                                 <td class="px-5 py-4 font-semibold text-white">Discord Link</td>
-                                <td class="px-5 py-4"><a href="https://discord.gg/kXEfDVcRx" target="_blank" rel="noopener noreferrer" class="break-all font-semibold text-volt transition hover:text-white">https://discord.gg/kXEfDVcRx</a></td>
+                                <td class="px-5 py-4"><a href="https://discord.gg/kXEfDVcRx2" target="_blank" rel="noopener noreferrer" class="break-all font-semibold text-volt transition hover:text-white">https://discord.gg/kXEfDVcRx2</a></td>
                             </tr>
                         </tbody>
                     </table>

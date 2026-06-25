@@ -74,7 +74,8 @@
 
     $prizes = [
         ['label' => 'Champion', 'value' => '15,000 BDT'],
-        ['label' => 'Runner-up', 'value' => '9,000 BDT'],
+        ['label' => 'Runner-up', 'value' => '10,000 BDT'],
+        ['label' => 'Third Place', 'value' => '5,000 BDT'],
     ];
 @endphp
 
@@ -142,9 +143,9 @@
         <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
                 <p class="text-xs font-medium uppercase tracking-[.22em] text-ember/80">Prize Pool</p>
-                <h2 class="mt-3 text-3xl font-semibold text-white">24,000 BDT</h2>
+                <h2 class="mt-3 text-3xl font-semibold text-white">30,000 BDT</h2>
             </div>
-            <div class="grid gap-4 sm:grid-cols-2 lg:flex-1">
+            <div class="grid gap-4 sm:grid-cols-3 lg:flex-1">
                 @foreach($prizes as $prize)
                     <div class="rounded-lg border border-white/10 bg-black/15 p-5">
                         <p class="text-xs uppercase tracking-[.16em] text-white/38">{{ $prize['label'] }}</p>
