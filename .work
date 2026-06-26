@@ -297,3 +297,13 @@ Gamejam : 75k BDT (accross top 3 Teams)
 FIFA : 30k BDT (accross top 3 players)
 
 Valorant : 50k BDT
+
+
+
+==========================
+
+1. make migrations for new tables. 
+   1. notifications : to store the email history and sent list. make sure to store which user of our site sent any mail.
+   2. delivery : success / fail of each email sent to participants.
+2. Pages in dashboard to see the previous history and sent success / failure details
+3. This notification email will have lowest priority in the queue. suppose i sent a notif to 1000 participants. 1000 emails queued. but someone registered that moment on any event. the sms, email for the registration and telegram commands needs to get top priority.
