@@ -2,13 +2,13 @@
 
 namespace App\Mail;
 
+use App\Queue\Middleware\ThrottleResendEmails;
 use App\Models\Registration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 
 class RegistrationSubmitted extends Mailable implements ShouldQueue
@@ -26,7 +26,7 @@ class RegistrationSubmitted extends Mailable implements ShouldQueue
     public function middleware(): array
     {
         return [
-            (new RateLimited('resend-emails'))->releaseAfter(1),
+            new ThrottleResendEmails(),
         ];
     }
 
