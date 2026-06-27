@@ -9,6 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -21,12 +22,24 @@ class SendDashboardNotificationEmail implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public int $tries = 1;
+    public int $tries = 0;
 
     public function __construct(
         public int $deliveryId,
     ) {
         $this->onQueue('low');
+    }
+
+    public function middleware(): array
+    {
+        return [
+            (new RateLimited('resend-emails'))->releaseAfter(1),
+        ];
+    }
+
+    public function retryUntil(): \DateTimeInterface
+    {
+        return now()->addHours(12);
     }
 
     public function handle(): void

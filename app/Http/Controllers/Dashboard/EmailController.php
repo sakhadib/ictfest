@@ -17,62 +17,61 @@ use Illuminate\Validation\Rule;
 
 class EmailController extends Controller
 {
-    public function index(): View
-    {
-        $events = Event::query()
-            ->withCount(['registrations as team_lead_email_count' => fn ($query) => $query
-                ->whereNotNull('contact_email')
-                ->where('contact_email', '!=', '')
-                ->selectRaw('count(distinct lower(contact_email))')])
-            ->orderBy('code')
-            ->get();
+    private const DRAFT_SESSION_KEY = 'dashboard_email_draft';
 
-        return view('dashboard.emails.index', [
-            'events' => $events,
+    public function index(): RedirectResponse
+    {
+        return redirect()->route('dashboard.emails.compose');
+    }
+
+    public function compose(Request $request): View
+    {
+        return view('dashboard.emails.compose', [
+            'draft' => $this->draft($request),
         ]);
     }
 
-    public function history(): View
+    public function storeCompose(Request $request): RedirectResponse
     {
-        $notifications = EmailNotification::query()
-            ->with('sender')
-            ->withCount([
-                'deliveries',
-                'deliveries as pending_count' => fn ($query) => $query->where('status', 'pending'),
-                'deliveries as sent_count' => fn ($query) => $query->where('status', 'sent'),
-                'deliveries as failed_count' => fn ($query) => $query->where('status', 'failed'),
-            ])
-            ->latest()
-            ->paginate(20);
+        $validated = $request->validate([
+            'subject' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'string'],
+        ]);
 
-        return view('dashboard.emails.history', [
-            'notifications' => $notifications,
+        $this->putDraft($request, [
+            'subject' => $validated['subject'],
+            'body' => str_replace(["\r\n", "\r"], "\n", $validated['body']),
+        ]);
+
+        return redirect()->route('dashboard.emails.recipients');
+    }
+
+    public function recipients(Request $request): RedirectResponse|View
+    {
+        $draft = $this->draft($request);
+
+        if (! $this->hasComposedMessage($draft)) {
+            return redirect()
+                ->route('dashboard.emails.compose')
+                ->with('status', 'Write the email subject and body first.');
+        }
+
+        return view('dashboard.emails.recipients', [
+            'draft' => $draft,
+            'events' => $this->eventsWithRecipientCounts(),
         ]);
     }
 
-    public function show(EmailNotification $notification): View
+    public function storeRecipients(Request $request): RedirectResponse
     {
-        $notification->load('sender');
+        $draft = $this->draft($request);
 
-        $deliveries = $notification->deliveries()
-            ->orderByRaw("case status when 'failed' then 0 when 'pending' then 1 else 2 end")
-            ->orderBy('email')
-            ->paginate(100);
+        if (! $this->hasComposedMessage($draft)) {
+            return redirect()
+                ->route('dashboard.emails.compose')
+                ->with('status', 'Write the email subject and body first.');
+        }
 
-        $counts = $notification->deliveries()
-            ->selectRaw("status, count(*) as aggregate")
-            ->groupBy('status')
-            ->pluck('aggregate', 'status');
-
-        return view('dashboard.emails.show', [
-            'notification' => $notification,
-            'deliveries' => $deliveries,
-            'counts' => $counts,
-        ]);
-    }
-
-    public function send(Request $request): RedirectResponse
-    {
         $mode = $request->input('mode', 'events');
 
         $validated = $request->validate([
@@ -80,33 +79,65 @@ class EmailController extends Controller
             'event_codes' => [$mode === 'events' ? 'required' : 'nullable', 'array'],
             'event_codes.*' => ['string', Rule::exists('events', 'code')],
             'custom_email' => [$mode === 'custom' ? 'required' : 'nullable', 'email', 'max:255'],
-            'subject' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string'],
         ]);
 
-        $body = str_replace(["\r\n", "\r"], "\n", $validated['body']);
-        $subject = $validated['subject'];
-        $eventCodes = array_values($validated['event_codes'] ?? []);
-        $recipients = $validated['mode'] === 'custom'
-            ? collect([[
-                'name' => null,
-                'email' => strtolower(trim($validated['custom_email'])),
-            ]])
-            : $this->eventRecipients($eventCodes);
+        $this->putDraft($request, [
+            'mode' => $validated['mode'],
+            'event_codes' => $validated['mode'] === 'events' ? array_values($validated['event_codes'] ?? []) : [],
+            'custom_email' => $validated['mode'] === 'custom' ? strtolower(trim($validated['custom_email'])) : null,
+        ]);
+
+        return redirect()->route('dashboard.emails.review');
+    }
+
+    public function review(Request $request): RedirectResponse|View
+    {
+        $draft = $this->draft($request);
+        $redirect = $this->redirectForIncompleteDraft($draft);
+
+        if ($redirect) {
+            return $redirect;
+        }
+
+        $recipients = $this->draftRecipients($draft);
 
         if ($recipients->isEmpty()) {
-            return back()
-                ->withInput()
+            return redirect()
+                ->route('dashboard.emails.recipients')
                 ->withErrors(['event_codes' => 'No team lead emails were found for the selected events.']);
         }
 
-        $notification = DB::transaction(function () use ($validated, $subject, $body, $eventCodes, $recipients): EmailNotification {
+        return view('dashboard.emails.review', [
+            'draft' => $draft,
+            'recipients' => $recipients,
+            'selectedEvents' => $this->selectedEvents($draft),
+        ]);
+    }
+
+    public function send(Request $request): RedirectResponse
+    {
+        $draft = $this->draft($request);
+        $redirect = $this->redirectForIncompleteDraft($draft);
+
+        if ($redirect) {
+            return $redirect;
+        }
+
+        $recipients = $this->draftRecipients($draft);
+
+        if ($recipients->isEmpty()) {
+            return redirect()
+                ->route('dashboard.emails.recipients')
+                ->withErrors(['event_codes' => 'No team lead emails were found for the selected events.']);
+        }
+
+        $notification = DB::transaction(function () use ($draft, $recipients): EmailNotification {
             $notification = EmailNotification::query()->create([
                 'user_id' => auth()->id(),
-                'subject' => $subject,
-                'body' => $body,
-                'mode' => $validated['mode'],
-                'event_codes' => $validated['mode'] === 'events' ? $eventCodes : null,
+                'subject' => $draft['subject'],
+                'body' => $draft['body'],
+                'mode' => $draft['mode'],
+                'event_codes' => $draft['mode'] === 'events' ? $draft['event_codes'] : null,
                 'recipient_count' => $recipients->count(),
                 'status' => 'queued',
                 'queued_at' => now(),
@@ -134,15 +165,191 @@ class EmailController extends Controller
                 SendDashboardNotificationEmail::dispatch($deliveryId);
             });
 
-        if ($validated['mode'] === 'custom') {
-            return redirect()
-                ->route('dashboard.emails.show', $notification)
-                ->with('status', 'Custom email has been queued on the low-priority queue.');
-        }
+        $request->session()->forget(self::DRAFT_SESSION_KEY);
 
         return redirect()
             ->route('dashboard.emails.show', $notification)
             ->with('status', $recipients->count().' email'.($recipients->count() === 1 ? '' : 's').' queued on the low-priority queue.');
+    }
+
+    public function history(Request $request): View
+    {
+        $filters = [
+            'status' => $request->string('status')->toString(),
+            'mode' => $request->string('mode')->toString(),
+            'search' => $request->string('search')->toString(),
+        ];
+
+        $query = EmailNotification::query()
+            ->with('sender')
+            ->withCount([
+                'deliveries',
+                'deliveries as pending_count' => fn ($query) => $query->where('status', 'pending'),
+                'deliveries as sent_count' => fn ($query) => $query->where('status', 'sent'),
+                'deliveries as failed_count' => fn ($query) => $query->where('status', 'failed'),
+            ]);
+
+        if (in_array($filters['status'], ['queued', 'sending', 'sent', 'partial', 'failed'], true)) {
+            $query->where('status', $filters['status']);
+        }
+
+        if (in_array($filters['mode'], ['events', 'custom'], true)) {
+            $query->where('mode', $filters['mode']);
+        }
+
+        if (filled($filters['search'])) {
+            $search = $filters['search'];
+
+            $query->where(function ($query) use ($search): void {
+                $query
+                    ->where('subject', 'like', "%{$search}%")
+                    ->orWhere('body', 'like', "%{$search}%")
+                    ->orWhereHas('sender', function ($senderQuery) use ($search): void {
+                        $senderQuery
+                            ->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $notifications = $query
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        $deliveryStats = [
+            'total' => Delivery::query()->count(),
+            'pending' => Delivery::query()->where('status', 'pending')->count(),
+            'sent' => Delivery::query()->where('status', 'sent')->count(),
+            'failed' => Delivery::query()->where('status', 'failed')->count(),
+        ];
+
+        return view('dashboard.emails.history', [
+            'notifications' => $notifications,
+            'filters' => $filters,
+            'eventsByCode' => Event::query()->orderBy('code')->get()->keyBy('code'),
+            'notificationCount' => EmailNotification::query()->count(),
+            'deliveryStats' => $deliveryStats,
+        ]);
+    }
+
+    public function show(EmailNotification $notification): View
+    {
+        $notification->load('sender');
+
+        $deliveries = $notification->deliveries()
+            ->orderByRaw("case status when 'failed' then 0 when 'pending' then 1 else 2 end")
+            ->orderBy('email')
+            ->paginate(100);
+
+        $counts = $notification->deliveries()
+            ->selectRaw("status, count(*) as aggregate")
+            ->groupBy('status')
+            ->pluck('aggregate', 'status');
+
+        return view('dashboard.emails.show', [
+            'notification' => $notification,
+            'deliveries' => $deliveries,
+            'counts' => $counts,
+        ]);
+    }
+
+    private function eventsWithRecipientCounts(): Collection
+    {
+        return Event::query()
+            ->withCount(['registrations as team_lead_email_count' => fn ($query) => $query
+                ->whereNotNull('contact_email')
+                ->where('contact_email', '!=', '')
+                ->selectRaw('count(distinct lower(contact_email))')])
+            ->orderBy('code')
+            ->get();
+    }
+
+    /**
+     * @return array{subject?: string, body?: string, mode?: string, event_codes?: array<int, string>, custom_email?: ?string}
+     */
+    private function draft(Request $request): array
+    {
+        return $request->session()->get(self::DRAFT_SESSION_KEY, []);
+    }
+
+    /**
+     * @param  array<string, mixed>  $values
+     */
+    private function putDraft(Request $request, array $values): void
+    {
+        $request->session()->put(self::DRAFT_SESSION_KEY, array_merge($this->draft($request), $values));
+    }
+
+    /**
+     * @param  array<string, mixed>  $draft
+     */
+    private function hasComposedMessage(array $draft): bool
+    {
+        return filled($draft['subject'] ?? null) && filled($draft['body'] ?? null);
+    }
+
+    /**
+     * @param  array<string, mixed>  $draft
+     */
+    private function redirectForIncompleteDraft(array $draft): ?RedirectResponse
+    {
+        if (! $this->hasComposedMessage($draft)) {
+            return redirect()
+                ->route('dashboard.emails.compose')
+                ->with('status', 'Write the email subject and body first.');
+        }
+
+        if (! in_array($draft['mode'] ?? null, ['events', 'custom'], true)) {
+            return redirect()
+                ->route('dashboard.emails.recipients')
+                ->with('status', 'Select recipients before reviewing the email.');
+        }
+
+        if (($draft['mode'] ?? null) === 'events' && empty($draft['event_codes'] ?? [])) {
+            return redirect()
+                ->route('dashboard.emails.recipients')
+                ->with('status', 'Select at least one event before reviewing the email.');
+        }
+
+        if (($draft['mode'] ?? null) === 'custom' && blank($draft['custom_email'] ?? null)) {
+            return redirect()
+                ->route('dashboard.emails.recipients')
+                ->with('status', 'Enter a custom email address before reviewing the email.');
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $draft
+     * @return \Illuminate\Support\Collection<int, array{email: string, name: ?string}>
+     */
+    private function draftRecipients(array $draft): Collection
+    {
+        if (($draft['mode'] ?? null) === 'custom') {
+            return collect([[
+                'name' => null,
+                'email' => strtolower(trim((string) $draft['custom_email'])),
+            ]])->filter(fn (array $recipient): bool => filled($recipient['email']))->values();
+        }
+
+        return $this->eventRecipients($draft['event_codes'] ?? []);
+    }
+
+    /**
+     * @param  array<string, mixed>  $draft
+     */
+    private function selectedEvents(array $draft): Collection
+    {
+        if (($draft['mode'] ?? null) !== 'events') {
+            return collect();
+        }
+
+        return Event::query()
+            ->whereIn('code', $draft['event_codes'] ?? [])
+            ->orderBy('code')
+            ->get();
     }
 
     /**

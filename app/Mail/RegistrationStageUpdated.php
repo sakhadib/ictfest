@@ -8,17 +8,32 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 
 class RegistrationStageUpdated extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public int $tries = 0;
+
     public function __construct(
         public Registration $registration,
         public string $stage,
     ) {
         $this->registration->loadMissing(['event', 'participants', 'payment', 'finalRegistration']);
+    }
+
+    public function middleware(): array
+    {
+        return [
+            (new RateLimited('resend-emails'))->releaseAfter(1),
+        ];
+    }
+
+    public function retryUntil(): \DateTimeInterface
+    {
+        return now()->addHours(6);
     }
 
     public function envelope(): Envelope

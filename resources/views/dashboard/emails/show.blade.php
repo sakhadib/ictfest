@@ -1,10 +1,12 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Email Delivery')
-@section('page-title', 'Email Delivery')
+@section('title', 'Email Log Details')
+@section('page-title', 'Email Log Details')
 @section('page-subtitle', 'Delivery success and failure details for one dashboard notification.')
 
 @section('content')
+    @include('dashboard.emails.partials.nav')
+
     @if(session('status'))
         <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-800">
             {{ session('status') }}
@@ -52,10 +54,10 @@
             </div>
 
             <div class="mt-6 flex flex-col gap-3 sm:flex-row">
-                <a href="{{ route('dashboard.emails.history') }}" class="rounded-lg border border-black/10 bg-white px-4 py-2.5 text-center text-sm font-semibold text-coal shadow-sm transition hover:bg-black/[.03]">
-                    Back to History
+                <a href="{{ route('dashboard.email-logs.index') }}" class="rounded-lg border border-black/10 bg-white px-4 py-2.5 text-center text-sm font-semibold text-coal shadow-sm transition hover:bg-black/[.03]">
+                    Back to Logs
                 </a>
-                <a href="{{ route('dashboard.emails.index') }}" class="rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-semibold text-white shadow-lg shadow-primary/15 transition hover:bg-[#bd453d]">
+                <a href="{{ route('dashboard.emails.compose') }}" class="rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-semibold text-white shadow-lg shadow-primary/15 transition hover:bg-[#bd453d]">
                     Compose New
                 </a>
             </div>
