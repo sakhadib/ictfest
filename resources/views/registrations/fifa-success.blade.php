@@ -3,6 +3,9 @@
 @section('title', 'FIFA Registration Submitted | '.config('app.name'))
 
 @section('content')
+@php
+    $registrationStatusLabel = $registration->status === 'pending' ? 'Registration Received' : ucfirst($registration->status);
+@endphp
 <section class="px-4 pb-32 pt-36 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-4xl">
         <div class="rounded-lg border border-white/10 bg-white/[.035] p-6 text-center sm:p-10">
@@ -33,7 +36,7 @@
                 </div>
                 <div class="rounded-md border border-white/10 bg-black/15 p-4">
                     <p class="text-xs uppercase tracking-[.16em] text-white/32">Status</p>
-                    <p class="mt-2 text-sm font-medium text-white">{{ ucfirst($registration->status) }}</p>
+                    <p class="mt-2 text-sm font-medium text-white">{{ $registrationStatusLabel }}</p>
                 </div>
                 <div class="rounded-md border border-white/10 bg-black/15 p-4">
                     <p class="text-xs uppercase tracking-[.16em] text-white/32">Payment Status</p>

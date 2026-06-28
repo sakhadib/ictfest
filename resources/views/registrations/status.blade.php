@@ -13,7 +13,7 @@
     $registrationStyles = [
         'paid' => ['label' => 'Approved', 'class' => 'border-volt/30 bg-volt/10 text-volt', 'icon' => 'fa-circle-check'],
         'verified' => ['label' => 'Final Round Qualified', 'class' => 'border-volt/30 bg-volt/10 text-volt', 'icon' => 'fa-circle-check'],
-        'pending' => ['label' => 'Pending Review', 'class' => 'border-ember/35 bg-ember/10 text-ember', 'icon' => 'fa-hourglass-half'],
+        'pending' => ['label' => 'Registration Received', 'class' => 'border-ember/35 bg-ember/10 text-ember', 'icon' => 'fa-inbox'],
         'rejected' => ['label' => 'Rejected', 'class' => 'border-red-400/25 bg-red-500/10 text-red-200', 'icon' => 'fa-circle-xmark'],
     ];
     $paymentStatus = $registration?->payment_status;
