@@ -22,9 +22,8 @@
 
 @section('content')
 @php
-    // Remaining slot counts are intentionally not shown publicly.
-    // $remainingSlots = $eventRecord?->remainingSlots();
-    // $slotLimit = $eventRecord?->slotLimit();
+    $remainingSlots = $eventRecord?->remainingSlots();
+    $slotLimit = $eventRecord?->slotLimit();
 
     $facts = [
         ['label' => 'Registration Fee', 'value' => '600 BDT per team', 'icon' => 'fa-ticket'],
@@ -112,7 +111,7 @@
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
                     A 32-team Valorant tournament moving through online knockout and double elimination rounds before the onsite LAN final.
                 </p>
-                {{-- @if($remainingSlots !== null)
+                @if($remainingSlots !== null)
                     <div class="mt-8 inline-flex items-center gap-5 rounded-lg border border-iris/35 bg-iris/10 px-5 py-4">
                         <span class="grid h-11 w-11 place-items-center rounded-md bg-iris/15 text-iris">
                             <i class="fa-solid fa-ticket"></i>
@@ -122,7 +121,7 @@
                             <p class="mt-1 text-3xl font-semibold text-white">{{ $remainingSlots }} / {{ $slotLimit }}</p>
                         </div>
                     </div>
-                @endif --}}
+                @endif
                 <div class="mt-10">
                     <a href="{{ route('events.rulebook', ['eventSlug' => 'valorant']) }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-iris">
                         See Rulebook
@@ -296,13 +295,13 @@
         <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/56">
             Register your roster and prepare your LAN equipment before the online match window begins.
         </p>
-        {{-- @if($remainingSlots !== null)
+        @if($remainingSlots !== null)
             <div class="mx-auto mt-8 max-w-sm rounded-lg border border-iris/35 bg-iris/10 px-5 py-4">
                 <p class="text-xs font-medium uppercase tracking-[.18em] text-iris/85">Available Slots</p>
                 <p class="mt-2 text-4xl font-semibold text-white">{{ $remainingSlots }}</p>
                 <p class="mt-2 text-sm text-white/56">out of {{ $slotLimit }} team slots</p>
             </div>
-        @endif --}}
+        @endif
         <div class="mt-10 flex justify-center">
             @if($eventRecord?->is_live && $eventRecord?->hasAvailableSlots())
                 <a href="{{ route('valorant.register') }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-iris">
