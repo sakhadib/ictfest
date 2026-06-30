@@ -55,7 +55,7 @@ class FifaRegistrationController extends Controller
             'payment_method' => ['required', Rule::in(['bkash', 'nagad'])],
             'trx_id' => ['required', 'string', 'max:255'],
             'participant.full_name' => ['required', 'string', 'max:255'],
-            'participant.email' => ['required', 'email', 'max:255'],
+            'participant.email' => ['required', new \App\Rules\StrictEmail(), 'max:255'],
             'participant.phone' => ['required', 'string', 'max:30'],
             'participant.student_id' => ['nullable', 'string', 'max:255'],
             'participant.university' => ['required', 'string', 'max:255'],

@@ -57,7 +57,7 @@ class ValorantRegistrationController extends Controller
             'trx_id' => ['required', 'string', 'max:255'],
             'participants' => ['required', 'array', 'min:5', 'max:7'],
             'participants.*.full_name' => ['required', 'string', 'max:255'],
-            'participants.*.email' => ['required', 'email', 'max:255'],
+            'participants.*.email' => ['required', new \App\Rules\StrictEmail(), 'max:255'],
             'participants.*.phone' => ['required', 'string', 'max:30'],
             'participants.*.student_id' => ['nullable', 'string', 'max:255'],
             'participants.*.university' => ['required', 'string', 'max:255'],

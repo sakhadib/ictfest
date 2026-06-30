@@ -6,6 +6,7 @@ use App\Mail\DashboardBroadcastMail;
 use App\Models\Delivery;
 use App\Models\Notification;
 use App\Queue\Middleware\ThrottleResendEmails;
+use App\Rules\StrictEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -53,6 +54,18 @@ class SendDashboardNotificationEmail implements ShouldQueue
         }
 
         if ($delivery->status !== 'pending') {
+            return;
+        }
+
+        if (! StrictEmail::isValid($delivery->email)) {
+            $delivery->forceFill([
+                'status' => 'failed',
+                'error' => 'Invalid recipient email address.',
+                'failed_at' => now(),
+            ])->save();
+
+            $this->refreshNotificationStatus($delivery->notification);
+
             return;
         }
 

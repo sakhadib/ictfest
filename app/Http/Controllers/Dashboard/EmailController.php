@@ -8,6 +8,7 @@ use App\Models\Delivery;
 use App\Models\Event;
 use App\Models\Notification as EmailNotification;
 use App\Models\Registration;
+use App\Rules\StrictEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -78,7 +79,7 @@ class EmailController extends Controller
             'mode' => ['required', Rule::in(['events', 'custom'])],
             'event_codes' => [$mode === 'events' ? 'required' : 'nullable', 'array'],
             'event_codes.*' => ['string', Rule::exists('events', 'code')],
-            'custom_email' => [$mode === 'custom' ? 'required' : 'nullable', 'email', 'max:255'],
+            'custom_email' => [$mode === 'custom' ? 'required' : 'nullable', new \App\Rules\StrictEmail(), 'max:255'],
         ]);
 
         $this->putDraft($request, [
@@ -331,7 +332,7 @@ class EmailController extends Controller
             return collect([[
                 'name' => null,
                 'email' => strtolower(trim((string) $draft['custom_email'])),
-            ]])->filter(fn (array $recipient): bool => filled($recipient['email']))->values();
+            ]])->filter(fn (array $recipient): bool => StrictEmail::isValid($recipient['email']))->values();
         }
 
         return $this->eventRecipients($draft['event_codes'] ?? []);
@@ -368,7 +369,7 @@ class EmailController extends Controller
                 'name' => trim($registration->contact_name),
                 'email' => strtolower(trim($registration->contact_email)),
             ])
-            ->filter(fn (array $recipient): bool => filled($recipient['email']))
+            ->filter(fn (array $recipient): bool => StrictEmail::isValid($recipient['email']))
             ->unique('email')
             ->values();
     }

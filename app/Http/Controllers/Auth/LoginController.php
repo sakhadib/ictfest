@@ -18,7 +18,7 @@ class LoginController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', new \App\Rules\StrictEmail()],
             'password' => ['required', 'string'],
         ]);
 

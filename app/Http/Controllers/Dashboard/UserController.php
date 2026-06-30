@@ -65,7 +65,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required',
-                'email',
+                new \App\Rules\StrictEmail(),
                 'max:255',
                 Rule::unique('users', 'email')->ignore($user),
             ],
