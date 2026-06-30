@@ -16,7 +16,12 @@ abstract class Controller
 
     protected function registrationComingSoon(Event $event): View
     {
-        return view('registrations.coming-soon', compact('event'));
+        return view('registrations.coming-soon', [
+            'event' => $event,
+            'title' => 'Registration Closed',
+            'message' => $event->name.' registration is currently closed.',
+            'status' => 'Closed',
+        ]);
     }
 
     protected function registrationSlotsFull(Event $event): View

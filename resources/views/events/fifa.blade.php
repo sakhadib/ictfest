@@ -270,7 +270,7 @@
                 </span>
             @else
                 <span class="inline-flex items-center justify-center gap-3 rounded-md border border-white/12 bg-white/[.04] px-5 py-3 text-sm font-semibold text-white/58">
-                    Registration will be live soon
+                    Registration Closed
                 </span>
             @endif
         </div>

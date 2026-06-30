@@ -451,7 +451,7 @@
                             </span>
                         @elseif(isset($event['register_url']))
                             <span class="inline-flex items-center justify-center gap-2 rounded-md border border-white/12 bg-white/[.04] px-4 py-2.5 text-sm font-semibold text-white/58">
-                                Reg Coming Soon
+                                Registration Closed
                             </span>
                         @endif
                     </div>
