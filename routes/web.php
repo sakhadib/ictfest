@@ -4,10 +4,12 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\EmailController;
 use App\Http\Controllers\Dashboard\EventRegistrationController;
 use App\Http\Controllers\Dashboard\EventStatusController;
+use App\Http\Controllers\Dashboard\IupcSlotController;
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\Dashboard\StatusLookupController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\EventRulebookController;
+use App\Http\Controllers\IupcCoachPortalController;
 use App\Http\Controllers\IupcRegistrationController;
 use App\Http\Controllers\HackathonRegistrationController;
 use App\Http\Controllers\DatathonRegistrationController;
@@ -96,6 +98,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/email-logs/{notification}', [EmailController::class, 'show'])->name('dashboard.email-logs.show');
     Route::get('/dashboard/event-status', [EventStatusController::class, 'index'])->name('dashboard.event-status.index');
     Route::patch('/dashboard/event-status/{event:code}', [EventStatusController::class, 'update'])->name('dashboard.event-status.update');
+    Route::get('/dashboard/iupc-slots', [IupcSlotController::class, 'index'])->name('dashboard.iupc-slots.index');
+    Route::patch('/dashboard/iupc-slots', [IupcSlotController::class, 'updateSlots'])->name('dashboard.iupc-slots.update');
+    Route::patch('/dashboard/iupc-slots/aliases/{alias}', [IupcSlotController::class, 'moveAlias'])->name('dashboard.iupc-slots.aliases.update');
+    Route::post('/dashboard/iupc-slots/{allocation}/send-links', [IupcSlotController::class, 'sendLinks'])->name('dashboard.iupc-slots.send-links');
+    Route::patch('/dashboard/iupc-slots/links/{link}/disable', [IupcSlotController::class, 'disableLink'])->name('dashboard.iupc-slots.links.disable');
+    Route::patch('/dashboard/iupc-slots/links/{link}/regenerate', [IupcSlotController::class, 'regenerateLink'])->name('dashboard.iupc-slots.links.regenerate');
     Route::get('/dashboard/events/{event:code}', [EventRegistrationController::class, 'index'])->name('dashboard.events.registrations.index');
     Route::patch('/dashboard/events/{event:code}/registrations/{registration}/approve', [EventRegistrationController::class, 'approve'])->name('dashboard.events.registrations.approve');
     Route::patch('/dashboard/events/{event:code}/registrations/{registration}/reject', [EventRegistrationController::class, 'reject'])->name('dashboard.events.registrations.reject');
@@ -110,6 +118,8 @@ Route::get('/status', [RegistrationStatusController::class, 'index'])->name('reg
 Route::post('/telegram/webhook', TelegramWebhookController::class)->name('telegram.webhook');
 Route::get('/final-reg/{registration_code}', [FinalRegistrationController::class, 'show'])->name('final-registration.show');
 Route::post('/final-reg/{registration_code}', [FinalRegistrationController::class, 'store'])->name('final-registration.store');
+Route::get('/iupc/coach/{token}', [IupcCoachPortalController::class, 'show'])->name('iupc.coach.show');
+Route::post('/iupc/coach/{token}/teams/{registration}', [IupcCoachPortalController::class, 'submit'])->name('iupc.coach.teams.submit');
 
 Route::get('/test-sms', function () {
     $url = config('services.bulk_sms.url');

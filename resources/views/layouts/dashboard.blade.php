@@ -76,6 +76,10 @@
                             <span>Event Status</span>
                             <span class="text-xs opacity-50">Live</span>
                         </a>
+                        <a href="{{ route('dashboard.iupc-slots.index') }}" class="flex items-center justify-between rounded-lg px-3 py-2.5 font-medium transition {{ request()->routeIs('dashboard.iupc-slots.*') ? 'bg-white text-coal shadow-lg shadow-black/10' : 'text-white/68 hover:bg-white/10 hover:text-white' }}">
+                            <span>IUPC Slots</span>
+                            <span class="text-xs opacity-50">Coach</span>
+                        </a>
                     </div>
                 </div>
 
