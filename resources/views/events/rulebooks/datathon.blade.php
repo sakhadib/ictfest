@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Datathon Rulebook | '.config('app.name'))
-@section('meta_description', 'Read the Datathon rulebook for IUT 12th ICT FEST 2026.')
+@section('title', 'অলীকবচন Datathon Rulebook | '.config('app.name'))
+@section('meta_description', 'Read the Datathon rulebook for অলীকবচন: Bengali LLM Hallucination Detection Challenge at IUT 12th ICT FEST 2026.')
 @section('canonical', route('events.rulebook', ['eventSlug' => 'datathon']))
 @section('og_image', asset('assets/logos/datathon.png'))
 
@@ -43,9 +43,10 @@
         <div class="mt-10 grid min-w-0 gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:items-end">
             <div class="min-w-0">
                 <p class="text-xs font-semibold uppercase tracking-[.24em] text-iris/80">Official Rulebook</p>
-                <h1 class="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">Datathon</h1>
+                <h1 class="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">অলীকবচন</h1>
+                <p class="mt-4 text-2xl font-semibold leading-snug text-iris">Bengali LLM Hallucination Detection Challenge</p>
                 <p class="mt-6 max-w-3xl text-base leading-8 text-white/60">
-                    BrainLab presents Datathon at the IUT 12th ICT Fest 2026, powered by Institute of Policy Dynamics. This data science competition strengthens participants' skills in data analysis, machine learning, and artificial intelligence.
+                    BrainLab presents Datathon at the IUT 12th ICT Fest 2026, powered by Institute of Policy Dynamics. This year's theme challenges teams to detect hallucinated Bengali outputs from large language models and build reliable, explainable language technology systems.
                 </p>
             </div>
 
@@ -53,7 +54,8 @@
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-white/36">Theme</p>
-                        <p class="mt-2 text-sm font-semibold text-white">Bengali Large Language Models</p>
+                        <p class="mt-2 text-sm font-semibold text-white">অলীকবচন</p>
+                        <p class="mt-1 text-xs leading-5 text-white/54">Bengali LLM Hallucination Detection</p>
                     </div>
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-white/36">Team Size</p>
@@ -90,7 +92,7 @@
             <section id="description" class="rounded-lg border border-white/10 bg-white/[.035] p-6 sm:p-8">
                 <h2 class="text-2xl font-semibold text-white">Competition Description</h2>
                 <p class="mt-5 text-sm leading-8 text-white/62">
-                    This year's challenge will focus on <strong class="text-white">Bengali Large Language Models (LLMs)</strong>, encouraging participants to develop innovative solutions for real-world language technology problems.
+                    This year's challenge is <strong class="text-white">অলীকবচন : Bengali LLM Hallucination Detection Challenge</strong>. Participants will work on detecting hallucinated outputs from Bengali Large Language Models (LLMs), encouraging innovative solutions for real-world language technology problems.
                 </p>
             </section>
 
@@ -128,9 +130,9 @@
                     <div class="rounded-lg border border-iris/20 bg-iris/10 p-5">
                         <h3 class="text-lg font-semibold text-white">Registration Timeline</h3>
                         <ul class="mt-4 space-y-3 text-sm leading-7 text-white/62">
-                            <li><strong class="text-white">Registration Starts:</strong> 19th June</li>
-                            <li><strong class="text-white">Registration Ends:</strong> 30 June</li>
-                            <li>Any participant can register in between this time frame.</li>
+                            <li><strong class="text-white">Phase I Registration:</strong> 19th June - 30 June</li>
+                            <li><strong class="text-white">Phase II Registration:</strong> 1 July - 15 July</li>
+                            <li>The competition started on 1 July, but participants can still join until 15 July.</li>
                         </ul>
                     </div>
                     <div class="rounded-lg border border-volt/20 bg-volt/10 p-5">
@@ -155,7 +157,8 @@
                         <tbody class="divide-y divide-white/10 text-white/64">
                             <tr><td class="px-5 py-4 text-center">Registration Starts</td><td class="px-5 py-4 text-center">19th June, 2026</td></tr>
                             <tr><td class="px-5 py-4 text-center">Datathon starts</td><td class="px-5 py-4 text-center">1st July, 2026</td></tr>
-                            <tr><td class="px-5 py-4 text-center">Registration Closes</td><td class="px-5 py-4 text-center">30 June, 2026</td></tr>
+                            <tr><td class="px-5 py-4 text-center">Phase I Registration Closes</td><td class="px-5 py-4 text-center">30 June, 2026</td></tr>
+                            <tr><td class="px-5 py-4 text-center">Phase II Registration Closes</td><td class="px-5 py-4 text-center">15th July, 2026</td></tr>
                             <tr><td class="px-5 py-4 text-center">Online Round Closes</td><td class="px-5 py-4 text-center">20th July, 2026</td></tr>
                             <tr><td class="px-5 py-4 text-center">Paper and Notebook Submission</td><td class="px-5 py-4 text-center">21st July, 2026</td></tr>
                             <tr><td class="px-5 py-4 text-center">Final Round Participants Announcement</td><td class="px-5 py-4 text-center">23rd July, 2026</td></tr>

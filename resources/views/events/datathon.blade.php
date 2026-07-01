@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Datathon 2026 | IUT ICT Fest Data Science Competition')
-@section('meta_description', 'Compete in Datathon at IUT 12th ICT FEST 2026: data science teams solve, report, present, and compete through preliminary and onsite final rounds.')
+@section('title', 'অলীকবচন Datathon 2026 | Bengali LLM Hallucination Detection Challenge')
+@section('meta_description', 'Compete in অলীকবচন: Bengali LLM Hallucination Detection Challenge at IUT 12th ICT FEST 2026, a Datathon on Bengali LLM hallucination detection.')
 @section('canonical', url('/datathon'))
 @section('og_image', asset('assets/logos/datathon.png'))
 
 @push('head')
     @include('partials.seo.event-jsonld', [
-        'name' => 'Datathon - IUT 12th ICT FEST 2026',
-        'description' => 'A university data science competition with code, notebooks, reports, presentations, and an onsite final round.',
+        'name' => 'অলীকবচন Datathon - IUT 12th ICT FEST 2026',
+        'description' => 'Bengali LLM Hallucination Detection Challenge with code, notebooks, reports, presentations, and an onsite final round.',
         'url' => url('/datathon'),
         'image' => asset('assets/logos/datathon_sponsor.png'),
         'startDate' => '2026-07-01T00:00:00+06:00',
@@ -25,14 +25,14 @@
     $facts = [
         ['label' => 'Registration Fee', 'value' => '600 BDT per team', 'icon' => 'fa-ticket'],
         ['label' => 'Team Size', 'value' => '1-4 members', 'icon' => 'fa-users'],
-        ['label' => 'Reg and Preli Round', 'value' => '19 June - 21 July', 'icon' => 'fa-calendar-days'],
+        ['label' => 'Registration Window', 'value' => '19 June - 15 July', 'icon' => 'fa-calendar-days'],
         ['label' => 'Final Round', 'value' => '10 AM - 3 PM, 25 July', 'icon' => 'fa-flag-checkered'],
     ];
 
     $timeline = [
         [
             'date' => '19-30 June',
-            'label' => 'First Stage Registration',
+            'label' => 'Phase I Registration',
             'accent' => 'iris',
             'icon' => 'fa-pen-to-square',
             'items' => [
@@ -40,18 +40,16 @@
                 ['value' => '30 June', 'label' => 'First Deadline', 'icon' => 'fa-lock'],
             ],
         ],
-        /*
         [
-            'date' => '1-13 July',
-            'label' => 'Extended Registration',
+            'date' => '1-15 July',
+            'label' => 'Phase II Registration',
             'accent' => 'volt',
             'icon' => 'fa-calendar-plus',
             'items' => [
-                ['value' => '1 July', 'label' => 'Extension Starts', 'icon' => 'fa-forward'],
-                ['value' => '13 July', 'label' => 'Final Deadline', 'icon' => 'fa-hourglass-end'],
+                ['value' => '1 July', 'label' => 'Competition Started', 'icon' => 'fa-play'],
+                ['value' => '15 July', 'label' => 'Late Join Deadline', 'icon' => 'fa-hourglass-end'],
             ],
         ],
-        */
         [
             'date' => '1-20 July',
             'label' => 'First Round',
@@ -97,13 +95,16 @@
             <div class="order-2 max-w-4xl lg:order-1">
                 <div class="hidden items-center gap-3 text-xs font-medium uppercase tracking-[.2em] text-white/45 sm:inline-flex">
                     <span class="h-px w-10 bg-iris/70"></span>
-                    Datathon
+                    Datathon Theme
                 </div>
                 <h1 class="mt-8 text-4xl font-semibold leading-[1.06] text-white sm:text-5xl lg:text-6xl">
-                    Turn data into a defensible story.
+                    অলীকবচন
                 </h1>
+                <p class="mt-5 max-w-2xl text-2xl font-semibold leading-snug text-iris sm:text-3xl">
+                    Bengali LLM Hallucination Detection Challenge
+                </p>
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                    A university-level data competition where teams move from analysis and modeling to paper, codebase, report, slides, and an onsite final.
+                    A Bengali language AI challenge where teams detect hallucinated outputs from large language models, turn evidence into reliable signals, and defend their approach through notebooks, reports, slides, and an onsite final.
                 </p>
                 <div class="mt-10">
                     <a href="{{ route('events.rulebook', ['eventSlug' => 'datathon']) }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-iris">
@@ -145,6 +146,9 @@
             <div>
                 <p class="text-xs font-medium uppercase tracking-[.22em] text-white/38">Datathon Timeline</p>
                 <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">A full track from registration to final defense.</h2>
+                <p class="mt-5 text-sm leading-7 text-white/56">
+                    The challenge started on 1 July, but Phase II registration remains open until 15 July so teams can still join the online round.
+                </p>
             </div>
 
             <div class="relative">

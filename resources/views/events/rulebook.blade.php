@@ -5,6 +5,10 @@
 @section('canonical', route('events.rulebook', ['eventSlug' => $eventSlug]))
 
 @section('content')
+@php
+    $isDatathon = $eventSlug === 'datathon';
+@endphp
+
 <section class="px-4 pb-14 pt-32 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-6xl">
         <div class="flex flex-col gap-6 border-b border-white/10 pb-10 lg:flex-row lg:items-end lg:justify-between">
@@ -15,9 +19,23 @@
                 </a>
                 <p class="mt-8 text-xs font-semibold uppercase tracking-[.22em] text-white/38">Rulebook</p>
                 <h1 class="mt-4 text-4xl font-semibold leading-tight text-white sm:text-5xl">{{ $eventRecord->name }}</h1>
-                <p class="mt-5 max-w-2xl text-sm leading-7 text-white/56">
-                    The rulebook is loaded from the event configuration. If the embedded document does not appear, use the direct link.
-                </p>
+                @if($isDatathon)
+                    <div class="mt-6 max-w-3xl rounded-lg border border-iris/25 bg-iris/10 p-5">
+                        <p class="text-xs font-semibold uppercase tracking-[.2em] text-iris/80">Theme</p>
+                        <h2 class="mt-3 text-3xl font-semibold leading-tight text-white sm:text-4xl">অলীকবচন</h2>
+                        <p class="mt-3 text-lg font-semibold leading-7 text-iris">Bengali LLM Hallucination Detection Challenge</p>
+                        <p class="mt-4 text-sm leading-7 text-white/62">
+                            This Datathon focuses on detecting hallucinated Bengali outputs from large language models and building reliable, explainable systems around language technology.
+                        </p>
+                        <p class="mt-4 rounded-md border border-white/10 bg-black/15 px-4 py-3 text-sm font-semibold leading-6 text-white">
+                            Phase II registration is open from 1-15 July, 2026. The competition has started, but participants can still join during this window.
+                        </p>
+                    </div>
+                @else
+                    <p class="mt-5 max-w-2xl text-sm leading-7 text-white/56">
+                        The rulebook is loaded from the event configuration. If the embedded document does not appear, use the direct link.
+                    </p>
+                @endif
             </div>
 
             @if(filled($eventRecord->rulebook_link))

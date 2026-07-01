@@ -24,7 +24,7 @@ Your team will have a designated time frame to design, develop, and submit a
 ```
 ##### complete game based on this theme.
 
-##### ➔ Onsite Round: All online submissions will be evaluated to select the Top 15 Teams.
+##### ➔ Onsite Round: All online submissions will be evaluated to select the Top 20 Teams.
 
 ```
 If selected, you will advance to the onsite grand finale to present the game you
@@ -47,9 +47,9 @@ project integrity.
 
 The onsite round will take place live at the **Islamic University of Technology (IUT),
 Boardbazar, Gazipur**.
-➔ This is a presentation-only round for the Top **15** selected teams. You will pitch and
+➔ This is a presentation-only round for the Top **20** selected teams. You will pitch and
 demo the exact game submitted during the online round to the judges.
-➔ The preliminary scores given by the organizers to select the top 15 **will not carry** over
+➔ The preliminary scores given by the organizers to select the top 20 **will not carry** over
 
 
 ```
@@ -278,4 +278,3 @@ Contact for queries ● MD. Nazmus Sadiq
 Competition Link 12th IUT ICT FEST 2026 GameJam - itch.io
 Discord Link https://discord.gg/kXEfDVcRx
 ```
-

@@ -88,7 +88,7 @@
         'Every team should have a unique name.',
         'Once formed, team members cannot be substituted for the remainder of the competition.',
         'Any undergraduate student and at max on graduation can participate in the preliminary round with a team.',
-        'From the preliminary round, 15 teams will be selected for the final onsite round.',
+        'From the preliminary round, 20 teams will be selected for the final onsite round.',
     ];
 
     $requirements = [

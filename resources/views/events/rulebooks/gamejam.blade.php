@@ -105,7 +105,7 @@
                     </div>
                     <div class="rounded-lg border border-ember/20 bg-ember/10 p-5">
                         <p class="text-sm font-semibold text-white">Onsite Round</p>
-                        <p class="mt-2 text-sm leading-7 text-white/62">Online submissions will be evaluated to select the Top 15 teams. Selected teams will present the exact submitted game in the onsite grand finale. No modifications are allowed after online submission.</p>
+                        <p class="mt-2 text-sm leading-7 text-white/62">Online submissions will be evaluated to select the Top 20 teams. Selected teams will present the exact submitted game in the onsite grand finale. No modifications are allowed after online submission.</p>
                     </div>
                 </div>
             </section>
@@ -126,9 +126,9 @@
                         <h3 class="text-lg font-semibold text-white">Onsite</h3>
                         <p class="mt-3 text-sm leading-7 text-white/62">The onsite round will take place live at Islamic University of Technology, Boardbazar, Gazipur.</p>
                         <ul class="mt-4 space-y-3 text-sm leading-7 text-white/62">
-                            <li>This is a presentation-only round for the Top 15 selected teams.</li>
+                            <li>This is a presentation-only round for the Top 20 selected teams.</li>
                             <li>Teams will pitch and demo the exact game submitted during the online round.</li>
-                            <li>Preliminary scores used to select the Top 15 will not carry over to the onsite round, except the video pitch submission score.</li>
+                            <li>Preliminary scores used to select the Top 20 will not carry over to the onsite round, except the video pitch submission score.</li>
                         </ul>
                         <div class="mt-5 rounded-lg border border-ember/30 bg-ember/10 p-5 text-sm font-semibold leading-7 text-white">
                             For onsite round, you don't have to make any new game and you can't update your previously submitted game. Here, you will have to present the game you already submitted in online round to the judges.

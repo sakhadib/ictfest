@@ -1,11 +1,13 @@
 
 
 **BrainLab** presents **Datathon** at the **IUT 12th ICT Fest 2026,** powered by **Institute of Policy Dynamics,** a data science competition designed to strengthen participants' skills in data analysis, machine learning, and artificial intelligence.   
+
+# **অলীকবচন : Bengali LLM Hallucination Detection Challenge**
  
 
 # **Competition Description**
 
-This year's challenge will focus on **Bengali Large Language Models (LLMs)**, encouraging participants to develop innovative solutions for real-world language technology problems.
+This year's challenge is **অলীকবচন : Bengali LLM Hallucination Detection Challenge**. Participants will work on detecting hallucinated outputs from **Bengali Large Language Models (LLMs)**, encouraging innovative solutions for real-world language technology problems.
 
 # **Eligibility Criteria**
 
@@ -34,9 +36,9 @@ Fill up the registration form while keeping the following points in mind:
 
 # **Registration Timeline**
 
-* Registration Starts: 19th June  
-* Registration Ends: 30 June  
-* Any participant can register in between this time frame
+* Phase I Registration: 19th June \- 30 June
+* Phase II Registration: 1 July \- 15 July
+* The competition started on 1 July, but participants can still join until 15 July.
 
 # **Event Timeline**
 
@@ -52,7 +54,8 @@ Fill up the registration form while keeping the following points in mind:
 | :---: | :---: |
 | Registration Starts | 19th June , 2026 |
 | Datathon starts | 1st July, 2026 |
-| Registration Closes | 30 June, 2026 |
+| Phase I Registration Closes | 30 June, 2026 |
+| Phase II Registration Closes | 15th July, 2026 |
 | Online Round Closes | 20th July, 2026 |
 | Paper and Notebook Submission  | 21st July, 2026 |
 | Final Round Participants Announcement | 23rd July, 2026 |
