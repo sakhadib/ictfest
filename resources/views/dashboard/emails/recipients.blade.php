@@ -27,6 +27,7 @@
     @php
         $mode = old('mode', $draft['mode'] ?? 'events');
         $selectedCodes = old('event_codes', $draft['event_codes'] ?? []);
+        $selectedStatuses = old('registration_statuses', $draft['registration_statuses'] ?? $registrationStatuses);
     @endphp
 
     <form method="POST" action="{{ route('dashboard.emails.recipients.store') }}" class="mx-auto max-w-5xl">
@@ -86,6 +87,35 @@
                         </label>
                     @endforeach
                 </div>
+
+                <div class="mt-6 rounded-2xl border border-black/10 bg-paper/60 p-4">
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
+                            <p class="text-sm font-semibold text-coal">Registration status</p>
+                            <p class="mt-1 text-xs leading-5 text-coal/55">Only team lead emails from selected statuses will be included.</p>
+                        </div>
+                        <p class="text-xs font-semibold uppercase tracking-[.16em] text-coal/40">Counts update from selected events</p>
+                    </div>
+
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                        @foreach($registrationStatuses as $status)
+                            <label class="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-black/10 bg-white px-4 py-3 transition has-[:checked]:border-primary has-[:checked]:bg-primary/5 hover:border-primary/30">
+                                <span class="flex items-center gap-3">
+                                    <input
+                                        type="checkbox"
+                                        name="registration_statuses[]"
+                                        value="{{ $status }}"
+                                        class="h-4 w-4 rounded border-black/20 text-primary focus:ring-primary"
+                                        @checked(in_array($status, $selectedStatuses, true))
+                                        data-status-input="{{ $status }}"
+                                    >
+                                    <span class="text-sm font-semibold capitalize text-coal">{{ $status }}</span>
+                                </span>
+                                <span class="shrink-0 rounded-full bg-paper px-3 py-1 text-xs font-semibold text-coal/60 shadow-sm" data-status-count="{{ $status }}">0 emails</span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
             </div>
 
             <div class="mt-6" data-custom-panel>
@@ -116,6 +146,8 @@
             const modeInputs = document.querySelectorAll('[data-recipient-mode]');
             const eventsPanel = document.querySelector('[data-events-panel]');
             const customPanel = document.querySelector('[data-custom-panel]');
+            const eventInputs = Array.from(document.querySelectorAll('input[name="event_codes[]"]'));
+            const statusCounts = @json($statusEmailCounts);
 
             const sync = () => {
                 const mode = document.querySelector('[data-recipient-mode]:checked')?.value || 'events';
@@ -123,8 +155,20 @@
                 customPanel.classList.toggle('hidden', mode !== 'custom');
             };
 
+            const syncStatusCounts = () => {
+                const selectedCodes = eventInputs.filter((input) => input.checked).map((input) => input.value);
+
+                document.querySelectorAll('[data-status-count]').forEach((target) => {
+                    const status = target.dataset.statusCount;
+                    const count = selectedCodes.reduce((sum, code) => sum + Number(statusCounts?.[code]?.[status] || 0), 0);
+                    target.textContent = `${count.toLocaleString()} ${count === 1 ? 'email' : 'emails'}`;
+                });
+            };
+
             modeInputs.forEach((input) => input.addEventListener('change', sync));
+            eventInputs.forEach((input) => input.addEventListener('change', syncStatusCounts));
             sync();
+            syncStatusCounts();
         })();
     </script>
 @endsection

@@ -116,6 +116,15 @@
                                         @endforeach
                                     </div>
                                 @endif
+                                @if($notification->metadata['registration_statuses'] ?? null)
+                                    <div class="mt-2 flex max-w-xs flex-wrap gap-1.5">
+                                        @foreach($notification->metadata['registration_statuses'] as $status)
+                                            <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold capitalize text-coal/60">
+                                                {{ $status }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                @endif
                                 <p class="mt-2 text-xs text-coal/50">{{ $notification->recipient_count }} recipients planned</p>
                             </td>
                             <td class="px-5 py-4 text-coal/65">

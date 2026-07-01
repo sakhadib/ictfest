@@ -20,6 +20,8 @@ class EmailController extends Controller
 {
     private const DRAFT_SESSION_KEY = 'dashboard_email_draft';
 
+    private const REGISTRATION_STATUSES = ['pending', 'verified', 'paid', 'rejected'];
+
     public function index(): RedirectResponse
     {
         return redirect()->route('dashboard.emails.compose');
@@ -60,6 +62,8 @@ class EmailController extends Controller
         return view('dashboard.emails.recipients', [
             'draft' => $draft,
             'events' => $this->eventsWithRecipientCounts(),
+            'registrationStatuses' => self::REGISTRATION_STATUSES,
+            'statusEmailCounts' => $this->statusEmailCounts(),
         ]);
     }
 
@@ -79,12 +83,15 @@ class EmailController extends Controller
             'mode' => ['required', Rule::in(['events', 'custom'])],
             'event_codes' => [$mode === 'events' ? 'required' : 'nullable', 'array'],
             'event_codes.*' => ['string', Rule::exists('events', 'code')],
+            'registration_statuses' => [$mode === 'events' ? 'required' : 'nullable', 'array'],
+            'registration_statuses.*' => ['string', Rule::in(self::REGISTRATION_STATUSES)],
             'custom_email' => [$mode === 'custom' ? 'required' : 'nullable', new \App\Rules\StrictEmail(), 'max:255'],
         ]);
 
         $this->putDraft($request, [
             'mode' => $validated['mode'],
             'event_codes' => $validated['mode'] === 'events' ? array_values($validated['event_codes'] ?? []) : [],
+            'registration_statuses' => $validated['mode'] === 'events' ? array_values($validated['registration_statuses'] ?? []) : [],
             'custom_email' => $validated['mode'] === 'custom' ? strtolower(trim($validated['custom_email'])) : null,
         ]);
 
@@ -105,13 +112,14 @@ class EmailController extends Controller
         if ($recipients->isEmpty()) {
             return redirect()
                 ->route('dashboard.emails.recipients')
-                ->withErrors(['event_codes' => 'No team lead emails were found for the selected events.']);
+                ->withErrors(['event_codes' => 'No team lead emails were found for the selected event and status filters.']);
         }
 
         return view('dashboard.emails.review', [
             'draft' => $draft,
             'recipients' => $recipients,
             'selectedEvents' => $this->selectedEvents($draft),
+            'selectedStatusLabels' => $this->selectedStatusLabels($draft),
         ]);
     }
 
@@ -129,7 +137,7 @@ class EmailController extends Controller
         if ($recipients->isEmpty()) {
             return redirect()
                 ->route('dashboard.emails.recipients')
-                ->withErrors(['event_codes' => 'No team lead emails were found for the selected events.']);
+                ->withErrors(['event_codes' => 'No team lead emails were found for the selected event and status filters.']);
         }
 
         $notification = DB::transaction(function () use ($draft, $recipients): EmailNotification {
@@ -139,6 +147,9 @@ class EmailController extends Controller
                 'body' => $draft['body'],
                 'mode' => $draft['mode'],
                 'event_codes' => $draft['mode'] === 'events' ? $draft['event_codes'] : null,
+                'metadata' => $draft['mode'] === 'events' ? [
+                    'registration_statuses' => $draft['registration_statuses'] ?? [],
+                ] : null,
                 'recipient_count' => $recipients->count(),
                 'status' => 'queued',
                 'queued_at' => now(),
@@ -267,7 +278,7 @@ class EmailController extends Controller
     }
 
     /**
-     * @return array{subject?: string, body?: string, mode?: string, event_codes?: array<int, string>, custom_email?: ?string}
+     * @return array{subject?: string, body?: string, mode?: string, event_codes?: array<int, string>, registration_statuses?: array<int, string>, custom_email?: ?string}
      */
     private function draft(Request $request): array
     {
@@ -313,6 +324,12 @@ class EmailController extends Controller
                 ->with('status', 'Select at least one event before reviewing the email.');
         }
 
+        if (($draft['mode'] ?? null) === 'events' && empty($draft['registration_statuses'] ?? [])) {
+            return redirect()
+                ->route('dashboard.emails.recipients')
+                ->with('status', 'Select at least one registration status before reviewing the email.');
+        }
+
         if (($draft['mode'] ?? null) === 'custom' && blank($draft['custom_email'] ?? null)) {
             return redirect()
                 ->route('dashboard.emails.recipients')
@@ -335,7 +352,7 @@ class EmailController extends Controller
             ]])->filter(fn (array $recipient): bool => StrictEmail::isValid($recipient['email']))->values();
         }
 
-        return $this->eventRecipients($draft['event_codes'] ?? []);
+        return $this->eventRecipients($draft['event_codes'] ?? [], $draft['registration_statuses'] ?? []);
     }
 
     /**
@@ -355,12 +372,14 @@ class EmailController extends Controller
 
     /**
      * @param  array<int, string>  $eventCodes
+     * @param  array<int, string>  $registrationStatuses
      * @return \Illuminate\Support\Collection<int, array{email: string, name: string}>
      */
-    private function eventRecipients(array $eventCodes): Collection
+    private function eventRecipients(array $eventCodes, array $registrationStatuses): Collection
     {
         return Registration::query()
             ->whereHas('event', fn ($query) => $query->whereIn('code', $eventCodes))
+            ->whereIn('status', $registrationStatuses)
             ->whereNotNull('contact_email')
             ->where('contact_email', '!=', '')
             ->orderBy('id')
@@ -372,5 +391,38 @@ class EmailController extends Controller
             ->filter(fn (array $recipient): bool => StrictEmail::isValid($recipient['email']))
             ->unique('email')
             ->values();
+    }
+
+    private function statusEmailCounts(): array
+    {
+        $eventCodes = Event::query()->orderBy('code')->pluck('code');
+        $counts = [];
+
+        foreach ($eventCodes as $eventCode) {
+            foreach (self::REGISTRATION_STATUSES as $status) {
+                $counts[$eventCode][$status] = (int) (Registration::query()
+                    ->where('status', $status)
+                    ->whereHas('event', fn ($query) => $query->where('code', $eventCode))
+                    ->whereNotNull('contact_email')
+                    ->where('contact_email', '!=', '')
+                    ->selectRaw('count(distinct lower(contact_email)) as aggregate')
+                    ->value('aggregate') ?? 0);
+            }
+        }
+
+        return $counts;
+    }
+
+    /**
+     * @param  array<string, mixed>  $draft
+     * @return array<int, string>
+     */
+    private function selectedStatusLabels(array $draft): array
+    {
+        return collect($draft['registration_statuses'] ?? [])
+            ->filter(fn (string $status): bool => in_array($status, self::REGISTRATION_STATUSES, true))
+            ->map(fn (string $status): string => ucfirst($status))
+            ->values()
+            ->all();
     }
 }

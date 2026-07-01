@@ -37,6 +37,9 @@
                     @if($notification->event_codes)
                         <dd class="mt-1 text-xs text-coal/50">Events: {{ implode(', ', $notification->event_codes) }}</dd>
                     @endif
+                    @if($notification->metadata['registration_statuses'] ?? null)
+                        <dd class="mt-1 text-xs text-coal/50">Statuses: {{ collect($notification->metadata['registration_statuses'])->map(fn ($status) => ucfirst($status))->join(', ') }}</dd>
+                    @endif
                 </div>
                 <div class="rounded-xl border border-black/5 bg-paper/70 p-4">
                     <dt class="text-xs font-semibold uppercase tracking-[.16em] text-coal/45">Delivery summary</dt>

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'body',
     'mode',
     'event_codes',
+    'metadata',
     'recipient_count',
     'status',
     'queued_at',
@@ -24,6 +25,7 @@ class Notification extends Model
     {
         return [
             'event_codes' => 'array',
+            'metadata' => 'array',
             'recipient_count' => 'integer',
             'queued_at' => 'datetime',
             'completed_at' => 'datetime',
