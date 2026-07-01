@@ -12,9 +12,13 @@
                     <p class="text-sm font-medium text-slate-500">Inter University Programming Contest</p>
                     <h2 class="mt-1 text-lg font-semibold">University slot allocation</h2>
                 </div>
-                <div class="rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-right">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-primary/70">Total Slots</p>
-                    <p id="slotTotal" class="mt-1 text-3xl font-semibold text-primary">0</p>
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <button form="slot-save-form" type="submit" class="rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary/90">Save Slots</button>
+                    <button form="send-all-links-form" type="submit" class="rounded-md bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">Send All Coach Links</button>
+                    <div class="rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-right">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-primary/70">Total Slots</p>
+                        <p id="slotTotal" class="mt-1 text-3xl font-semibold text-primary">0</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -130,14 +134,15 @@
                 @endforelse
         </div>
 
-        <div class="border-t border-slate-200 px-5 py-4 text-right">
-            <button form="slot-save-form" type="submit" class="rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary/90">Save Slots</button>
-        </div>
     </section>
 
     <form id="slot-save-form" method="POST" action="{{ route('dashboard.iupc-slots.update') }}">
         @csrf
         @method('PATCH')
+    </form>
+
+    <form id="send-all-links-form" method="POST" action="{{ route('dashboard.iupc-slots.send-all-links') }}">
+        @csrf
     </form>
 
     @foreach($allocations as $allocation)

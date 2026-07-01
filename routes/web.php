@@ -101,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/iupc-slots', [IupcSlotController::class, 'index'])->name('dashboard.iupc-slots.index');
     Route::patch('/dashboard/iupc-slots', [IupcSlotController::class, 'updateSlots'])->name('dashboard.iupc-slots.update');
     Route::patch('/dashboard/iupc-slots/aliases/{alias}', [IupcSlotController::class, 'moveAlias'])->name('dashboard.iupc-slots.aliases.update');
+    Route::post('/dashboard/iupc-slots/send-all-links', [IupcSlotController::class, 'sendAllLinks'])->name('dashboard.iupc-slots.send-all-links');
     Route::post('/dashboard/iupc-slots/{allocation}/send-links', [IupcSlotController::class, 'sendLinks'])->name('dashboard.iupc-slots.send-links');
     Route::patch('/dashboard/iupc-slots/links/{link}/disable', [IupcSlotController::class, 'disableLink'])->name('dashboard.iupc-slots.links.disable');
     Route::patch('/dashboard/iupc-slots/links/{link}/regenerate', [IupcSlotController::class, 'regenerateLink'])->name('dashboard.iupc-slots.links.regenerate');

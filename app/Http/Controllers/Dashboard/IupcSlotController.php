@@ -101,29 +101,32 @@ class IupcSlotController extends Controller
         $sent = 0;
 
         foreach ($coaches as $coach) {
-            $link = $this->activeOrNewLink($allocation, $coach);
-            $url = route('iupc.coach.show', ['token' => Crypt::decryptString($link->token_encrypted)]);
-
-            if (StrictEmail::isValid($coach->official_email)) {
-                Mail::to(trim($coach->official_email), $coach->name)
-                    ->queue(new IupcCoachPortalLinkMail($link, $url));
-
-                $link->update([
-                    'last_email_sent_at' => now(),
-                    'last_sent_at' => now(),
-                ]);
-            } else {
-                Log::warning('IUPC coach portal email skipped because email is invalid.', [
-                    'coach_id' => $coach->id,
-                    'email' => $coach->official_email,
-                ]);
-            }
-
-            SendIupcCoachPortalSms::dispatch($link->id, $url);
+            $this->queueCoachLink($allocation, $coach);
             $sent++;
         }
 
         return back()->with('status', "Coach links queued for {$sent} coach".($sent === 1 ? '' : 'es').'.');
+    }
+
+    public function sendAllLinks(): RedirectResponse
+    {
+        $this->sync->sync();
+
+        $allocations = IupcUniversityAllocation::query()
+            ->with(['coaches' => fn ($query) => $query->where('is_active', true)])
+            ->orderBy('name')
+            ->get();
+
+        $sent = 0;
+
+        foreach ($allocations as $allocation) {
+            foreach ($allocation->coaches as $coach) {
+                $this->queueCoachLink($allocation, $coach, 'low');
+                $sent++;
+            }
+        }
+
+        return back()->with('status', "All IUPC coach links queued on the low queue for {$sent} coach".($sent === 1 ? '' : 'es').'.');
     }
 
     public function disableLink(IupcCoachLink $link): RedirectResponse
@@ -171,5 +174,37 @@ class IupcSlotController extends Controller
             'token_hash' => hash('sha256', $token),
             'token_encrypted' => Crypt::encryptString($token),
         ]);
+    }
+
+    private function queueCoachLink(IupcUniversityAllocation $allocation, IupcCoachContact $coach, ?string $queue = null): void
+    {
+        $link = $this->activeOrNewLink($allocation, $coach);
+        $url = route('iupc.coach.show', ['token' => Crypt::decryptString($link->token_encrypted)]);
+
+        if (StrictEmail::isValid($coach->official_email)) {
+            $mail = new IupcCoachPortalLinkMail($link, $url);
+
+            if ($queue) {
+                $mail->onQueue($queue);
+            }
+
+            Mail::to(trim($coach->official_email), $coach->name)->queue($mail);
+
+            $link->update([
+                'last_email_sent_at' => now(),
+                'last_sent_at' => now(),
+            ]);
+        } else {
+            Log::warning('IUPC coach portal email skipped because email is invalid.', [
+                'coach_id' => $coach->id,
+                'email' => $coach->official_email,
+            ]);
+        }
+
+        $smsDispatch = SendIupcCoachPortalSms::dispatch($link->id, $url);
+
+        if ($queue) {
+            $smsDispatch->onQueue($queue);
+        }
     }
 }
