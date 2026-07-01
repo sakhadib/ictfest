@@ -275,7 +275,7 @@
                             </tr>
                             <tr>
                                 <td class="px-5 py-4 font-semibold text-white">Discord Link</td>
-                                <td class="px-5 py-4"><a href="https://discord.gg/xmeSS6FN" target="_blank" rel="noopener noreferrer" class="break-all font-semibold text-iris hover:text-white">https://discord.gg/xmeSS6FN</a></td>
+                                <td class="px-5 py-4"><a href="https://discord.gg/yXcrdM2f5" target="_blank" rel="noopener noreferrer" class="break-all font-semibold text-iris hover:text-white">https://discord.gg/yXcrdM2f5</a></td>
                             </tr>
                         </tbody>
                     </table>

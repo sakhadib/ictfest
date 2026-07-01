@@ -71,7 +71,7 @@
                                         Important Datathon announcements and support will be shared in the Discord server.
                                     </p>
                                     <p style="margin:12px 0 0;font-size:14px;line-height:1.6;">
-                                        <a href="https://discord.gg/xmeSS6FN" style="color:#d4574e;font-weight:700;">https://discord.gg/xmeSS6FN</a>
+                                        <a href="https://discord.gg/yXcrdM2f5" style="color:#d4574e;font-weight:700;">https://discord.gg/yXcrdM2f5</a>
                                     </p>
                                 </div>
                             @endif

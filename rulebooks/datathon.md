@@ -156,7 +156,7 @@ Will be set when the competition launches.
 | :---: | :---- |
 | Contact for queries | Abdullah Al Jubaer Event head, Datathon 01736-587392  |
 | Competition Link | Will be updated later |
-| Discord Link | [https://discord.gg/xmeSS6FN](https://discord.gg/xmeSS6FN)  |
+| Discord Link | [https://discord.gg/yXcrdM2f5](https://discord.gg/yXcrdM2f5)  |
 
 # 
 
