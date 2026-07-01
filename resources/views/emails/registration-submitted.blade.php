@@ -64,6 +64,18 @@
                                 </a>
                             </div>
 
+                            @if($registration->event?->code === '03')
+                                <div style="margin-top:24px;padding:18px;border-radius:14px;background:#f6f4ef;border:1px solid rgba(16,18,22,.08);">
+                                    <p style="margin:0;color:#101216;font-size:15px;line-height:1.6;font-weight:700;">Join the Datathon Discord server</p>
+                                    <p style="margin:8px 0 0;color:#6b7280;font-size:14px;line-height:1.6;">
+                                        Important Datathon announcements and support will be shared in the Discord server.
+                                    </p>
+                                    <p style="margin:12px 0 0;font-size:14px;line-height:1.6;">
+                                        <a href="https://discord.gg/xmeSS6FN" style="color:#d4574e;font-weight:700;">https://discord.gg/xmeSS6FN</a>
+                                    </p>
+                                </div>
+                            @endif
+
                             <p style="margin:28px 0 0;font-size:13px;line-height:1.7;color:#6b7280;">
                                 If the button does not work, open this link:
                                 <br>
