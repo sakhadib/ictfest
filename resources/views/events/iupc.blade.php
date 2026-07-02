@@ -74,9 +74,13 @@
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
                     A three-member team contest with a dedicated mock round, a five-hour main round, and onsite lab execution at {{ config('app.name') }}.
                 </p>
-                <div class="mt-10">
+                <div class="mt-10 flex flex-col gap-3 sm:flex-row">
                     <a href="{{ route('events.rulebook', ['eventSlug' => 'iupc']) }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-volt">
                         See Rulebook
+                    </a>
+                    <a href="{{ route('iupc.slots') }}" class="inline-flex items-center justify-center gap-3 rounded-md border border-volt/40 bg-volt/10 px-5 py-3 text-sm font-semibold text-volt shadow-glow transition hover:border-volt/70 hover:bg-volt hover:text-ink">
+                        <i class="fa-solid fa-list-check"></i>
+                        View IUPC Slots
                     </a>
                 </div>
             </div>
@@ -104,6 +108,24 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+    </div>
+</section>
+
+<section class="px-4 py-16 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl rounded-lg border border-volt/25 bg-volt/10 p-6 sm:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[.22em] text-volt/80">University Slot Allocation</p>
+                <h2 class="mt-4 text-3xl font-semibold text-white sm:text-4xl">Check assigned IUPC slots.</h2>
+                <p class="mt-4 max-w-2xl text-sm leading-7 text-white/58">
+                    View the public university-wise slot allocation list before completing final registration through the coach portal.
+                </p>
+            </div>
+            <a href="{{ route('iupc.slots') }}" class="inline-flex w-full items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-volt sm:w-auto">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                IUPC Slots
+            </a>
         </div>
     </div>
 </section>

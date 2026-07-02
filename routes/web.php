@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\EventRulebookController;
 use App\Http\Controllers\IupcCoachPortalController;
 use App\Http\Controllers\IupcRegistrationController;
+use App\Models\IupcUniversityAllocation;
 use App\Http\Controllers\HackathonRegistrationController;
 use App\Http\Controllers\DatathonRegistrationController;
 use App\Http\Controllers\FifaRegistrationController;
@@ -39,6 +40,7 @@ Route::get('/sitemap.xml', function () {
     $pages = collect([
         ['url' => url('/'), 'priority' => '1.0', 'changefreq' => 'daily'],
         ['url' => url('/iupc'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['url' => route('iupc.slots'), 'priority' => '0.6', 'changefreq' => 'daily'],
         ['url' => url('/hackathon'), 'priority' => '0.9', 'changefreq' => 'weekly'],
         ['url' => url('/datathon'), 'priority' => '0.9', 'changefreq' => 'weekly'],
         ['url' => url('/gamejam'), 'priority' => '0.9', 'changefreq' => 'weekly'],
@@ -180,6 +182,19 @@ Route::get('/{eventSlug}/rulebook', EventRulebookController::class)
 Route::get('/iupc', function () {
     return view('events.iupc', ['eventRecord' => \App\Models\Event::where('code', '01')->firstOrFail()]);
 });
+
+Route::get('/iupc/slots', function () {
+    $allocations = IupcUniversityAllocation::query()
+        ->where('is_active', true)
+        ->orderByDesc('slot_count')
+        ->orderBy('name')
+        ->get();
+
+    return view('events.iupc-slots', [
+        'allocations' => $allocations,
+        'totalSlots' => $allocations->sum('slot_count'),
+    ]);
+})->name('iupc.slots');
 
 Route::get('/iupc/register', [IupcRegistrationController::class, 'create'])->name('iupc.register');
 Route::post('/iupc/register', [IupcRegistrationController::class, 'store'])->name('iupc.register.store');
