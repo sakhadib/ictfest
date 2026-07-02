@@ -24,13 +24,38 @@
 
                 <div class="flex flex-wrap rounded-md border border-slate-200 bg-slate-50 p-1 text-sm">
                     @foreach($tabs as $tabKey => $tabLabel)
-                        <a href="{{ route('dashboard.events.registrations.index', ['event' => $event->code, 'tab' => $tabKey]) }}" class="rounded px-4 py-2 font-medium {{ $tab === $tabKey ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950' }}">
+                        <a href="{{ route('dashboard.events.registrations.index', array_filter(['event' => $event->code, 'tab' => $tabKey, 'search' => $search ?: null])) }}" class="rounded px-4 py-2 font-medium {{ $tab === $tabKey ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950' }}">
                             {{ $tabLabel }}
                             <span class="ml-2 text-slate-400">{{ $counts[$tabKey] ?? 0 }}</span>
                         </a>
                     @endforeach
                 </div>
             </div>
+        </div>
+
+        <div class="border-b border-slate-200 px-5 py-4">
+            <form method="GET" action="{{ route('dashboard.events.registrations.index', ['event' => $event->code]) }}" class="flex flex-col gap-3 lg:flex-row lg:items-center">
+                <input type="hidden" name="tab" value="{{ $tab }}">
+                <label class="flex-1">
+                    <span class="sr-only">Search registrations</span>
+                    <input name="search" value="{{ $search }}" placeholder="Search by code, team name, leader email, or trx id" class="w-full rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-primary/50">
+                </label>
+                <div class="flex gap-2">
+                    <button type="submit" class="rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary/90">
+                        Search
+                    </button>
+                    @if($search !== '')
+                        <a href="{{ route('dashboard.events.registrations.index', ['event' => $event->code, 'tab' => $tab]) }}" class="rounded-md border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
+                            Clear
+                        </a>
+                    @endif
+                </div>
+            </form>
+            @if($search !== '')
+                <p class="mt-3 text-xs text-slate-500">
+                    Showing matches for <span class="font-semibold text-slate-700">{{ $search }}</span> in this event.
+                </p>
+            @endif
         </div>
 
         @if (session('status'))
@@ -159,7 +184,7 @@
                     @empty
                         <tr>
                             <td colspan="5" class="px-5 py-12 text-center text-slate-500">
-                                No {{ $tab }} registrations found for this event.
+                                No {{ $tab }} registrations found for this event{{ $search !== '' ? ' matching your search.' : '.' }}
                             </td>
                         </tr>
                     @endforelse

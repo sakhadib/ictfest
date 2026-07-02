@@ -22,19 +22,19 @@
 **Rulebook: \[Insert link here\]**
 
 **Event Name: Agentic AI Hackathon**  
-**Registration Fees:** No fees for preliminary round, 1500 BDT for Final Round  
+**Registration Fees:** No fees for preliminary round, 2500 BDT for Final Round
 **Registration Window:** 18 June \- 3 July  
 **Team Size:** 1-3 members  
 **Event Timeline**: 18 June \- 25 July 
 
 * **First Stage Registration**: 18 June \- 3 July  
-* **Online Round:** 10 July (48 hours)  
+* **Online Round:** 9 July, 6 PM - 10 PM (4 hours)
 * **Final Round Participants Announcement**: 16 July  
 * **Final Round Registration:** 16 \- 21 July  
-* **Final Round**: 24 \- 25 July (onsite)
+* **Final Round**: 10 AM, 24 July \- 10 AM, 25 July (onsite 24-hour challenge; final judgement starts 10 AM on 25 July)
 
 **Location**: IUT Campus: AB2 301, 302 & Auditorium  
-**GitHub Policy**: A fresh repository must be created at 09:00 PM on Day 1\. No pre-coded modules allowed.  
+**GitHub Policy**: A fresh repository must be created after the final challenge begins at 10:00 AM on 24 July. No pre-coded modules allowed.
 **Equipment**: Teams must bring Laptops, Multiplugs, Chargers, and any specialized hardware  
 **Rulebook: \[Insert link here\]**
 

@@ -8,7 +8,7 @@
     $selectedPaymentMethod = old('payment_method', $registration->payment?->method);
     $selectedCoachSize = old('coach.tshirt_size', $registration->coach?->tshirt_size);
     $paymentInfo = [
-        '02' => ['amount' => '1500 BDT', 'number' => '01746145346'],
+        '02' => ['amount' => '2500 BDT', 'number' => '01746145346'],
         '04' => ['amount' => '700 BDT', 'number' => '01941435623'],
     ][$registration->event?->code] ?? null;
 

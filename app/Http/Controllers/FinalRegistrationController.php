@@ -68,7 +68,7 @@ class FinalRegistrationController extends Controller
                 $registration->payment()->updateOrCreate(
                     ['registration_id' => $registration->id],
                     [
-                        'amount' => $registration->event?->amount ?? 0,
+                        'amount' => $this->finalRoundAmount($registration),
                         'method' => $validated['payment_method'],
                         'trx_id' => $validated['trx_id'],
                         'status' => 'submitted',
@@ -160,5 +160,14 @@ class FinalRegistrationController extends Controller
         }
 
         return null;
+    }
+
+    private function finalRoundAmount(Registration $registration): int
+    {
+        return match ($registration->event?->code) {
+            '02' => 2500,
+            '04' => 700,
+            default => (int) ($registration->event?->amount ?? 0),
+        };
     }
 }

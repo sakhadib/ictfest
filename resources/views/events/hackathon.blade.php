@@ -8,11 +8,11 @@
 @push('head')
     @include('partials.seo.event-jsonld', [
         'name' => 'Agentic AI Hackathon - IUT 12th ICT FEST 2026',
-        'description' => 'A two-stage agentic AI hackathon with an online preliminary round and onsite final at IUT.',
+        'description' => 'A two-stage agentic AI hackathon with an online preliminary round and a 24-hour onsite final challenge at IUT.',
         'url' => url('/hackathon'),
         'image' => asset('assets/logos/hackathon.png'),
         'startDate' => '2026-07-09T18:00:00+06:00',
-        'endDate' => '2026-07-24T18:00:00+06:00',
+        'endDate' => '2026-07-25T10:00:00+06:00',
         'locationName' => 'AB2 301, 302 and Auditorium, Islamic University of Technology',
         'registrationUrl' => route('hackathon.register'),
         'price' => 0,
@@ -24,7 +24,7 @@
 @php
     $facts = [
         ['label' => 'Preliminary Fee', 'value' => 'No fees', 'icon' => 'fa-ticket'],
-        ['label' => 'Final Round Fee', 'value' => '1500 BDT per team', 'icon' => 'fa-receipt'],
+        ['label' => 'Final Round Fee', 'value' => '2500 BDT per team', 'icon' => 'fa-receipt'],
         ['label' => 'Team Size', 'value' => '1-3 members', 'icon' => 'fa-users'],
         ['label' => 'Location', 'value' => 'AB2 301, 302 & Auditorium', 'icon' => 'fa-location-dot'],
     ];
@@ -62,12 +62,14 @@
             ],
         ],
         [
-            'date' => '24 July',
-            'label' => 'Onsite Final Round',
+            'date' => '24-25 July',
+            'label' => '24-hour Final Challenge',
             'accent' => 'ember',
             'icon' => 'fa-flag-checkered',
             'items' => [
-                ['value' => 'IUT', 'label' => 'Final Round', 'icon' => 'fa-building-columns'],
+                ['value' => '10 AM, 24 July', 'label' => 'Challenge Starts', 'icon' => 'fa-play'],
+                ['value' => '10 AM, 25 July', 'label' => 'Final Judgement Starts', 'icon' => 'fa-gavel'],
+                ['value' => 'IUT', 'label' => 'Onsite Round', 'icon' => 'fa-building-columns'],
                 ['value' => 'AB2', 'label' => '301, 302 & Auditorium', 'icon' => 'fa-location-dot'],
             ],
         ],
@@ -92,7 +94,7 @@
                     Build an agent that solves a real problem under pressure.
                 </h1>
                 <p class="mt-8 max-w-2xl text-base leading-8 text-white/58">
-                    A focused agent-building challenge where teams turn a released problem into a working AI workflow, starting with an online preliminary on 9 July, 2026 from 6:00 PM to 10:00 PM Bangladesh Standard Time and leading selected teams to the onsite final at {{ config('app.name') }} Hackathon powered by <a href="https://openai.com/codex/" target="_blank" rel="noopener noreferrer" class="font-semibold text-[#d9b8b4] transition hover:text-ember">OpenAI Codex</a>.
+                    A focused agent-building challenge where teams turn a released problem into a working AI workflow, starting with an online preliminary on 9 July, 2026 from 6:00 PM to 10:00 PM Bangladesh Standard Time and leading selected teams to a 24-hour onsite final challenge from 10:00 AM on 24 July to final judgement beginning at 10:00 AM on 25 July. IUT 12th ICT FEST Hackathon powered by <a href="https://openai.com/codex/" target="_blank" rel="noopener noreferrer" class="font-semibold text-[#d9b8b4] transition hover:text-ember">OpenAI Codex</a>.
                 </p>
                 <div class="mt-10">
                     <a href="{{ route('events.rulebook', ['eventSlug' => 'hackathon']) }}" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-ember">

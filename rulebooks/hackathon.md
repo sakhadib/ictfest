@@ -1,4 +1,4 @@
-**Event Dates:** July 24–25, 2026  
+**Event Dates:** 10 AM, July 24 - 10 AM, July 25, 2026
 **Location:** IUT Premises, K B Bazar Rd, Gazipur 1704  
 **Registration Link:** [iutictfest26.tech/hackathon](https://iutictfest26.tech/hackathon)   
 **Event Page:** [Facebook Event](https://www.facebook.com/events/1300321915602853/)
@@ -12,7 +12,7 @@ The data never stops flowing, and neither do the innovators connecting the digit
 The campus will transform into an electrifying battleground where you will race against the clock to design powerful applications. The competition is divided into two distinct phases:
 
 * **Phase 1: Preliminary Round:** A fast-paced online screening round lasting **4 hours**.  
-* **Phase 2: Main Development Sprint:** An intense, on-site development sprint lasting **8 hours**, where qualifying teams will build their solutions under pressure.
+* **Phase 2: 24-hour Final Challenge:** An intense, on-site challenge lasting **24 hours**, starting at **10:00 AM on 24 July** and leading into final judgement from **10:00 AM on 25 July**.
 
 ### **3\. Rules & Guidelines**
 

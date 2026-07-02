@@ -20,9 +20,11 @@ class EventRegistrationController extends Controller
         $tab = in_array($request->query('tab'), ['pending', 'final', 'review', 'done'], true)
             ? $request->query('tab')
             : 'pending';
+        $search = trim((string) $request->query('search', ''));
 
         $registrations = $event->registrations()
             ->with(['payment', 'finalRegistration', 'participants'])
+            ->when($search !== '', fn ($query) => $this->applySearch($query, $search))
             ->when($tab === 'pending', fn ($query) => $this->pendingReview($query, $event))
             ->when($tab === 'final', fn ($query) => $this->awaitingFinalSubmission($query, $event))
             ->when($tab === 'review', fn ($query) => $this->finalReview($query, $event))
@@ -43,13 +45,14 @@ class EventRegistrationController extends Controller
             'events' => Event::orderBy('code')->get(),
             'registrations' => $registrations,
             'tab' => $tab,
+            'search' => $search,
             'counts' => [
-                'pending' => $this->pendingReview($event->registrations(), $event)->count(),
-                'final' => $this->awaitingFinalSubmission($event->registrations(), $event)->count(),
-                'review' => $this->finalReview($event->registrations(), $event)->count(),
+                'pending' => $this->pendingReview($this->searchableRegistrations($event, $search), $event)->count(),
+                'final' => $this->awaitingFinalSubmission($this->searchableRegistrations($event, $search), $event)->count(),
+                'review' => $this->finalReview($this->searchableRegistrations($event, $search), $event)->count(),
                 'done' => $event->isFinalRoundPaidType()
-                    ? $event->registrations()->where('status', 'paid')->where('payment_status', 'confirmed')->count()
-                    : $event->registrations()->whereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_APPROVED))->count(),
+                    ? $this->searchableRegistrations($event, $search)->where('status', 'paid')->where('payment_status', 'confirmed')->count()
+                    : $this->searchableRegistrations($event, $search)->whereHas('finalRegistration', fn ($query) => $query->where('status', FinalRegistration::STATUS_APPROVED))->count(),
             ],
         ]);
     }
@@ -246,5 +249,34 @@ class EventRegistrationController extends Controller
             FinalRegistration::STATUS_INVITED,
             FinalRegistration::STATUS_SUBMITTED,
         ]));
+    }
+
+    private function searchableRegistrations(Event $event, string $search)
+    {
+        $query = $event->registrations();
+
+        if ($search !== '') {
+            $this->applySearch($query, $search);
+        }
+
+        return $query;
+    }
+
+    private function applySearch($query, string $search): void
+    {
+        $like = '%'.str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $search).'%';
+        $operator = DB::connection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+
+        $query->where(function ($query) use ($like, $operator): void {
+            $query
+                ->where('registration_code', $operator, $like)
+                ->orWhere('team_name', $operator, $like)
+                ->orWhere('contact_email', $operator, $like)
+                ->orWhereHas('participants', fn ($query) => $query
+                    ->where('is_leader', true)
+                    ->where('email', $operator, $like))
+                ->orWhereHas('payment', fn ($query) => $query->where('trx_id', $operator, $like))
+                ->orWhereHas('finalRegistration', fn ($query) => $query->where('trx_id', $operator, $like));
+        });
     }
 }

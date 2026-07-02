@@ -52,11 +52,15 @@
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-white/36">Event Dates</p>
-                        <p class="mt-2 text-sm font-semibold text-white">July 24-25, 2026</p>
+                        <p class="mt-2 text-sm font-semibold text-white">10 AM, 24 July - 10 AM, 25 July, 2026</p>
                     </div>
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-white/36">Location</p>
                         <p class="mt-2 text-sm font-semibold text-white">IUT Premises, K B Bazar Rd, Gazipur 1704</p>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-white/36">Final Fee</p>
+                        <p class="mt-2 text-sm font-semibold text-white">2500 BDT per team</p>
                     </div>
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-white/36">Registration</p>
@@ -104,8 +108,8 @@
                         <p class="mt-2 text-sm leading-7 text-white/62">A fast-paced online screening round lasting <strong class="text-white">4 hours</strong>.</p>
                     </div>
                     <div class="rounded-lg border border-volt/20 bg-volt/10 p-5">
-                        <p class="text-sm font-semibold text-white">Phase 2: Main Development Sprint</p>
-                        <p class="mt-2 text-sm leading-7 text-white/62">An intense, on-site development sprint lasting <strong class="text-white">8 hours</strong>, where qualifying teams will build their solutions under pressure.</p>
+                        <p class="text-sm font-semibold text-white">Phase 2: 24-hour Final Challenge</p>
+                        <p class="mt-2 text-sm leading-7 text-white/62">An intense, on-site challenge lasting <strong class="text-white">24 hours</strong>, starting at 10:00 AM on 24 July and leading into final judgement from 10:00 AM on 25 July.</p>
                     </div>
                 </div>
             </section>
