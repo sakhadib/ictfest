@@ -62,6 +62,7 @@
                         $isSubmitted = in_array($registration->finalRegistration?->status, ['submitted', 'approved'], true);
                         $canSubmit = $isSubmitted || $remainingSlots > 0;
                         $selectedPackage = old('payment_package', $registration->finalRegistration?->payment_package);
+                        $selectedMethod = old('payment_method', $registration->payment?->method ?? 'bkash');
                     @endphp
 
                     <details class="group rounded-lg border border-white/10 bg-white/[.035]">
@@ -122,19 +123,18 @@
                                         <div class="mt-5 rounded-lg border border-white/10 bg-black/15 p-4">
                                             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                                 <div>
-                                                    <p class="text-xs font-semibold uppercase tracking-[.18em] text-white/38">bKash Send Money Recipient</p>
-                                                    <p class="mt-2 text-sm font-semibold text-white">{{ $currentBkashRecipient->recipient_name }}</p>
-                                                    <p class="mt-1 text-3xl font-semibold tracking-wide text-white" data-bkash-number="{{ $currentBkashRecipient->bkash_number }}">{{ $currentBkashRecipient->bkash_number }}</p>
+                                                    <p class="text-xs font-semibold uppercase tracking-[.18em] text-white/38">Send Money Recipient</p>
+                                                    <p class="mt-2 text-3xl font-semibold tracking-wide text-white" data-bkash-number="{{ $currentBkashRecipient->bkash_number }}">{{ $currentBkashRecipient->bkash_number }}</p>
                                                 </div>
                                                 <button type="button" data-copy-bkash="{{ $currentBkashRecipient->bkash_number }}" class="inline-flex items-center justify-center rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-volt">
                                                     Copy Number
                                                 </button>
                                             </div>
-                                            <p class="mt-3 text-sm text-white/50">Use bKash Send Money only. This exact number will be recorded with your transaction for verification.</p>
+                                            <p class="mt-3 text-sm text-white/50">Use bKash or Nagad Send Money. This exact number and selected method will be recorded with your transaction for verification.</p>
                                         </div>
                                     @else
                                         <div class="mt-5 rounded-lg border border-amber-300/25 bg-amber-400/10 p-4">
-                                            <p class="text-sm font-semibold text-amber-100">bKash recipient is not available right now.</p>
+                                            <p class="text-sm font-semibold text-amber-100">Payment recipient is not available right now.</p>
                                             <p class="mt-2 text-sm leading-6 text-white/54">Please wait for the event team to publish the payment number before submitting final registration.</p>
                                         </div>
                                     @endif
@@ -142,12 +142,17 @@
                                     @error('iupc_bkash_recipient_payload')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
 
                                     <div class="mt-5 grid gap-4 md:grid-cols-2">
-                                        <div class="rounded-lg border border-white/10 bg-black/15 p-4">
+                                        <div>
                                             <span class="{{ $labelClass }}">Payment Method</span>
-                                            <div class="mt-3 flex min-h-16 items-center rounded-lg border border-volt/35 bg-volt/10 px-4 py-3">
-                                                <img src="{{ asset('assets/bkash.webp') }}" alt="bKash" class="h-8 w-auto">
-                                                <span class="ml-3 text-sm font-semibold text-white">bKash selected</span>
+                                            <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                                                @foreach (['bkash' => 'bKash', 'nagad' => 'Nagad'] as $value => $label)
+                                                    <label class="flex min-h-16 cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-black/15 px-4 py-3 transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10 hover:border-white/24">
+                                                        <input type="radio" name="payment_method" value="{{ $value }}" @checked($selectedMethod === $value) class="sr-only">
+                                                        <img src="{{ asset($value === 'bkash' ? 'assets/bkash.webp' : 'assets/nagad.png') }}" alt="{{ $label }}" class="h-8 w-auto">
+                                                    </label>
+                                                @endforeach
                                             </div>
+                                            @error('payment_method')<p class="mt-2 text-xs text-red-300">{{ $message }}</p>@enderror
                                         </div>
                                         <label>
                                             <span class="{{ $labelClass }}">Transaction ID</span>

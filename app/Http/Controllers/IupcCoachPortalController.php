@@ -78,6 +78,7 @@ class IupcCoachPortalController extends Controller
             'team_name' => ['required', 'string', 'max:255'],
             'payment_package' => ['required', Rule::in(array_keys(IupcCoachPortalService::PACKAGE_AMOUNTS))],
             'iupc_bkash_recipient_payload' => ['required', 'string'],
+            'payment_method' => ['required', Rule::in(['bkash', 'nagad'])],
             'trx_id' => ['required', 'string', 'max:255'],
             'participants' => ['required', 'array', 'size:3'],
             'participants.*.id' => ['required', 'integer'],
@@ -141,7 +142,7 @@ class IupcCoachPortalController extends Controller
                 ['registration_id' => $registration->id],
                 [
                     'amount' => $amount,
-                    'method' => 'bkash',
+                    'method' => $validated['payment_method'],
                     'iupc_bkash_recipient_id' => $bkashRecipient->id,
                     'recipient_name' => $bkashRecipient->recipient_name,
                     'recipient_number' => $bkashRecipient->bkash_number,

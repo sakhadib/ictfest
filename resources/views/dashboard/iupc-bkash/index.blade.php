@@ -1,14 +1,14 @@
 @extends('layouts.dashboard')
 
-@section('title', 'IUPC bKash')
-@section('page-title', 'IUPC bKash')
-@section('page-subtitle', 'Manage the rotating bKash send money recipient shown in the coach portal.')
+@section('title', 'IUPC Payment Numbers')
+@section('page-title', 'IUPC Payment Numbers')
+@section('page-subtitle', 'Manage the rotating send money recipient shown in the coach portal.')
 
 @section('content')
     <div class="grid gap-6 xl:grid-cols-[22rem_1fr]">
         <section class="h-fit rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <p class="text-sm font-medium text-slate-500">Add recipient</p>
-            <h2 class="mt-1 text-lg font-semibold text-slate-950">New bKash number</h2>
+            <h2 class="mt-1 text-lg font-semibold text-slate-950">New recipient number</h2>
 
             @if (session('status'))
                 <div class="mt-5 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
@@ -30,7 +30,7 @@
                     @error('recipient_name')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </label>
                 <label>
-                    <span class="text-xs font-semibold uppercase tracking-wide text-slate-500">bKash Number</span>
+                    <span class="text-xs font-semibold uppercase tracking-wide text-slate-500">Recipient Number</span>
                     <input name="bkash_number" value="{{ old('bkash_number') }}" placeholder="017XXXXXXXX" class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-primary/50">
                     @error('bkash_number')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     <p class="mt-2 text-xs leading-5 text-slate-500">Accepted formats: 017..., +88017..., 88017.... It will be stored as 01XXXXXXXXX.</p>
@@ -46,7 +46,7 @@
                     <p class="mt-2 text-lg font-semibold text-slate-950">{{ $currentRecipient->recipient_name }}</p>
                     <p class="mt-1 text-3xl font-semibold tracking-wide text-primary">{{ $currentRecipient->bkash_number }}</p>
                 @else
-                    <p class="mt-2 text-sm leading-6 text-slate-600">No active bKash recipient is available. The coach portal will show a payment unavailable notice.</p>
+                    <p class="mt-2 text-sm leading-6 text-slate-600">No active payment recipient is available. The coach portal will show a payment unavailable notice.</p>
                 @endif
             </div>
         </section>
@@ -56,7 +56,7 @@
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p class="text-sm font-medium text-slate-500">Rotation pool</p>
-                        <h2 class="mt-1 text-lg font-semibold text-slate-950">bKash recipients</h2>
+                        <h2 class="mt-1 text-lg font-semibold text-slate-950">Payment recipients</h2>
                     </div>
                     <p class="text-sm text-slate-500">Hourly rotation uses Bangladesh time. Manual deactivation auto-reactivates at 12:15 AM next day.</p>
                 </div>
@@ -74,7 +74,7 @@
                                     <input name="recipient_name" value="{{ old("recipients.$recipient->id.recipient_name", $recipient->recipient_name) }}" class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold outline-none focus:border-primary/50">
                                 </label>
                                 <label>
-                                    <span class="text-xs font-semibold uppercase tracking-wide text-slate-500">bKash Number</span>
+                                    <span class="text-xs font-semibold uppercase tracking-wide text-slate-500">Recipient Number</span>
                                     <input name="bkash_number" value="{{ old("recipients.$recipient->id.bkash_number", $recipient->bkash_number) }}" class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold tracking-wide outline-none focus:border-primary/50">
                                 </label>
                                 <label>
@@ -134,7 +134,7 @@
                     </article>
                 @empty
                     <div class="px-5 py-12 text-center text-slate-500">
-                        No bKash recipients added yet.
+                        No payment recipients added yet.
                     </div>
                 @endforelse
             </div>
