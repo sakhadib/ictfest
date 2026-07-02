@@ -6,7 +6,7 @@
 * There are no rank limits, players of any ranks can register  
 * All players playing in the tournament must be registered through the provided Google Form.  
 * The tournament format features head-to-head matches between individual players.  
-* **Registration Deadline is July 03, 2026, 11:59 PM** 
+* **Registration Deadline is 15 July, 2026, 11:59 PM**
 
 **Reporting Time \- 09:00 AM**  
 **Tournament Starts \- 10:00 AM**  

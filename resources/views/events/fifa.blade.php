@@ -28,20 +28,20 @@
 
     $facts = [
         ['label' => 'Registration Fee', 'value' => '200 BDT', 'icon' => 'fa-ticket'],
-        ['label' => 'Registration Window', 'value' => '18 June - 3 July', 'icon' => 'fa-calendar-plus'],
+        ['label' => 'Registration Window', 'value' => '18 June - 15 July, 11:59 PM', 'icon' => 'fa-calendar-plus'],
         ['label' => 'Player Type', 'value' => '1 member tournament', 'icon' => 'fa-user'],
         ['label' => 'Venue', 'value' => 'Auditorium', 'icon' => 'fa-location-dot'],
     ];
 
     $timeline = [
         [
-            'date' => '18 June - 3 July',
+            'date' => '18 June - 15 July',
             'label' => 'Registration',
             'accent' => 'ember',
             'icon' => 'fa-pen-to-square',
             'items' => [
                 ['value' => '18 June', 'label' => 'Opens', 'icon' => 'fa-door-open'],
-                ['value' => '3 July', 'label' => 'Closes', 'icon' => 'fa-lock'],
+                ['value' => '15 July, 11:59 PM', 'label' => 'Closes', 'icon' => 'fa-lock'],
             ],
         ],
         [

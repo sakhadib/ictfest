@@ -96,7 +96,7 @@
             'accent' => 'ember',
             'fee' => '200 BDT',
             'team' => '1 member',
-            'window' => '18 June - 3 July',
+            'window' => '18 June - 15 July',
             'date' => '24 July, 9 AM - 6 PM',
             'venue' => 'Auditorium',
             'signal' => '64-player PC controller-only tournament, escalating to best-of-five finals.',

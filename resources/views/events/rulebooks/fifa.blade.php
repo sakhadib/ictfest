@@ -65,7 +65,7 @@
                     </div>
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-white/36">Deadline</p>
-                        <p class="mt-2 text-sm font-semibold text-white">July 03, 2026, 11:59 PM</p>
+                        <p class="mt-2 text-sm font-semibold text-white">15 July, 2026, 11:59 PM</p>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                     <li>There are no rank limits. Players of any rank can register.</li>
                     <li>All players must be registered through the provided form.</li>
                     <li>The tournament format features head-to-head matches between individual players.</li>
-                    <li><strong class="text-white">Registration deadline:</strong> July 03, 2026, 11:59 PM.</li>
+                    <li><strong class="text-white">Registration deadline:</strong> 15 July, 2026, 11:59 PM.</li>
                 </ul>
             </section>
 
