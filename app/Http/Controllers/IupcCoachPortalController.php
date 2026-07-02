@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Actions\SendRegistrationTelegramNotification;
 use App\Models\FinalRegistration;
+use App\Models\IupcBkashRecipient;
 use App\Models\IupcCoachActivityLog;
 use App\Models\IupcCoachLink;
 use App\Models\Registration;
 use App\Rules\StrictEmail;
+use App\Services\IupcBkashRecipientService;
 use App\Services\IupcCoachPortalService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -20,6 +23,7 @@ class IupcCoachPortalController extends Controller
 {
     public function __construct(
         private readonly IupcCoachPortalService $portal,
+        private readonly IupcBkashRecipientService $bkashRecipients,
     ) {
     }
 
@@ -34,6 +38,8 @@ class IupcCoachPortalController extends Controller
             ->orderBy('team_name')
             ->get();
 
+        $currentBkashRecipient = $this->bkashRecipients->current();
+
         return view('iupc-coach.portal', [
             'link' => $link->loadMissing('coach'),
             'allocation' => $allocation,
@@ -42,6 +48,14 @@ class IupcCoachPortalController extends Controller
             'remainingSlots' => $this->portal->remainingSlots($allocation),
             'tshirtSizes' => IupcCoachPortalService::TSHIRT_SIZES,
             'packageAmounts' => IupcCoachPortalService::PACKAGE_AMOUNTS,
+            'currentBkashRecipient' => $currentBkashRecipient,
+            'currentBkashPayload' => $currentBkashRecipient
+                ? Crypt::encryptString(json_encode([
+                    'id' => $currentBkashRecipient->id,
+                    'name' => $currentBkashRecipient->recipient_name,
+                    'number' => $currentBkashRecipient->bkash_number,
+                ], JSON_THROW_ON_ERROR))
+                : null,
             'logs' => $allocation->activityLogs()
                 ->with(['coachLink.coach', 'registration'])
                 ->latest()
@@ -63,7 +77,7 @@ class IupcCoachPortalController extends Controller
         $validated = $request->validate([
             'team_name' => ['required', 'string', 'max:255'],
             'payment_package' => ['required', Rule::in(array_keys(IupcCoachPortalService::PACKAGE_AMOUNTS))],
-            'payment_method' => ['required', Rule::in(['bkash', 'nagad'])],
+            'iupc_bkash_recipient_payload' => ['required', 'string'],
             'trx_id' => ['required', 'string', 'max:255'],
             'participants' => ['required', 'array', 'size:3'],
             'participants.*.id' => ['required', 'integer'],
@@ -81,9 +95,25 @@ class IupcCoachPortalController extends Controller
         ]);
 
         $amount = IupcCoachPortalService::PACKAGE_AMOUNTS[$validated['payment_package']];
+        $recipientPayload = $this->decryptBkashRecipientPayload($validated['iupc_bkash_recipient_payload']);
+        $bkashRecipient = IupcBkashRecipient::query()
+            ->whereKey($recipientPayload['id'])
+            ->where('is_enabled', true)
+            ->first();
+
+        if (
+            ! $bkashRecipient ||
+            $bkashRecipient->recipient_name !== $recipientPayload['name'] ||
+            $bkashRecipient->bkash_number !== $recipientPayload['number']
+        ) {
+            throw ValidationException::withMessages([
+                'payment' => 'The selected bKash recipient changed. Please refresh the page and use the current number.',
+            ]);
+        }
+
         $before = $this->registrationSnapshot($registration);
 
-        DB::transaction(function () use ($allocation, $registration, $validated, $amount, $link, $request, $before): void {
+        DB::transaction(function () use ($allocation, $registration, $validated, $amount, $bkashRecipient, $link, $request, $before): void {
             $registration = Registration::query()
                 ->with(['participants', 'coach', 'payment', 'finalRegistration', 'event'])
                 ->whereKey($registration->id)
@@ -111,7 +141,10 @@ class IupcCoachPortalController extends Controller
                 ['registration_id' => $registration->id],
                 [
                     'amount' => $amount,
-                    'method' => $validated['payment_method'],
+                    'method' => 'bkash',
+                    'iupc_bkash_recipient_id' => $bkashRecipient->id,
+                    'recipient_name' => $bkashRecipient->recipient_name,
+                    'recipient_number' => $bkashRecipient->bkash_number,
                     'trx_id' => $validated['trx_id'],
                     'status' => 'submitted',
                     'submitted_at' => now(),
@@ -205,6 +238,35 @@ class IupcCoachPortalController extends Controller
             ->first();
     }
 
+    private function decryptBkashRecipientPayload(string $payload): array
+    {
+        try {
+            $decoded = json_decode(Crypt::decryptString($payload), true, flags: JSON_THROW_ON_ERROR);
+        } catch (\Throwable) {
+            throw ValidationException::withMessages([
+                'payment' => 'The bKash recipient could not be verified. Please refresh the page and try again.',
+            ]);
+        }
+
+        if (
+            ! is_array($decoded) ||
+            ! isset($decoded['id'], $decoded['name'], $decoded['number']) ||
+            ! is_numeric($decoded['id']) ||
+            ! is_string($decoded['name']) ||
+            ! preg_match('/^01[3-9]\d{8}$/', (string) $decoded['number'])
+        ) {
+            throw ValidationException::withMessages([
+                'payment' => 'The bKash recipient could not be verified. Please refresh the page and try again.',
+            ]);
+        }
+
+        return [
+            'id' => (int) $decoded['id'],
+            'name' => $decoded['name'],
+            'number' => $decoded['number'],
+        ];
+    }
+
     private function registrationSnapshot(Registration $registration): array
     {
         $registration->loadMissing(['participants', 'coach', 'payment', 'finalRegistration']);
@@ -213,7 +275,7 @@ class IupcCoachPortalController extends Controller
             'team_name' => $registration->team_name,
             'status' => $registration->status,
             'payment_status' => $registration->payment_status,
-            'payment' => $registration->payment?->only(['amount', 'method', 'trx_id', 'status']),
+            'payment' => $registration->payment?->only(['amount', 'method', 'recipient_name', 'recipient_number', 'trx_id', 'status']),
             'final_registration' => $registration->finalRegistration?->only(['trx_id', 'status', 'payment_package', 'payment_amount']),
             'participants' => $registration->participants
                 ->map(fn ($participant): array => $participant->only(['id', 'full_name', 'email', 'phone', 'student_id', 'tshirt_size']))

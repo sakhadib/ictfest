@@ -80,6 +80,10 @@
                             <span>IUPC Slots</span>
                             <span class="text-xs opacity-50">Coach</span>
                         </a>
+                        <a href="{{ route('dashboard.iupc-bkash.index') }}" class="flex items-center justify-between rounded-lg px-3 py-2.5 font-medium transition {{ request()->routeIs('dashboard.iupc-bkash.*') ? 'bg-white text-coal shadow-lg shadow-black/10' : 'text-white/68 hover:bg-white/10 hover:text-white' }}">
+                            <span>IUPC bKash</span>
+                            <span class="text-xs opacity-50">Rotate</span>
+                        </a>
                     </div>
                 </div>
 

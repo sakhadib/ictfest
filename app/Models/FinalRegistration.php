@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'registration_id',
     'trx_id',
     'status',
+    'payment_package',
+    'payment_amount',
 ])]
 class FinalRegistration extends Model
 {

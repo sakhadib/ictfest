@@ -307,3 +307,34 @@ Valorant : 50k BDT
    2. delivery : success / fail of each email sent to participants.
 2. Pages in dashboard to see the previous history and sent success / failure details
 3. This notification email will have lowest priority in the queue. suppose i sent a notif to 1000 participants. 1000 emails queued. but someone registered that moment on any event. the sms, email for the registration and telegram commands needs to get top priority.
+
+
+
+
+=====================================
+
+
+Add a New system for bkash on IUPC (remember we left the recipient numbers blank)
+
+so we need to have a system in dashboard where we can include bkash number and recipient names. and a button to active / deactive it. 
+
+Add / remove numbers is possible.
+
+if any admin deactivates a number it auto reactivates at 12:15 AM next day. 
+
+all the active numbers gets shuffled as current sequentially every hour. like 7:00 - 8:00 one number then 8:00 - 9:00 next number... like this.
+
+Manual override of active and current number is possible. 
+
+if a current number is deactivated then, next in the row will be immidiately selected as current.
+
+at a time only one number can be active. 
+
+If no numbers then system should not break. handle the edge cases.
+
+on the coach portal the current active number will be shown. no nagad option, remove method selector, all will be bkash selected internally.
+
+on coach portal a copy button to copy the bkash number to clipboard. be careful, do not copy wrong numbers, huge steak on it.
+
+All times are Bangladesh Standerd Time
+
