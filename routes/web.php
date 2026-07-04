@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\IupcBkashRecipientController;
 use App\Http\Controllers\Dashboard\IupcSlotController;
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\Dashboard\StatusLookupController;
+use App\Http\Controllers\Dashboard\TshirtController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\EventRulebookController;
 use App\Http\Controllers\IupcCoachPortalController;
@@ -85,6 +86,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
     Route::get('/dashboard', fn () => redirect()->route('dashboard.users.index'))->name('dashboard');
     Route::get('/dashboard/status', [StatusLookupController::class, 'index'])->name('dashboard.status.index');
+    Route::get('/dashboard/tshirt', [TshirtController::class, 'index'])->name('dashboard.tshirts.index');
     Route::get('/dashboard/reports', [ReportController::class, 'index'])->name('dashboard.reports.index');
     Route::get('/dashboard/reports/download', [ReportController::class, 'download'])->name('dashboard.reports.download');
     Route::get('/dashboard/reports/complete-pdf', [ReportController::class, 'completePdf'])->name('dashboard.reports.complete-pdf');

@@ -60,6 +60,10 @@
                             <span>Status</span>
                             <span class="text-xs opacity-50">Lookup</span>
                         </a>
+                        <a href="{{ route('dashboard.tshirts.index') }}" class="flex items-center justify-between rounded-lg px-3 py-2.5 font-medium transition {{ request()->routeIs('dashboard.tshirts.*') ? 'bg-white text-coal shadow-lg shadow-black/10' : 'text-white/68 hover:bg-white/10 hover:text-white' }}">
+                            <span>Tshirt</span>
+                            <span class="text-xs opacity-50">Sizes</span>
+                        </a>
                         <a href="{{ route('dashboard.reports.index') }}" class="flex items-center justify-between rounded-lg px-3 py-2.5 font-medium transition {{ request()->routeIs('dashboard.reports.*') ? 'bg-white text-coal shadow-lg shadow-black/10' : 'text-white/68 hover:bg-white/10 hover:text-white' }}">
                             <span>Report</span>
                             <span class="text-xs opacity-50">CSV</span>
