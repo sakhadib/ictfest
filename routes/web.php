@@ -188,6 +188,7 @@ Route::get('/iupc', function () {
 Route::get('/iupc/slots', function () {
     $allocations = IupcUniversityAllocation::query()
         ->where('is_active', true)
+        ->where('slot_count', '>', 0)
         ->orderByDesc('slot_count')
         ->orderBy('name')
         ->get();
