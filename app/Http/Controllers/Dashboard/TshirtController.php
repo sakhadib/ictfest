@@ -10,7 +10,7 @@ use Illuminate\View\View;
 
 class TshirtController extends Controller
 {
-    private const STANDARD_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+    private const STANDARD_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'];
 
     public function index(): View
     {

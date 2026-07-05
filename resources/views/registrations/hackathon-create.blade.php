@@ -55,7 +55,7 @@
                     <div class="grid h-10 w-10 place-items-center rounded-md bg-ember/10 text-ember"><i class="fa-solid fa-receipt"></i></div>
                     <div>
                         <p class="text-xs uppercase tracking-[.16em] text-white/32">Final Round Fee</p>
-                        <p class="mt-1 text-sm font-medium text-white">2500 BDT per selected team</p>
+                        <p class="mt-1 text-sm font-medium text-white">2000 BDT per selected team</p>
                     </div>
                 </div>
             </div>

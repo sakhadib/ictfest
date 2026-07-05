@@ -37,7 +37,7 @@
             'logo' => 'hackathon.png',
             'icon' => 'fa-plug-circle-bolt',
             'accent' => 'ember',
-            'fee' => 'Free preliminary, 2500 BDT final',
+            'fee' => 'Free preliminary, 2000 BDT final',
             'team' => '1-3 members',
             'window' => '19 June - 3 July',
             'date' => 'Preli: 9 July, 6-10 PM; Final: 10 AM 24 July - 10 AM 25 July',

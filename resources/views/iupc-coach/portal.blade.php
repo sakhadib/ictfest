@@ -203,7 +203,7 @@
                                                 </div>
                                                 <div class="mt-4">
                                                     <span class="{{ $labelClass }}">T-shirt Size</span>
-                                                    <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+                                                    <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
                                                         @foreach($tshirtSizes as $size)
                                                             <label class="flex cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/[.035] px-3 py-3 text-sm text-white transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10">
                                                                 <input type="radio" name="participants[{{ $participantIndex }}][tshirt_size]" value="{{ $size }}" @checked(old("participants.$participantIndex.tshirt_size", $participant->tshirt_size) === $size) class="sr-only">
@@ -247,7 +247,7 @@
                                             </div>
                                             <div class="mt-4">
                                                 <span class="{{ $labelClass }}">Coach T-shirt Size</span>
-                                                <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+                                                <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
                                                     @foreach($tshirtSizes as $size)
                                                         <label class="flex cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/[.035] px-3 py-3 text-sm text-white transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10">
                                                             <input type="radio" name="coach[tshirt_size]" value="{{ $size }}" @checked(old('coach.tshirt_size', $registration->coach->tshirt_size) === $size) class="sr-only">

@@ -20,7 +20,7 @@ class IupcCoachPortalService
         self::WITHOUT_COACH_KIT => 4099,
     ];
 
-    public const TSHIRT_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+    public const TSHIRT_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'];
 
     public function iupcEvent(): Event
     {

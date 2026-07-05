@@ -62,16 +62,14 @@ class EventRegistrationController extends Controller
         $this->ensureRegistrationBelongsToEvent($event, $registration);
 
         $stage = DB::transaction(function () use ($event, $registration): ?string {
-            if ($event->isFinalRoundPaidType() && $registration->status === 'pending') {
-                $registration->update([
-                    'status' => 'verified',
-                    'payment_status' => 'unpaid',
-                ]);
-
-                return 'final_qualified';
-            }
-
-            if ($event->isFinalRoundPaidType() && $registration->payment_status === 'submitted') {
+            if (
+                $event->isFinalRoundPaidType() &&
+                $registration->finalRegistration?->status === FinalRegistration::STATUS_SUBMITTED &&
+                (
+                    $registration->payment_status === 'submitted' ||
+                    $registration->payment?->status === 'submitted'
+                )
+            ) {
                 $registration->update([
                     'status' => 'paid',
                     'payment_status' => 'confirmed',
@@ -87,6 +85,15 @@ class EventRegistrationController extends Controller
                 ]);
 
                 return 'final_payment_confirmed';
+            }
+
+            if ($event->isFinalRoundPaidType() && $registration->status === 'pending') {
+                $registration->update([
+                    'status' => 'verified',
+                    'payment_status' => 'unpaid',
+                ]);
+
+                return 'final_qualified';
             }
 
             if (
@@ -183,10 +190,18 @@ class EventRegistrationController extends Controller
     {
         $this->ensureRegistrationBelongsToEvent($event, $registration);
 
-        DB::transaction(function () use ($registration): void {
+        DB::transaction(function () use ($event, $registration): void {
+            $registrationStatus = 'pending';
+            $paymentStatus = $registration->payment ? 'submitted' : 'unpaid';
+
+            if ($event->isFinalRoundPaidType() && $registration->finalRegistration) {
+                $registrationStatus = 'verified';
+                $paymentStatus = $registration->payment ? 'submitted' : 'unpaid';
+            }
+
             $registration->update([
-                'status' => 'pending',
-                'payment_status' => $registration->payment ? 'submitted' : 'unpaid',
+                'status' => $registrationStatus,
+                'payment_status' => $paymentStatus,
             ]);
 
             $registration->payment?->update([

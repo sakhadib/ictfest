@@ -24,7 +24,7 @@
 @php
     $facts = [
         ['label' => 'Preliminary Fee', 'value' => 'No fees', 'icon' => 'fa-ticket'],
-        ['label' => 'Final Round Fee', 'value' => '2500 BDT per team', 'icon' => 'fa-receipt'],
+        ['label' => 'Final Round Fee', 'value' => '2000 BDT per team', 'icon' => 'fa-receipt'],
         ['label' => 'Team Size', 'value' => '1-3 members', 'icon' => 'fa-users'],
         ['label' => 'Location', 'value' => 'AB2 301, 302 & Auditorium', 'icon' => 'fa-location-dot'],
     ];

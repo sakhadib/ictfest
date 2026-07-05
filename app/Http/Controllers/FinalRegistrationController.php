@@ -13,7 +13,7 @@ use Illuminate\View\View;
 
 class FinalRegistrationController extends Controller
 {
-    private const TSHIRT_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+    private const TSHIRT_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'];
 
     public function show(string $registration_code): View|RedirectResponse
     {
@@ -165,7 +165,7 @@ class FinalRegistrationController extends Controller
     private function finalRoundAmount(Registration $registration): int
     {
         return match ($registration->event?->code) {
-            '02' => 2500,
+            '02' => 2000,
             '04' => 700,
             default => (int) ($registration->event?->amount ?? 0),
         };

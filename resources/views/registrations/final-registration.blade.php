@@ -8,7 +8,7 @@
     $selectedPaymentMethod = old('payment_method', $registration->payment?->method);
     $selectedCoachSize = old('coach.tshirt_size', $registration->coach?->tshirt_size);
     $paymentInfo = [
-        '02' => ['amount' => '2500 BDT', 'number' => '01746145346'],
+        '02' => ['amount' => '2000 BDT', 'number' => '01746145346'],
         '04' => ['amount' => '700 BDT', 'number' => '01941435623'],
     ][$registration->event?->code] ?? null;
 
@@ -203,7 +203,7 @@
 
                                 <div>
                                     <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">T-shirt Size</span>
-                                    <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+                                    <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
                                         @foreach($tshirtSizes as $size)
                                             <label class="flex cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/[.035] px-3 py-3 text-sm text-white transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10">
                                                 <input type="radio" name="participants[{{ $participantIndex }}][tshirt_size]" value="{{ $size }}" @checked(old("participants.$participantIndex.tshirt_size", $participant->tshirt_size) === $size) class="sr-only">
@@ -256,7 +256,7 @@
 
                                 <div>
                                     <span class="text-xs font-medium uppercase tracking-[.16em] text-white/38">T-shirt Size</span>
-                                    <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+                                    <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
                                         @foreach($tshirtSizes as $size)
                                             <label class="flex cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/[.035] px-3 py-3 text-sm text-white transition has-[:checked]:border-volt/50 has-[:checked]:bg-volt/10">
                                                 <input type="radio" name="coach[tshirt_size]" value="{{ $size }}" @checked($selectedCoachSize === $size) class="sr-only">

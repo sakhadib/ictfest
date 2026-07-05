@@ -60,7 +60,7 @@
                     </div>
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-white/36">Final Fee</p>
-                        <p class="mt-2 text-sm font-semibold text-white">2500 BDT per team</p>
+                        <p class="mt-2 text-sm font-semibold text-white">2000 BDT per team</p>
                     </div>
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-white/36">Registration</p>

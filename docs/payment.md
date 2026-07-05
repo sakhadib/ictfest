@@ -1,6 +1,6 @@
 ## Type 1 EVENT : Free at preli, Paid at final
 
-Hackathon - 01746145346 - bkash and nagad - Sendmoney - 2500 BDT
+Hackathon - 01746145346 - bkash and nagad - Sendmoney - 2000 BDT
 GameJam - 01941435623 - bkash and nagad - sendmoney - 700 BDT
 
 

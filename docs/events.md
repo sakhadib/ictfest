@@ -22,7 +22,7 @@
 **Rulebook: \[Insert link here\]**
 
 **Event Name: Agentic AI Hackathon**  
-**Registration Fees:** No fees for preliminary round, 2500 BDT for Final Round
+**Registration Fees:** No fees for preliminary round, 2000 BDT for Final Round
 **Registration Window:** 18 June \- 3 July  
 **Team Size:** 1-3 members  
 **Event Timeline**: 18 June \- 25 July 
