@@ -7,6 +7,7 @@ use App\Jobs\SendDashboardNotificationEmail;
 use App\Models\Delivery;
 use App\Models\Event;
 use App\Models\Notification as EmailNotification;
+use App\Models\Participant;
 use App\Models\Registration;
 use App\Rules\StrictEmail;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +22,11 @@ class EmailController extends Controller
     private const DRAFT_SESSION_KEY = 'dashboard_email_draft';
 
     private const REGISTRATION_STATUSES = ['pending', 'verified', 'paid', 'rejected'];
+
+    private const RECIPIENT_SCOPES = [
+        'team_lead' => 'Only Team Lead',
+        'all_participants' => 'All Participant',
+    ];
 
     public function index(): RedirectResponse
     {
@@ -63,6 +69,7 @@ class EmailController extends Controller
             'draft' => $draft,
             'events' => $this->eventsWithRecipientCounts(),
             'registrationStatuses' => self::REGISTRATION_STATUSES,
+            'recipientScopes' => self::RECIPIENT_SCOPES,
             'statusEmailCounts' => $this->statusEmailCounts(),
         ]);
     }
@@ -85,6 +92,7 @@ class EmailController extends Controller
             'event_codes.*' => ['string', Rule::exists('events', 'code')],
             'registration_statuses' => [$mode === 'events' ? 'required' : 'nullable', 'array'],
             'registration_statuses.*' => ['string', Rule::in(self::REGISTRATION_STATUSES)],
+            'recipient_scope' => [$mode === 'events' ? 'required' : 'nullable', Rule::in(array_keys(self::RECIPIENT_SCOPES))],
             'custom_email' => [$mode === 'custom' ? 'required' : 'nullable', new \App\Rules\StrictEmail(), 'max:255'],
         ]);
 
@@ -92,6 +100,7 @@ class EmailController extends Controller
             'mode' => $validated['mode'],
             'event_codes' => $validated['mode'] === 'events' ? array_values($validated['event_codes'] ?? []) : [],
             'registration_statuses' => $validated['mode'] === 'events' ? array_values($validated['registration_statuses'] ?? []) : [],
+            'recipient_scope' => $validated['mode'] === 'events' ? $validated['recipient_scope'] : null,
             'custom_email' => $validated['mode'] === 'custom' ? strtolower(trim($validated['custom_email'])) : null,
         ]);
 
@@ -112,7 +121,7 @@ class EmailController extends Controller
         if ($recipients->isEmpty()) {
             return redirect()
                 ->route('dashboard.emails.recipients')
-                ->withErrors(['event_codes' => 'No team lead emails were found for the selected event and status filters.']);
+                ->withErrors(['event_codes' => 'No recipient emails were found for the selected event, status, and recipient filters.']);
         }
 
         return view('dashboard.emails.review', [
@@ -120,6 +129,7 @@ class EmailController extends Controller
             'recipients' => $recipients,
             'selectedEvents' => $this->selectedEvents($draft),
             'selectedStatusLabels' => $this->selectedStatusLabels($draft),
+            'recipientScopeLabel' => $this->recipientScopeLabel($draft),
         ]);
     }
 
@@ -137,7 +147,7 @@ class EmailController extends Controller
         if ($recipients->isEmpty()) {
             return redirect()
                 ->route('dashboard.emails.recipients')
-                ->withErrors(['event_codes' => 'No team lead emails were found for the selected event and status filters.']);
+                ->withErrors(['event_codes' => 'No recipient emails were found for the selected event, status, and recipient filters.']);
         }
 
         $notification = DB::transaction(function () use ($draft, $recipients): EmailNotification {
@@ -149,6 +159,7 @@ class EmailController extends Controller
                 'event_codes' => $draft['mode'] === 'events' ? $draft['event_codes'] : null,
                 'metadata' => $draft['mode'] === 'events' ? [
                     'registration_statuses' => $draft['registration_statuses'] ?? [],
+                    'recipient_scope' => $draft['recipient_scope'] ?? 'team_lead',
                 ] : null,
                 'recipient_count' => $recipients->count(),
                 'status' => 'queued',
@@ -269,16 +280,27 @@ class EmailController extends Controller
     private function eventsWithRecipientCounts(): Collection
     {
         return Event::query()
-            ->withCount(['registrations as team_lead_email_count' => fn ($query) => $query
-                ->whereNotNull('contact_email')
-                ->where('contact_email', '!=', '')
-                ->selectRaw('count(distinct lower(contact_email))')])
             ->orderBy('code')
-            ->get();
+            ->get()
+            ->each(function (Event $event): void {
+                $event->team_lead_email_count = (int) Registration::query()
+                    ->whereBelongsTo($event)
+                    ->whereNotNull('contact_email')
+                    ->where('contact_email', '!=', '')
+                    ->selectRaw('count(distinct lower(contact_email)) as aggregate')
+                    ->value('aggregate');
+
+                $event->participant_email_count = (int) Participant::query()
+                    ->whereHas('registration', fn ($query) => $query->whereBelongsTo($event))
+                    ->whereNotNull('email')
+                    ->where('email', '!=', '')
+                    ->selectRaw('count(distinct lower(email)) as aggregate')
+                    ->value('aggregate');
+            });
     }
 
     /**
-     * @return array{subject?: string, body?: string, mode?: string, event_codes?: array<int, string>, registration_statuses?: array<int, string>, custom_email?: ?string}
+     * @return array{subject?: string, body?: string, mode?: string, event_codes?: array<int, string>, registration_statuses?: array<int, string>, recipient_scope?: ?string, custom_email?: ?string}
      */
     private function draft(Request $request): array
     {
@@ -330,6 +352,15 @@ class EmailController extends Controller
                 ->with('status', 'Select at least one registration status before reviewing the email.');
         }
 
+        if (
+            ($draft['mode'] ?? null) === 'events' &&
+            ! array_key_exists((string) ($draft['recipient_scope'] ?? ''), self::RECIPIENT_SCOPES)
+        ) {
+            return redirect()
+                ->route('dashboard.emails.recipients')
+                ->with('status', 'Select whether this email should go to team leads or all participants.');
+        }
+
         if (($draft['mode'] ?? null) === 'custom' && blank($draft['custom_email'] ?? null)) {
             return redirect()
                 ->route('dashboard.emails.recipients')
@@ -352,7 +383,11 @@ class EmailController extends Controller
             ]])->filter(fn (array $recipient): bool => StrictEmail::isValid($recipient['email']))->values();
         }
 
-        return $this->eventRecipients($draft['event_codes'] ?? [], $draft['registration_statuses'] ?? []);
+        return $this->eventRecipients(
+            $draft['event_codes'] ?? [],
+            $draft['registration_statuses'] ?? [],
+            (string) ($draft['recipient_scope'] ?? 'team_lead'),
+        );
     }
 
     /**
@@ -375,8 +410,28 @@ class EmailController extends Controller
      * @param  array<int, string>  $registrationStatuses
      * @return \Illuminate\Support\Collection<int, array{email: string, name: string}>
      */
-    private function eventRecipients(array $eventCodes, array $registrationStatuses): Collection
+    private function eventRecipients(array $eventCodes, array $registrationStatuses, string $recipientScope): Collection
     {
+        if ($recipientScope === 'all_participants') {
+            return Participant::query()
+                ->whereHas('registration', fn ($query) => $query
+                    ->whereIn('status', $registrationStatuses)
+                    ->whereHas('event', fn ($query) => $query->whereIn('code', $eventCodes)))
+                ->whereNotNull('email')
+                ->where('email', '!=', '')
+                ->orderBy('registration_id')
+                ->orderByDesc('is_leader')
+                ->orderBy('id')
+                ->get(['full_name', 'email'])
+                ->map(fn (Participant $participant): array => [
+                    'name' => trim($participant->full_name),
+                    'email' => strtolower(trim($participant->email)),
+                ])
+                ->filter(fn (array $recipient): bool => StrictEmail::isValid($recipient['email']))
+                ->unique('email')
+                ->values();
+        }
+
         return Registration::query()
             ->whereHas('event', fn ($query) => $query->whereIn('code', $eventCodes))
             ->whereIn('status', $registrationStatuses)
@@ -396,16 +451,28 @@ class EmailController extends Controller
     private function statusEmailCounts(): array
     {
         $eventCodes = Event::query()->orderBy('code')->pluck('code');
-        $counts = [];
+        $counts = [
+            'team_lead' => [],
+            'all_participants' => [],
+        ];
 
         foreach ($eventCodes as $eventCode) {
             foreach (self::REGISTRATION_STATUSES as $status) {
-                $counts[$eventCode][$status] = (int) (Registration::query()
+                $counts['team_lead'][$eventCode][$status] = (int) (Registration::query()
                     ->where('status', $status)
                     ->whereHas('event', fn ($query) => $query->where('code', $eventCode))
                     ->whereNotNull('contact_email')
                     ->where('contact_email', '!=', '')
                     ->selectRaw('count(distinct lower(contact_email)) as aggregate')
+                    ->value('aggregate') ?? 0);
+
+                $counts['all_participants'][$eventCode][$status] = (int) (Participant::query()
+                    ->whereHas('registration', fn ($query) => $query
+                        ->where('status', $status)
+                        ->whereHas('event', fn ($query) => $query->where('code', $eventCode)))
+                    ->whereNotNull('email')
+                    ->where('email', '!=', '')
+                    ->selectRaw('count(distinct lower(email)) as aggregate')
                     ->value('aggregate') ?? 0);
             }
         }
@@ -424,5 +491,13 @@ class EmailController extends Controller
             ->map(fn (string $status): string => ucfirst($status))
             ->values()
             ->all();
+    }
+
+    /**
+     * @param  array<string, mixed>  $draft
+     */
+    private function recipientScopeLabel(array $draft): string
+    {
+        return self::RECIPIENT_SCOPES[$draft['recipient_scope'] ?? 'team_lead'] ?? self::RECIPIENT_SCOPES['team_lead'];
     }
 }

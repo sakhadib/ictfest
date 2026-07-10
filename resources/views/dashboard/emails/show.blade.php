@@ -40,6 +40,9 @@
                     @if($notification->metadata['registration_statuses'] ?? null)
                         <dd class="mt-1 text-xs text-coal/50">Statuses: {{ collect($notification->metadata['registration_statuses'])->map(fn ($status) => ucfirst($status))->join(', ') }}</dd>
                     @endif
+                    @if($notification->mode === 'events')
+                        <dd class="mt-1 text-xs text-coal/50">Audience: {{ ($notification->metadata['recipient_scope'] ?? 'team_lead') === 'all_participants' ? 'All Participant' : 'Only Team Lead' }}</dd>
+                    @endif
                 </div>
                 <div class="rounded-xl border border-black/5 bg-paper/70 p-4">
                     <dt class="text-xs font-semibold uppercase tracking-[.16em] text-coal/45">Delivery summary</dt>

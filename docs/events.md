@@ -77,7 +77,7 @@
 **Team Size:** 1-3 members  
 **Event Timeline**: 18 June \- 25 July
 
-* **Registration**: 18 June \- 10 July  
+* **Registration**: 17 June \- 10 July \(closed\)
 * **Online Round:** 14 July \- 19 July  
 * **Final Round Participants Announcement**: 22 July  
 * **Final Round Registration:** 22 \- 23 July  

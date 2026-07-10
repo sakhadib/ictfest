@@ -125,6 +125,11 @@
                                         @endforeach
                                     </div>
                                 @endif
+                                @if($notification->mode === 'events')
+                                    <p class="mt-2 text-xs font-semibold text-coal/50">
+                                        {{ ($notification->metadata['recipient_scope'] ?? 'team_lead') === 'all_participants' ? 'All Participant' : 'Only Team Lead' }}
+                                    </p>
+                                @endif
                                 <p class="mt-2 text-xs text-coal/50">{{ $notification->recipient_count }} recipients planned</p>
                             </td>
                             <td class="px-5 py-4 text-coal/65">

@@ -28,6 +28,7 @@
         $mode = old('mode', $draft['mode'] ?? 'events');
         $selectedCodes = old('event_codes', $draft['event_codes'] ?? []);
         $selectedStatuses = old('registration_statuses', $draft['registration_statuses'] ?? $registrationStatuses);
+        $recipientScope = old('recipient_scope', $draft['recipient_scope'] ?? 'team_lead');
     @endphp
 
     <form method="POST" action="{{ route('dashboard.emails.recipients.store') }}" class="mx-auto max-w-5xl">
@@ -81,7 +82,12 @@
                                     <span class="mt-1 block text-xs text-coal/50">Event {{ $event->code }}</span>
                                 </span>
                             </span>
-                            <span class="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-semibold text-coal/60 shadow-sm">
+                            <span
+                                class="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-semibold text-coal/60 shadow-sm"
+                                data-event-count
+                                data-team-lead-count="{{ $event->team_lead_email_count }}"
+                                data-all-participants-count="{{ $event->participant_email_count }}"
+                            >
                                 {{ $event->team_lead_email_count }} emails
                             </span>
                         </label>
@@ -91,8 +97,39 @@
                 <div class="mt-6 rounded-2xl border border-black/10 bg-paper/60 p-4">
                     <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                         <div>
+                            <p class="text-sm font-semibold text-coal">Recipient audience</p>
+                            <p class="mt-1 text-xs leading-5 text-coal/55">Choose whether this email goes only to team leads or to every participant email in the selected registrations.</p>
+                        </div>
+                        <p class="text-xs font-semibold uppercase tracking-[.16em] text-coal/40">Unique emails are queued once</p>
+                    </div>
+
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                        @foreach($recipientScopes as $scope => $label)
+                            <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-black/10 bg-white px-4 py-3 transition has-[:checked]:border-primary has-[:checked]:bg-primary/5 hover:border-primary/30">
+                                <input
+                                    type="radio"
+                                    name="recipient_scope"
+                                    value="{{ $scope }}"
+                                    class="mt-1 h-4 w-4 border-black/20 text-primary focus:ring-primary"
+                                    @checked($recipientScope === $scope)
+                                    data-recipient-scope
+                                >
+                                <span>
+                                    <span class="block text-sm font-semibold text-coal">{{ $label }}</span>
+                                    <span class="mt-1 block text-xs leading-5 text-coal/55">
+                                        {{ $scope === 'team_lead' ? 'Uses the team lead contact email from each registration.' : 'Uses participant emails from all matching registration teams.' }}
+                                    </span>
+                                </span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="mt-6 rounded-2xl border border-black/10 bg-paper/60 p-4">
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
                             <p class="text-sm font-semibold text-coal">Registration status</p>
-                            <p class="mt-1 text-xs leading-5 text-coal/55">Only team lead emails from selected statuses will be included.</p>
+                            <p class="mt-1 text-xs leading-5 text-coal/55">Only selected registration statuses will be included for the chosen audience.</p>
                         </div>
                         <p class="text-xs font-semibold uppercase tracking-[.16em] text-coal/40">Counts update from selected events</p>
                     </div>
@@ -147,6 +184,7 @@
             const eventsPanel = document.querySelector('[data-events-panel]');
             const customPanel = document.querySelector('[data-custom-panel]');
             const eventInputs = Array.from(document.querySelectorAll('input[name="event_codes[]"]'));
+            const scopeInputs = Array.from(document.querySelectorAll('[data-recipient-scope]'));
             const statusCounts = @json($statusEmailCounts);
 
             const sync = () => {
@@ -155,18 +193,27 @@
                 customPanel.classList.toggle('hidden', mode !== 'custom');
             };
 
+            const selectedScope = () => document.querySelector('[data-recipient-scope]:checked')?.value || 'team_lead';
+
             const syncStatusCounts = () => {
                 const selectedCodes = eventInputs.filter((input) => input.checked).map((input) => input.value);
+                const scope = selectedScope();
+
+                document.querySelectorAll('[data-event-count]').forEach((target) => {
+                    const count = Number(scope === 'all_participants' ? target.dataset.allParticipantsCount : target.dataset.teamLeadCount) || 0;
+                    target.textContent = `${count.toLocaleString()} ${count === 1 ? 'email' : 'emails'}`;
+                });
 
                 document.querySelectorAll('[data-status-count]').forEach((target) => {
                     const status = target.dataset.statusCount;
-                    const count = selectedCodes.reduce((sum, code) => sum + Number(statusCounts?.[code]?.[status] || 0), 0);
+                    const count = selectedCodes.reduce((sum, code) => sum + Number(statusCounts?.[scope]?.[code]?.[status] || 0), 0);
                     target.textContent = `${count.toLocaleString()} ${count === 1 ? 'email' : 'emails'}`;
                 });
             };
 
             modeInputs.forEach((input) => input.addEventListener('change', sync));
             eventInputs.forEach((input) => input.addEventListener('change', syncStatusCounts));
+            scopeInputs.forEach((input) => input.addEventListener('change', syncStatusCounts));
             sync();
             syncStatusCounts();
         })();

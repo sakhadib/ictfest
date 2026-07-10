@@ -66,6 +66,10 @@ IUT Computer Society.</pre>
                                 </span>
                             @endforeach
                         </div>
+                        <p class="mt-4 text-xs font-semibold uppercase tracking-[.16em] text-coal/45">Recipient audience</p>
+                        <span class="mt-2 inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold text-coal/60 shadow-sm">
+                            {{ $recipientScopeLabel }}
+                        </span>
                         <p class="mt-4 text-xs font-semibold uppercase tracking-[.16em] text-coal/45">Registration statuses</p>
                         <div class="mt-2 flex flex-wrap gap-2">
                             @foreach($selectedStatusLabels as $statusLabel)

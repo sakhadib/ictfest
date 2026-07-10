@@ -80,7 +80,7 @@
             'window' => '17 June - 10 July',
             'date' => 'Online: 14-19 July, Final: 25 July',
             'venue' => 'Onsite showcase',
-            'signal' => 'Online build round selects 15 teams for the final onsite showcase.',
+            'signal' => 'Registration closed on 10 July; the online build round selects 20 teams for the final onsite showcase.',
             'url' => '/gamejam',
             'register_url' => '/gamejam/register',
             'start_date' => '2026-07-13T00:00:00+06:00',

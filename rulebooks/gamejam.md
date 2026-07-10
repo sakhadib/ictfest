@@ -57,7 +57,7 @@ to the onsite round, other than the scores for video (pitch) submission.
 ```
 ## Event Timeline
 
-● Teams can register from **17th June** to the end of the online round.
+● Teams could register from **17th June** to **10th July, 2026**. Registration is now closed.
 ● The online round will run for **7 days** , with an approximate date of **July 14 - July 20,
 2026.**
 ● The onsite round will be held at Islamic University of Technology on **July 25, 2026.

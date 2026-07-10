@@ -32,12 +32,12 @@
     $timeline = [
         [
             'date' => '17 June - 10 July',
-            'label' => 'Registration',
+            'label' => 'Registration Closed',
             'accent' => 'volt',
             'icon' => 'fa-pen-to-square',
             'items' => [
                 ['value' => '17 June', 'label' => 'Opens', 'icon' => 'fa-door-open'],
-                ['value' => '10 July', 'label' => 'Closes', 'icon' => 'fa-lock'],
+                ['value' => '10 July', 'label' => 'Closed', 'icon' => 'fa-lock'],
             ],
         ],
         [
@@ -277,9 +277,9 @@
 <section class="px-4 pb-32 pt-16 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-6xl rounded-lg border border-white/10 bg-white/[.035] px-6 py-14 text-center sm:px-10">
         <p class="text-xs font-medium uppercase tracking-[.22em] text-volt/80">Gamejam Registration</p>
-        <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">Ready to ship a playable idea?</h2>
+        <h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">Registration closed on 10 July.</h2>
         <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/56">
-            Form your team, plan your build window, and prepare your files for the onsite showcase.
+            Registered teams should follow the online round, submit through itch.io, and prepare their files for the onsite showcase.
         </p>
         <div class="mt-10 flex justify-center">
             @if($eventRecord?->is_live)

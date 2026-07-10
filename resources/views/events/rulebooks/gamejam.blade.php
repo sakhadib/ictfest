@@ -148,7 +148,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-white/10 text-white/64">
-                            <tr><td class="px-5 py-4 font-semibold text-white">Registration</td><td class="px-5 py-4">17th June to the end of the online round</td></tr>
+                            <tr><td class="px-5 py-4 font-semibold text-white">Registration</td><td class="px-5 py-4">17th June to 10th July, 2026. Registration is now closed.</td></tr>
                             <tr><td class="px-5 py-4 font-semibold text-white">Online Round</td><td class="px-5 py-4">Approximately July 14 - July 20, 2026</td></tr>
                             <tr><td class="px-5 py-4 font-semibold text-white">Video Submission Deadline</td><td class="px-5 py-4">21st July, 2026, 11:59 PM Bangladesh time</td></tr>
                             <tr><td class="px-5 py-4 font-semibold text-white">Onsite Round</td><td class="px-5 py-4">July 25, 2026 at Islamic University of Technology</td></tr>
@@ -167,6 +167,7 @@
                     <li>Once formed, team members cannot be substituted for the remainder of the competition.</li>
                     <li>Cross-university teams are permitted.</li>
                     <li>Eligible participants include higher secondary students, undergraduate students, and graduate students of HSC-21 or equivalent.</li>
+                    <li>Registration closed on 10th July, 2026.</li>
                     <li>Registration for the online stage is free.</li>
                     <li>The onsite round will require a registration fee of 700 BDT per team, only for selected teams.</li>
                 </ul>
