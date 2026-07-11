@@ -21,7 +21,6 @@ use App\Http\Controllers\FinalRegistrationController;
 use App\Http\Controllers\GamejamRegistrationController;
 use App\Http\Controllers\RegistrationStatusController;
 use App\Http\Controllers\TelegramWebhookController;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ValorantRegistrationController;
 
@@ -133,49 +132,6 @@ Route::get('/final-reg/{registration_code}', [FinalRegistrationController::class
 Route::post('/final-reg/{registration_code}', [FinalRegistrationController::class, 'store'])->name('final-registration.store');
 Route::get('/iupc/coach/{token}', [IupcCoachPortalController::class, 'show'])->name('iupc.coach.show');
 Route::post('/iupc/coach/{token}/teams/{registration}', [IupcCoachPortalController::class, 'submit'])->name('iupc.coach.teams.submit');
-
-Route::get('/test-sms', function () {
-    $url = config('services.bulk_sms.url');
-    $apiKey = config('services.bulk_sms.api_key');
-    $senderId = config('services.bulk_sms.sender_id');
-    $number = '8801832560411';
-    $message = 'Test SMS check from IUT ICT FEST';
-
-    try {
-        $response = Http::timeout(20)->asForm()->post($url, [
-            'api_key' => $apiKey,
-            'number' => $number,
-            'senderid' => $senderId,
-            'message' => $message,
-        ]);
-
-        return response()->json([
-            'request' => [
-                'url' => $url,
-                'api_key_set' => filled($apiKey),
-                'sender_id' => $senderId,
-                'number' => $number,
-                'message' => $message,
-            ],
-            'response' => [
-                'http_status' => $response->status(),
-                'body' => $response->body(),
-                'json' => $response->json(),
-            ],
-        ]);
-    } catch (\Throwable $exception) {
-        return response()->json([
-            'request' => [
-                'url' => $url,
-                'api_key_set' => filled($apiKey),
-                'sender_id' => $senderId,
-                'number' => $number,
-                'message' => $message,
-            ],
-            'error' => $exception->getMessage(),
-        ], 500);
-    }
-});
 
 Route::get('/{eventSlug}/rulebook', EventRulebookController::class)
     ->whereIn('eventSlug', ['iupc', 'hackathon', 'datathon', 'gamejam', 'fifa', 'valorant'])

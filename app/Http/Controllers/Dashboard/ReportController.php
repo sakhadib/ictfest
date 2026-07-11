@@ -58,7 +58,7 @@ class ReportController extends Controller
     public function download(Request $request): StreamedResponse
     {
         $filters = $this->filters($request);
-        $columns = $this->columns($request);
+        $columns = $this->downloadColumns($this->columns($request), $filters);
         $availableColumns = $this->availableColumns();
         $fileName = 'registration-report-'.now()->format('Y-m-d-His').'.csv';
 
@@ -116,7 +116,7 @@ class ReportController extends Controller
             'payment_status' => 'Payment Status',
             'payment_method' => 'Payment Method',
             'trx_id' => 'TRX ID',
-            'payment_amount' => 'Payment Amount',
+            'payment_amount' => 'Amount',
             'payment_record_status' => 'Payment Record Status',
             'final_registration_status' => 'Final Registration Status',
             'final_registration_trx_id' => 'Final Registration TRX ID',
@@ -147,6 +147,41 @@ class ReportController extends Controller
         $columns = array_values(array_intersect($requested, array_keys($this->availableColumns())));
 
         return $columns === [] ? self::DEFAULT_COLUMNS : $columns;
+    }
+
+    /**
+     * @param  list<string>  $columns
+     * @param  array<string, mixed>  $filters
+     * @return list<string>
+     */
+    private function downloadColumns(array $columns, array $filters): array
+    {
+        if ($this->reportMayContainIupc($filters) && ! in_array('payment_amount', $columns, true)) {
+            $insertAfter = array_search('trx_id', $columns, true);
+
+            if ($insertAfter === false) {
+                $columns[] = 'payment_amount';
+            } else {
+                array_splice($columns, $insertAfter + 1, 0, ['payment_amount']);
+            }
+        }
+
+        return $columns;
+    }
+
+    /**
+     * @param  array<string, mixed>  $filters
+     */
+    private function reportMayContainIupc(array $filters): bool
+    {
+        if (blank($filters['event_id'])) {
+            return true;
+        }
+
+        return Event::query()
+            ->whereKey($filters['event_id'])
+            ->where('code', '01')
+            ->exists();
     }
 
     /**
@@ -282,7 +317,7 @@ class ReportController extends Controller
             'contact_name' => $registration->contact_name,
             'contact_email' => $registration->contact_email,
             'contact_phone' => $registration->contact_phone,
-            'coach_name' => $registration->coach?->name,
+            'coach_name' => $this->nameWithTshirtSize($registration->coach?->name, $registration->coach?->tshirt_size),
             'coach_designation' => $registration->coach?->designation,
             'coach_official_email' => $registration->coach?->official_email,
             'coach_contact_number' => $registration->coach?->contact_number,
@@ -290,14 +325,17 @@ class ReportController extends Controller
             'payment_status' => $registration->payment_status,
             'payment_method' => $registration->payment?->method,
             'trx_id' => $registration->payment?->trx_id ?? '---',
-            'payment_amount' => $registration->payment?->amount,
+            'payment_amount' => $this->paymentAmount($registration),
             'payment_record_status' => $registration->payment?->status,
             'final_registration_status' => $registration->finalRegistration?->status,
             'final_registration_trx_id' => $registration->finalRegistration?->trx_id,
             'payment_submitted_at' => $registration->payment?->submitted_at?->format('Y-m-d H:i:s'),
             'payment_verified_at' => $registration->payment?->verified_at?->format('Y-m-d H:i:s'),
             'participants_count' => $registration->participants_count,
-            'participant_names' => $registration->participants->pluck('full_name')->join('; '),
+            'participant_names' => $registration->participants
+                ->map(fn ($participant): string => $this->nameWithTshirtSize($participant->full_name, $participant->tshirt_size))
+                ->filter()
+                ->join('; '),
             'participant_emails' => $registration->participants->pluck('email')->join('; '),
             'participant_phones' => $registration->participants->pluck('phone')->join('; '),
             'participant_student_ids' => $registration->participants->pluck('student_id')->join('; '),
@@ -306,5 +344,30 @@ class ReportController extends Controller
             'updated_at' => $registration->updated_at?->format('Y-m-d H:i:s'),
             default => null,
         };
+    }
+
+    private function paymentAmount(Registration $registration): ?int
+    {
+        if ($registration->event?->code === '01') {
+            if ($registration->payment_status === 'unpaid') {
+                return null;
+            }
+
+            return $registration->finalRegistration?->payment_amount ?? $registration->payment?->amount;
+        }
+
+        return $registration->payment?->amount;
+    }
+
+    private function nameWithTshirtSize(?string $name, ?string $size): string
+    {
+        $name = trim((string) $name);
+        $size = trim((string) $size);
+
+        if ($name === '' || $size === '') {
+            return $name;
+        }
+
+        return $name.' ('.strtoupper($size).')';
     }
 }

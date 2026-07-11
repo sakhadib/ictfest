@@ -338,3 +338,13 @@ on coach portal a copy button to copy the bkash number to clipboard. be careful,
 
 All times are Bangladesh Standerd Time
 
+
+
+
+========================
+
+
+I need specific 2 updates
+
+1. In CSV report download for IUPC, add mandetory col of Amount. if it's 4099 or 5099 for a registered team, we need to know. if not paid / payment info not found. leave that cell empty
+2. In CSV report when a participant's / coach's tshirt size is available, beside his / her name add `(<size>)` like if someone is John Doe and Size is 2xl then the his name will be shown as `John Doe (2XL)` i hope you understood. 

@@ -24,6 +24,18 @@ class FinalRegistration extends Model
     public const STATUS_REJECTED = 'rejected';
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'payment_amount' => 'integer',
+        ];
+    }
+
+    /**
      * Get the registration for this final registration submission.
      */
     public function registration(): BelongsTo
