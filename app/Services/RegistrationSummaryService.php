@@ -34,6 +34,7 @@ class RegistrationSummaryService
             'regcard force' => 'Try sending all registration cards in one PDF.',
             'regcard event <code>' => 'Send registration cards for one event.',
             'regcard team <code>' => 'Send one team registration card.',
+            'tshirt event <code>' => 'Send a paid T-shirt CSV for one event.',
         ];
     }
 

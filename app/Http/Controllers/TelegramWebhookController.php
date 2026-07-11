@@ -6,6 +6,7 @@ use App\Jobs\SendRegistrationTrendChart;
 use App\Jobs\SendCompleteRegistrationReport;
 use App\Jobs\SendRegistrationCards;
 use App\Jobs\SendUniversityDistributionChart;
+use App\Jobs\SendTshirtCsvReport;
 use App\Services\RegistrationSummaryService;
 use App\Services\TelegramBotClient;
 use Illuminate\Http\JsonResponse;
@@ -113,6 +114,12 @@ class TelegramWebhookController extends Controller
 
         if (preg_match('/^\/?regcard\s+team\s+([a-z0-9_-]+)$/', $command, $matches)) {
             SendRegistrationCards::dispatch($chatId, 'team', $matches[1]);
+
+            return '__job_dispatched__';
+        }
+
+        if (preg_match('/^\/?tshirt\s+event\s+([0-9]{1,2})$/', $command, $matches)) {
+            SendTshirtCsvReport::dispatch($chatId, $matches[1]);
 
             return '__job_dispatched__';
         }
