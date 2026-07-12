@@ -69,9 +69,11 @@ class TshirtCsvReportService
 
                 $rows = $registration->participants
                     ->map(fn ($participant): array => [
+                        'registration_code' => $registration->registration_code,
                         'team_name' => $registration->team_name,
                         'person' => $participant->full_name,
                         'person_type' => $participant->is_leader ? 'leader' : 'participant',
+                        'participant_institution' => $participant->university,
                         'paid_amount' => $amount,
                         'tshirt_size' => $this->formatSize($participant->tshirt_size),
                     ])
@@ -79,9 +81,11 @@ class TshirtCsvReportService
 
                 if ($registration->coach) {
                     $rows[] = [
+                        'registration_code' => $registration->registration_code,
                         'team_name' => $registration->team_name,
                         'person' => $registration->coach->name,
                         'person_type' => 'coach',
+                        'participant_institution' => $registration->institution,
                         'paid_amount' => $amount,
                         'tshirt_size' => $this->formatSize($registration->coach->tshirt_size),
                     ];
@@ -110,13 +114,15 @@ class TshirtCsvReportService
         }
 
         try {
-            fputcsv($handle, ['Team Name', 'Person', 'Person Type', 'Paid Amount', 'T-shirt Size']);
+            fputcsv($handle, ['Registration Code', 'Team Name', 'Person', 'Person Type', 'Participant Institution', 'Paid Amount', 'T-shirt Size']);
 
             foreach ($rows as $row) {
                 fputcsv($handle, [
+                    $row['registration_code'],
                     $row['team_name'],
                     $row['person'],
                     $row['person_type'],
+                    $row['participant_institution'],
                     $row['paid_amount'],
                     $row['tshirt_size'],
                 ]);

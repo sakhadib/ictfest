@@ -94,5 +94,5 @@ Queues and sends a single team registration card.
 tshirt event <code>
 /tshirt event <code>
 Queues and sends a CSV for paid T-shirt rows of one event.
-Columns: team name, person, person type, paid amount, T-shirt size.
+Columns: registration code, team name, person, person type, participant institution, paid amount, T-shirt size.
 Person type can be leader, participant, or coach.
