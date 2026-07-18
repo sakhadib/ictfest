@@ -43,11 +43,33 @@ class RegistrationSummaryService
         $lines = [
             config('app.name').' Bot Commands',
             '',
+            'Quick summaries',
+            '/status - Overall totals',
+            '/today - Today by event',
+            '/events - Live status',
+            '/pending - Pending reviews',
+            '/payments - Payment queue',
+            '/finals - Final pipeline',
+            '/ca - CA-wise registrations',
+            '/event 03 - One event summary',
+            '',
+            'Reports',
+            '/trend 02 - Event trend chart',
+            '/trend all - All event trend chart',
+            '/univ - University participant PDF',
+            '/tshirt event 04 - Paid T-shirt CSV',
+            '/fullreport - Complete PDF in parts',
+            '/fullreport-force - Complete PDF as one file',
+            '',
+            'Registration cards',
+            '/regcard event 01 - Cards except pending',
+            '/regcard event 01 all - Cards including pending',
+            '/regcard all - Event-wise PDFs',
+            '/regcard force - One full PDF',
+            '/regcard team REG-CODE - One team card',
+            '',
+            'Slash can be omitted for most commands.',
         ];
-
-        foreach ($this->commands() as $command => $description) {
-            $lines[] = $command.' - '.$description;
-        }
 
         return implode("\n", $lines);
     }

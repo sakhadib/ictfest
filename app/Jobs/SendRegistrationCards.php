@@ -42,9 +42,10 @@ class SendRegistrationCards implements ShouldQueue
             match ($this->mode) {
                 'force' => $paths[] = $this->sendReport($telegram, $pdfs, $cards->all(), 'All Registration Cards', 'ictfest-regcards-all-'),
                 'event' => $paths[] = $this->sendReport($telegram, $pdfs, $cards->event((string) $this->value), 'Registration Cards - Event '.str_pad((string) $this->value, 2, '0', STR_PAD_LEFT), 'ictfest-regcards-event-'),
+                'event_all' => $paths[] = $this->sendReport($telegram, $pdfs, $cards->event((string) $this->value, true), 'All Registration Cards - Event '.str_pad((string) $this->value, 2, '0', STR_PAD_LEFT), 'ictfest-regcards-event-all-'),
                 'team' => $paths[] = $this->sendReport($telegram, $pdfs, $cards->team((string) $this->value), 'Registration Card - '.strtoupper((string) $this->value), 'ictfest-regcard-team-'),
                 'all' => $this->sendAllEventReports($cards, $pdfs, $telegram, $paths),
-                default => $telegram->sendMessage($this->chatId, 'Invalid registration card command. Use /regcard all, /regcard force, /regcard event 01, or /regcard team REG-CODE.'),
+                default => $telegram->sendMessage($this->chatId, 'Invalid registration card command. Use /regcard all, /regcard force, /regcard event 01, /regcard event 01 all, or /regcard team REG-CODE.'),
             };
         } catch (Throwable $exception) {
             Log::error('Telegram registration cards failed.', [

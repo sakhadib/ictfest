@@ -106,6 +106,12 @@ class TelegramWebhookController extends Controller
             return '__job_dispatched__';
         }
 
+        if (preg_match('/^\/?regcard\s+event\s+([0-9]{1,2})\s+all$/', $command, $matches)) {
+            SendRegistrationCards::dispatch($chatId, 'event_all', $matches[1]);
+
+            return '__job_dispatched__';
+        }
+
         if (preg_match('/^\/?regcard\s+event\s+([0-9]{1,2})$/', $command, $matches)) {
             SendRegistrationCards::dispatch($chatId, 'event', $matches[1]);
 

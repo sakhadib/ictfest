@@ -85,7 +85,13 @@ Queues and tries to send all registration cards in one PDF.
 
 regcard event <code>
 /regcard event <code>
-Queues and sends registration cards for one event, for example: /regcard event 01.
+Queues and sends registration cards for one event, excluding pending registrations.
+Example: /regcard event 01
+
+regcard event <code> all
+/regcard event <code> all
+Queues and sends registration cards for one event, including pending registrations.
+Example: /regcard event 01 all
 
 regcard team <registration-code>
 /regcard team <registration-code>

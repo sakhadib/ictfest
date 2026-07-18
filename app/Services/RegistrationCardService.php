@@ -19,7 +19,7 @@ class RegistrationCardService
     /**
      * @return array<string, mixed>
      */
-    public function event(string $eventCode): array
+    public function event(string $eventCode, bool $includePending = false): array
     {
         $eventCode = str_pad($eventCode, 2, '0', STR_PAD_LEFT);
         $event = Event::where('code', $eventCode)->first();
@@ -31,10 +31,15 @@ class RegistrationCardService
             ];
         }
 
+        $query = $this->baseQuery()
+            ->whereHas('event', fn ($query) => $query->where('code', $eventCode));
+
+        if (! $includePending) {
+            $query->where('registrations.status', '!=', 'pending');
+        }
+
         return $this->report(
-            $this->baseQuery()
-                ->whereHas('event', fn ($query) => $query->where('code', $eventCode))
-                ->get(),
+            $query->get(),
             $event->code.' - '.$event->name.' Registration Cards',
         );
     }
