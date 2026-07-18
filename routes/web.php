@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\EventRulebookController;
 use App\Http\Controllers\IupcCoachPortalController;
 use App\Http\Controllers\IupcRegistrationController;
+use App\Http\Controllers\OperationsController;
 use App\Models\IupcUniversityAllocation;
 use App\Http\Controllers\HackathonRegistrationController;
 use App\Http\Controllers\DatathonRegistrationController;
@@ -83,6 +84,13 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+    Route::get('/operations', [OperationsController::class, 'index'])->name('operations.index');
+    Route::get('/operations/personnel', [OperationsController::class, 'personnel'])->name('operations.personnel.index');
+    Route::get('/operations/fast-find', [OperationsController::class, 'fastFind'])->name('operations.fast-find.index');
+    Route::post('/operations/personnel', [OperationsController::class, 'store'])->name('operations.personnel.store');
+    Route::post('/operations/personnel/upload', [OperationsController::class, 'upload'])->name('operations.personnel.upload');
+    Route::patch('/operations/personnel/{personnel}', [OperationsController::class, 'update'])->name('operations.personnel.update');
+    Route::delete('/operations/personnel/{personnel}', [OperationsController::class, 'destroy'])->name('operations.personnel.destroy');
     Route::get('/dashboard', fn () => redirect()->route('dashboard.users.index'))->name('dashboard');
     Route::get('/dashboard/status', [StatusLookupController::class, 'index'])->name('dashboard.status.index');
     Route::get('/dashboard/tshirt', [TshirtController::class, 'index'])->name('dashboard.tshirts.index');

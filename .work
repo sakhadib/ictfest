@@ -348,3 +348,21 @@ I need specific 2 updates
 
 1. In CSV report download for IUPC, add mandetory col of Amount. if it's 4099 or 5099 for a registered team, we need to know. if not paid / payment info not found. leave that cell empty
 2. In CSV report when a participant's / coach's tshirt size is available, beside his / her name add `(<size>)` like if someone is John Doe and Size is 2xl then the his name will be shown as `John Doe (2XL)` i hope you understood. 
+
+
+
+==========================
+
+I need a new dashboard named "Operations" it will be located at `/operations` and you need to be logged in to access this page. on main dashboard ass a link to open operations dashboard in new tab and on operations dashboard a link to go back to main dashboard.
+
+now in this new dashboard put personnel management. 
+- A CSV with `name`, `student_id`, `phone`, `team`, `status` `comments` can be uploaded where comments is optional. clearly state and reject if format is not upto required format. and state the error of uploaded format. also status can be `volunteer`, `organizer`, `staff`, `faculty`, `other`. null means other here. 
+- A list will be shown of current personnels and edit / delete operations can be performed.
+- Manual add of personnel should be possible. 
+
+2nd thing is Fast Find
+- typing by name, regcode, team name, email, phone number informations about the person, registration or anything related to the typed thing in DB will appear in formatted way. specially typing name and getting person's phone number (regardless of the person is a participant / internal personnel but obviously labeled) is very important from this page. case sensitivity or space / hiphen miplacement should not be hinderence in search.
+
+You are free to make new models and migrations, controllers and routes, whatever is needed. do not touch / edit previous migrations as the system is already deployed.
+
+This new dashboard should be built the frontend from perspective of mobile device first users. 

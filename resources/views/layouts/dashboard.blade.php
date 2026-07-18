@@ -88,6 +88,10 @@
                             <span>IUPC bKash</span>
                             <span class="text-xs opacity-50">Rotate</span>
                         </a>
+                        <a href="{{ route('operations.index') }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between rounded-lg px-3 py-2.5 font-medium text-white/68 transition hover:bg-white/10 hover:text-white">
+                            <span>Operations</span>
+                            <span class="text-xs opacity-50">New tab</span>
+                        </a>
                     </div>
                 </div>
 
