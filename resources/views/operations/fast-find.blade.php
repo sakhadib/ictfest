@@ -2,14 +2,14 @@
 
 @section('title', 'Fast Find')
 @section('page-title', 'Fast Find')
-@section('page-subtitle', 'Search names, phones, emails, teams, and registration records.')
+@section('page-subtitle', 'Search people by name, email, or phone.')
 
 @section('content')
     <section class="rounded-2xl border border-black/5 bg-white p-5 shadow-soft sm:p-6">
         <div class="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
                 <p class="text-xs font-semibold uppercase tracking-[.18em] text-primary">Fast Find</p>
-                <h2 class="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">Find the person or team now.</h2>
+                <h2 class="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">Find the person now.</h2>
                 <p class="mt-3 max-w-2xl text-sm leading-7 text-coal/58">
                     Search tolerates case, spaces, punctuation, hyphens, and Bangladesh phone number formats.
                 </p>
@@ -20,9 +20,9 @@
         </div>
 
         <form method="GET" action="{{ route('operations.fast-find.index') }}" class="mt-6">
-            <label for="q" class="text-xs font-semibold uppercase tracking-[.16em] text-coal/45">Name, reg code, team, email, phone</label>
+            <label for="q" class="text-xs font-semibold uppercase tracking-[.16em] text-coal/45">Name, email, phone</label>
             <div class="mt-2 grid gap-3 sm:grid-cols-[1fr_auto]">
-                <input id="q" name="q" value="{{ $searchQuery }}" autofocus class="w-full rounded-2xl border border-black/10 bg-paper px-4 py-4 text-xl font-semibold outline-none transition placeholder:text-coal/30 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10" placeholder="Search operations">
+                <input id="q" name="q" value="{{ $searchQuery }}" autofocus class="w-full rounded-2xl border border-black/10 bg-paper px-4 py-4 text-xl font-semibold outline-none transition placeholder:text-coal/30 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10" placeholder="Search a person">
                 <button class="rounded-2xl bg-primary px-6 py-4 text-sm font-semibold text-white shadow-lg shadow-primary/15 transition hover:bg-[#bd453d]">
                     Search
                 </button>
@@ -77,11 +77,11 @@
             </div>
             <div class="rounded-2xl border border-black/5 bg-white p-5 shadow-soft">
                 <p class="text-xs font-semibold uppercase tracking-[.16em] text-coal/42">Find</p>
-                <p class="mt-3 text-lg font-semibold">Participant and personnel phone numbers</p>
+                <p class="mt-3 text-lg font-semibold">Participants, coaches, and personnel</p>
             </div>
             <div class="rounded-2xl border border-black/5 bg-white p-5 shadow-soft">
                 <p class="text-xs font-semibold uppercase tracking-[.16em] text-coal/42">Match</p>
-                <p class="mt-3 text-lg font-semibold">Names, teams, emails, reg codes</p>
+                <p class="mt-3 text-lg font-semibold">Names, emails, and phone numbers</p>
             </div>
         </section>
     @endif

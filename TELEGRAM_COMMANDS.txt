@@ -42,6 +42,15 @@ ca
 Shows registration counts grouped by Campus Ambassador name.
 Blank CA values are shown as Unassigned.
 
+who <query>
+/who <query>
+Finds people by partial name, email, or phone number.
+Results can include participants, IUPC coaches, and operations personnel.
+Examples:
+/who rahman
+/who 017
+/who example@gmail.com
+
 event <code>
 /event <code>
 Shows a focused summary for one event.

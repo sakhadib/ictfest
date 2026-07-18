@@ -7,6 +7,7 @@ use App\Jobs\SendCompleteRegistrationReport;
 use App\Jobs\SendRegistrationCards;
 use App\Jobs\SendUniversityDistributionChart;
 use App\Jobs\SendTshirtCsvReport;
+use App\Services\PersonFastFindService;
 use App\Services\RegistrationSummaryService;
 use App\Services\TelegramBotClient;
 use Illuminate\Http\JsonResponse;
@@ -18,6 +19,7 @@ class TelegramWebhookController extends Controller
     public function __invoke(
         Request $request,
         RegistrationSummaryService $summary,
+        PersonFastFindService $people,
         TelegramBotClient $telegram,
     ): JsonResponse {
         if (! $this->hasValidSecret($request)) {
@@ -43,7 +45,7 @@ class TelegramWebhookController extends Controller
             return response()->json(['ok' => true]);
         }
 
-        $reply = $this->replyFor($text, $summary, $chatId);
+        $reply = $this->replyFor($text, $summary, $people, $chatId);
 
         if ($reply === '__job_dispatched__') {
             return response()->json(['ok' => true]);
@@ -76,7 +78,7 @@ class TelegramWebhookController extends Controller
         return hash_equals($secret, (string) $request->header('X-Telegram-Bot-Api-Secret-Token'));
     }
 
-    private function replyFor(string $text, RegistrationSummaryService $summary, string|int $chatId): ?string
+    private function replyFor(string $text, RegistrationSummaryService $summary, PersonFastFindService $people, string|int $chatId): ?string
     {
         $command = $this->normalizedCommand($text);
 
@@ -86,6 +88,14 @@ class TelegramWebhookController extends Controller
 
         if (preg_match('/^\/?event\s+([0-9]{1,2})$/', $command, $matches)) {
             return $summary->eventText($matches[1]);
+        }
+
+        if (preg_match('/^\/?who\s+(.+)$/', $command, $matches)) {
+            return $people->telegramText($matches[1]);
+        }
+
+        if (in_array($command, ['who', '/who'], true)) {
+            return $people->telegramText('');
         }
 
         if (preg_match('/^\/?trend\s+(all|[0-9]{1,2})$/', $command, $matches)) {

@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\OperationsPersonnel;
 use App\Models\Participant;
 use App\Models\Registration;
-use App\Models\RegistrationCoach;
+use App\Services\PersonFastFindService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -45,13 +44,13 @@ class OperationsController extends Controller
         ]);
     }
 
-    public function fastFind(Request $request): View
+    public function fastFind(Request $request, PersonFastFindService $people): View
     {
         $query = trim((string) $request->query('q', ''));
 
         return view('operations.fast-find', [
             'searchQuery' => $query,
-            'results' => $query === '' ? collect() : $this->fastFindResults($query),
+            'results' => $query === '' ? collect() : $people->results($query),
         ]);
     }
 
@@ -193,202 +192,11 @@ class OperationsController extends Controller
         return $data;
     }
 
-    /**
-     * @return Collection<int, array<string, mixed>>
-     */
-    private function fastFindResults(string $query): Collection
-    {
-        $normalized = $this->normalizeSearch($query);
-        $phoneNeedles = $this->phoneVariants($query);
-
-        if ($normalized === '' && $phoneNeedles === []) {
-            return collect();
-        }
-
-        return collect()
-            ->merge($this->personnelResults($normalized, $phoneNeedles))
-            ->merge($this->participantResults($normalized, $phoneNeedles))
-            ->merge($this->registrationResults($normalized, $phoneNeedles))
-            ->merge($this->coachResults($normalized, $phoneNeedles))
-            ->take(60)
-            ->values();
-    }
-
-    private function personnelResults(string $normalized, array $phoneNeedles): Collection
-    {
-        return OperationsPersonnel::query()
-            ->latest()
-            ->get()
-            ->filter(fn (OperationsPersonnel $person): bool => $this->matches($normalized, $phoneNeedles, [
-                $person->name,
-                $person->student_id,
-                $person->phone,
-                $person->team,
-                $person->status,
-                $person->comments,
-            ]))
-            ->map(fn (OperationsPersonnel $person): array => [
-                'type' => 'Internal Personnel',
-                'title' => $person->name,
-                'subtitle' => ucfirst($person->status).' / '.($person->team ?: 'No team'),
-                'lines' => [
-                    'Phone' => $person->phone ?: '-',
-                    'Student ID' => $person->student_id ?: '-',
-                    'Comments' => $person->comments ?: '-',
-                ],
-            ]);
-    }
-
-    private function participantResults(string $normalized, array $phoneNeedles): Collection
-    {
-        return Participant::query()
-            ->with(['registration.event', 'registration.payment'])
-            ->get()
-            ->filter(fn (Participant $participant): bool => $this->matches($normalized, $phoneNeedles, [
-                $participant->full_name,
-                $participant->email,
-                $participant->phone,
-                $participant->student_id,
-                $participant->university,
-                $participant->registration?->registration_code,
-                $participant->registration?->team_name,
-            ]))
-            ->map(fn (Participant $participant): array => [
-                'type' => $participant->is_leader ? 'Participant / Leader' : 'Participant',
-                'title' => $participant->full_name,
-                'subtitle' => ($participant->registration?->event?->code ?? '--').' / '.($participant->registration?->team_name ?? 'No team'),
-                'lines' => [
-                    'Phone' => $participant->phone ?: '-',
-                    'Email' => $participant->email ?: '-',
-                    'Student ID' => $participant->student_id ?: '-',
-                    'Institution' => $participant->university ?: '-',
-                    'Registration Code' => $participant->registration?->registration_code ?: '-',
-                    'Registration Status' => $participant->registration?->status ?: '-',
-                    'Payment Status' => $participant->registration?->payment_status ?: '-',
-                ],
-            ]);
-    }
-
-    private function registrationResults(string $normalized, array $phoneNeedles): Collection
-    {
-        return Registration::query()
-            ->with(['event', 'payment', 'participants'])
-            ->get()
-            ->filter(fn (Registration $registration): bool => $this->matches($normalized, $phoneNeedles, [
-                $registration->registration_code,
-                $registration->team_name,
-                $registration->institution,
-                $registration->contact_name,
-                $registration->contact_email,
-                $registration->contact_phone,
-                $registration->participants->pluck('full_name')->join(' '),
-                $registration->participants->pluck('email')->join(' '),
-                $registration->participants->pluck('phone')->join(' '),
-            ]))
-            ->map(fn (Registration $registration): array => [
-                'type' => 'Registration',
-                'title' => $registration->registration_code.' / '.$registration->team_name,
-                'subtitle' => ($registration->event?->code ?? '--').' / '.($registration->event?->name ?? 'Unknown event'),
-                'lines' => [
-                    'Lead' => $registration->contact_name ?: '-',
-                    'Lead Phone' => $registration->contact_phone ?: '-',
-                    'Lead Email' => $registration->contact_email ?: '-',
-                    'Institution' => $registration->institution ?: '-',
-                    'Registration Status' => $registration->status ?: '-',
-                    'Payment Status' => $registration->payment_status ?: '-',
-                    'TRX ID' => $registration->payment?->trx_id ?: '-',
-                ],
-            ]);
-    }
-
-    private function coachResults(string $normalized, array $phoneNeedles): Collection
-    {
-        return RegistrationCoach::query()
-            ->with(['registration.event'])
-            ->get()
-            ->filter(fn (RegistrationCoach $coach): bool => $this->matches($normalized, $phoneNeedles, [
-                $coach->name,
-                $coach->designation,
-                $coach->official_email,
-                $coach->contact_number,
-                $coach->registration?->registration_code,
-                $coach->registration?->team_name,
-                $coach->registration?->institution,
-            ]))
-            ->map(fn (RegistrationCoach $coach): array => [
-                'type' => 'Coach',
-                'title' => $coach->name,
-                'subtitle' => ($coach->registration?->event?->code ?? '--').' / '.($coach->registration?->team_name ?? 'No team'),
-                'lines' => [
-                    'Phone' => $coach->contact_number ?: '-',
-                    'Official Email' => $coach->official_email ?: '-',
-                    'Designation' => $coach->designation ?: '-',
-                    'Institution' => $coach->registration?->institution ?: '-',
-                    'Registration Code' => $coach->registration?->registration_code ?: '-',
-                ],
-            ]);
-    }
-
-    private function matches(string $normalizedNeedle, array $phoneNeedles, array $values): bool
-    {
-        foreach ($values as $value) {
-            $value = (string) $value;
-
-            if ($normalizedNeedle !== '') {
-                $normalizedValue = $this->normalizeSearch($value);
-
-                if (
-                    $normalizedValue !== '' &&
-                    (str_contains($normalizedValue, $normalizedNeedle) || str_contains($normalizedNeedle, $normalizedValue))
-                ) {
-                    return true;
-                }
-            }
-
-            $phoneValues = $this->phoneVariants($value);
-
-            foreach ($phoneNeedles as $needle) {
-                if (in_array($needle, $phoneValues, true)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     private function normalizeHeader(string $header): string
     {
         $header = preg_replace('/^\xEF\xBB\xBF/', '', $header) ?? $header;
 
         return strtolower(trim(str_replace([' ', '-'], '_', $header)));
-    }
-
-    private function normalizeSearch(string $value): string
-    {
-        return strtolower(preg_replace('/[^a-z0-9]+/i', '', $value) ?? '');
-    }
-
-    /**
-     * @return list<string>
-     */
-    private function phoneVariants(string $value): array
-    {
-        $digits = preg_replace('/\D+/', '', $value) ?? '';
-
-        if ($digits === '') {
-            return [];
-        }
-
-        $variants = [$digits];
-
-        if (str_starts_with($digits, '880')) {
-            $variants[] = '0'.substr($digits, 3);
-        } elseif (str_starts_with($digits, '0')) {
-            $variants[] = '880'.substr($digits, 1);
-        }
-
-        return array_values(array_unique($variants));
     }
 
     /**
