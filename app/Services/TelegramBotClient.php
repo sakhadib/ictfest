@@ -17,6 +17,43 @@ class TelegramBotClient
         ]);
     }
 
+    /**
+     * @return list<Response>
+     */
+    public function sendTextChunks(string|int $chatId, string $text, int $limit = 3900): array
+    {
+        $lines = preg_split("/\r\n|\n|\r/", $text) ?: [$text];
+        $chunks = [];
+        $current = '';
+
+        foreach ($lines as $line) {
+            $candidate = $current === '' ? $line : $current."\n".$line;
+
+            if (mb_strlen($candidate, 'UTF-8') <= $limit) {
+                $current = $candidate;
+                continue;
+            }
+
+            if ($current !== '') {
+                $chunks[] = $current;
+                $current = '';
+            }
+
+            while (mb_strlen($line, 'UTF-8') > $limit) {
+                $chunks[] = mb_substr($line, 0, $limit, 'UTF-8');
+                $line = mb_substr($line, $limit, null, 'UTF-8');
+            }
+
+            $current = $line;
+        }
+
+        if ($current !== '') {
+            $chunks[] = $current;
+        }
+
+        return array_map(fn (string $chunk): Response => $this->sendMessage($chatId, $chunk), $chunks);
+    }
+
     public function sendPhoto(string|int $chatId, string $photoPath, ?string $caption = null): Response
     {
         $handle = fopen($photoPath, 'rb');

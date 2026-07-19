@@ -55,13 +55,13 @@ class TelegramWebhookController extends Controller
             return response()->json(['ok' => true]);
         }
 
-        $response = $telegram->sendMessage($chatId, $reply);
+        $responses = $telegram->sendTextChunks($chatId, $reply);
 
         Log::info('Telegram webhook command response sent.', [
             'chat_id' => $chatId,
             'command' => $this->normalizedCommand($text),
-            'status' => $response->status(),
-            'body' => $response->body(),
+            'chunks' => count($responses),
+            'statuses' => array_map(fn ($response): int => $response->status(), $responses),
         ]);
 
         return response()->json(['ok' => true]);

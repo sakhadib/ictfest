@@ -7,6 +7,7 @@ use App\Models\FinalRegistration;
 use App\Models\Participant;
 use App\Models\Registration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class RegistrationSummaryService
 {
@@ -288,15 +289,25 @@ class RegistrationSummaryService
 
     public function caText(): string
     {
+        if (! Schema::hasColumn('registrations', 'ca')) {
+            return config('app.name')." Campus Ambassador Registrations\n"
+                .now()->format('d M Y, h:i A')."\n\n"
+                .'CA data is not available because the registrations.ca column is missing.';
+        }
+
         $rows = Registration::query()
-            ->select([
-                DB::raw("COALESCE(NULLIF(TRIM(ca), ''), 'Unassigned') as ca_name"),
-                DB::raw('COUNT(*) as registrations_count'),
+            ->select(['ca'])
+            ->get()
+            ->groupBy(fn (Registration $registration): string => trim((string) $registration->ca) !== '' ? trim((string) $registration->ca) : 'Unassigned')
+            ->map(fn ($registrations, string $ca): array => [
+                'ca_name' => $ca,
+                'registrations_count' => $registrations->count(),
             ])
-            ->groupBy(DB::raw("COALESCE(NULLIF(TRIM(ca), ''), 'Unassigned')"))
-            ->orderByDesc('registrations_count')
-            ->orderBy('ca_name')
-            ->get();
+            ->sortBy([
+                ['registrations_count', 'desc'],
+                ['ca_name', 'asc'],
+            ])
+            ->values();
 
         $lines = [
             config('app.name').' Campus Ambassador Registrations',
@@ -309,7 +320,7 @@ class RegistrationSummaryService
         }
 
         foreach ($rows as $row) {
-            $lines[] = $row->ca_name.': '.number_format((int) $row->registrations_count).' registrations';
+            $lines[] = $row['ca_name'].': '.number_format((int) $row['registrations_count']).' registrations';
         }
 
         return implode("\n", $lines);
