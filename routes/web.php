@@ -14,6 +14,7 @@ use App\Http\Controllers\EventRulebookController;
 use App\Http\Controllers\IupcCoachPortalController;
 use App\Http\Controllers\IupcRegistrationController;
 use App\Http\Controllers\OperationsController;
+use App\Http\Controllers\PersonnelFindController;
 use App\Models\IupcUniversityAllocation;
 use App\Http\Controllers\HackathonRegistrationController;
 use App\Http\Controllers\DatathonRegistrationController;
@@ -54,6 +55,7 @@ Route::get('/sitemap.xml', function () {
         ['url' => route('events.rulebook', ['eventSlug' => 'fifa']), 'priority' => '0.6', 'changefreq' => 'weekly'],
         ['url' => route('events.rulebook', ['eventSlug' => 'valorant']), 'priority' => '0.6', 'changefreq' => 'weekly'],
         ['url' => route('registration.status'), 'priority' => '0.5', 'changefreq' => 'weekly'],
+        ['url' => route('personnel.find'), 'priority' => '0.4', 'changefreq' => 'weekly'],
         ['url' => route('contact'), 'priority' => '0.4', 'changefreq' => 'monthly'],
         ['url' => route('about'), 'priority' => '0.4', 'changefreq' => 'monthly'],
     ]);
@@ -76,6 +78,7 @@ Route::get('/sitemap.xml', function () {
 
 Route::view('/about', 'about')->name('about');
 Route::view('/contact', 'contact')->name('contact');
+Route::get('/find', PersonnelFindController::class)->name('personnel.find');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');

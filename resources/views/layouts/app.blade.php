@@ -106,6 +106,7 @@
                     <a href="{{ url('/') }}" class="rounded-full px-4 py-2 font-medium text-white shadow-sm shadow-black/20">Home</a>
                     <a href="{{ url('/#events') }}" class="rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white">Events</a>
                     <a href="{{ route('registration.status') }}" class="rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white">Status</a>
+                    <a href="{{ route('personnel.find') }}" class="rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white">Find</a>
                     <a href="{{ route('contact') }}" class="rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white">Contact</a>
                     <a href="{{ route('about') }}" class="rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white">About</a>
                 </div>
@@ -139,6 +140,10 @@
                     <a href="{{ route('registration.status') }}" class="flex items-center justify-between rounded-md px-4 py-3 text-sm font-medium text-white/76 transition hover:bg-white/10 hover:text-white">
                         Status
                         <i class="fa-solid fa-magnifying-glass-chart text-xs text-white/36"></i>
+                    </a>
+                    <a href="{{ route('personnel.find') }}" class="flex items-center justify-between rounded-md px-4 py-3 text-sm font-medium text-white/76 transition hover:bg-white/10 hover:text-white">
+                        Find
+                        <i class="fa-solid fa-magnifying-glass text-xs text-white/36"></i>
                     </a>
                     <a href="{{ route('contact') }}" class="flex items-center justify-between rounded-md px-4 py-3 text-sm font-medium text-white/76 transition hover:bg-white/10 hover:text-white">
                         Contact
