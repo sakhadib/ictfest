@@ -18,6 +18,19 @@
         $payment = $registration?->payment;
         $iupcPackage = $finalRegistration?->payment_package ? ($packageLabels[$finalRegistration->payment_package] ?? $finalRegistration->payment_package) : null;
         $iupcAmount = $finalRegistration?->payment_amount ?? $payment?->amount;
+        $tshirtCounts = collect();
+        if ($registration) {
+            $includeCoachTshirt = $registration->event?->code === '01'
+                && $finalRegistration?->payment_package === 'with_coach_kit'
+                && $registration->coach?->tshirt_size;
+
+            $tshirtCounts = $registration->participants
+                ->pluck('tshirt_size')
+                ->when($includeCoachTshirt, fn ($sizes) => $sizes->push($registration->coach->tshirt_size))
+                ->filter(fn ($size) => trim((string) $size) !== '')
+                ->map(fn ($size) => strtoupper((string) $size))
+                ->countBy();
+        }
     @endphp
 
     <section class="rounded-2xl border border-black/5 bg-white p-5 shadow-soft sm:p-6">
@@ -56,6 +69,22 @@
     @endif
 
     @if($registration)
+        @if($registration->event?->code === '01')
+            <section class="mt-6 rounded-2xl border border-primary/20 bg-primary p-5 text-white shadow-soft sm:p-6">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[.18em] text-white/62">IUPC Package</p>
+                        <h2 class="mt-2 text-3xl font-semibold">{{ $iupcPackage ?: 'Package not recorded' }}</h2>
+                        <p class="mt-2 text-sm text-white/70">With coach kit: BDT 5,099 / Without coach kit: BDT 4,099</p>
+                    </div>
+                    <div class="rounded-2xl bg-white px-5 py-4 text-primary">
+                        <p class="text-xs font-semibold uppercase tracking-[.16em] text-primary/60">Registered Amount</p>
+                        <p class="mt-1 text-3xl font-semibold">{{ $iupcAmount ? 'BDT '.number_format((int) $iupcAmount) : '-' }}</p>
+                    </div>
+                </div>
+            </section>
+        @endif
+
         <section class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div class="rounded-2xl border border-black/5 bg-white p-5 shadow-soft">
                 <p class="{{ $labelClass }}">Registration</p>
@@ -68,9 +97,15 @@
                 <p class="mt-2 text-sm text-coal/58">{{ $registration->event?->name ?? 'Unknown event' }}</p>
             </div>
             <div class="rounded-2xl border border-black/5 bg-white p-5 shadow-soft">
-                <p class="{{ $labelClass }}">Registration Status</p>
-                <p class="mt-3 text-2xl font-semibold capitalize">{{ $registration->status ?: '-' }}</p>
-                <p class="mt-2 text-sm text-coal/58">Payment: <span class="font-semibold capitalize">{{ $registration->payment_status ?: '-' }}</span></p>
+                <p class="{{ $labelClass }}">Tshirts</p>
+                <p class="mt-3 text-lg font-semibold leading-8">
+                    @forelse($tshirtCounts as $size => $count)
+                        <span class="inline-flex">{{ $size }}({{ $count }}){{ ! $loop->last ? ',' : '' }}</span>
+                    @empty
+                        <span class="text-coal/42">No size data</span>
+                    @endforelse
+                </p>
+                <p class="mt-2 text-sm text-coal/58">Participants{{ ($registration->event?->code === '01' && $finalRegistration?->payment_package === 'with_coach_kit' && $registration->coach?->tshirt_size) ? ' + coach' : '' }}</p>
             </div>
             <div class="rounded-2xl border border-black/5 bg-white p-5 shadow-soft">
                 <p class="{{ $labelClass }}">Participants</p>
@@ -187,20 +222,6 @@
                         </div>
                     </dl>
                 </article>
-
-                @if($registration->event?->code === '01')
-                    <article class="rounded-2xl border border-primary/20 bg-primary/10 p-5 shadow-soft sm:p-6">
-                        <p class="{{ $labelClass }}">IUPC Package</p>
-                        <h2 class="mt-3 text-2xl font-semibold">{{ $iupcPackage ?: 'Package not recorded' }}</h2>
-                        <p class="mt-2 text-sm text-coal/60">
-                            Amount:
-                            <span class="font-semibold">{{ $iupcAmount ? 'BDT '.number_format((int) $iupcAmount) : '-' }}</span>
-                        </p>
-                        <p class="mt-3 text-xs leading-5 text-coal/50">
-                            With coach kit is BDT 5,099. Without coach kit is BDT 4,099.
-                        </p>
-                    </article>
-                @endif
 
                 <article class="rounded-2xl border border-black/5 bg-white p-5 shadow-soft sm:p-6">
                     <p class="{{ $labelClass }}">Payment</p>
