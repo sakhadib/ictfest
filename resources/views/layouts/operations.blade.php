@@ -29,6 +29,7 @@
             ['route' => 'operations.index', 'label' => 'Overview', 'icon' => 'fa-table-columns'],
             ['route' => 'operations.personnel.index', 'label' => 'Personnel', 'icon' => 'fa-people-group'],
             ['route' => 'operations.fast-find.index', 'label' => 'Fast Find', 'icon' => 'fa-magnifying-glass'],
+            ['route' => 'operations.desk.index', 'label' => 'Desk', 'icon' => 'fa-clipboard-list'],
         ];
     @endphp
 

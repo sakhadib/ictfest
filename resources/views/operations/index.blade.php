@@ -13,15 +13,27 @@
                 Personnel work and lookup work are separate here, so phone-first users can get to the right screen without scrolling through unrelated forms.
             </p>
 
-            <div class="mt-8 grid gap-4 sm:grid-cols-2">
+            <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 <a href="{{ route('operations.fast-find.index') }}" class="group rounded-2xl border border-primary/20 bg-primary/10 p-5 transition hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/15">
                     <span class="grid h-12 w-12 place-items-center rounded-xl bg-primary text-white shadow-lg shadow-primary/20">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </span>
                     <h3 class="mt-5 text-xl font-semibold">Fast Find</h3>
-                    <p class="mt-2 text-sm leading-6 text-coal/58">Search names, phones, emails, registration codes, team names, participants, coaches, and personnel.</p>
+                    <p class="mt-2 text-sm leading-6 text-coal/58">Search people by name, phone, or email across participants, coaches, and personnel.</p>
                     <span class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
                         Open lookup
+                        <i class="fa-solid fa-arrow-right text-xs transition group-hover:translate-x-1"></i>
+                    </span>
+                </a>
+
+                <a href="{{ route('operations.desk.index') }}" class="group rounded-2xl border border-black/5 bg-white p-5 transition hover:-translate-y-0.5 hover:border-primary/25">
+                    <span class="grid h-12 w-12 place-items-center rounded-xl bg-primary text-white shadow-lg shadow-primary/20">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                    </span>
+                    <h3 class="mt-5 text-xl font-semibold">Desk</h3>
+                    <p class="mt-2 text-sm leading-6 text-coal/58">Enter a registration code and inspect the full team, payment, participant, T-shirt, coach, and final-registration record.</p>
+                    <span class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                        Open desk
                         <i class="fa-solid fa-arrow-right text-xs transition group-hover:translate-x-1"></i>
                     </span>
                 </a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OperationsPersonnel;
 use App\Models\Participant;
 use App\Models\Registration;
+use App\Models\IupcCoachActivityLog;
 use App\Services\PersonFastFindService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -51,6 +52,26 @@ class OperationsController extends Controller
         return view('operations.fast-find', [
             'searchQuery' => $query,
             'results' => $query === '' ? collect() : $people->results($query),
+        ]);
+    }
+
+    public function desk(Request $request): View
+    {
+        $code = trim((string) $request->query('code', ''));
+        $registration = $code === '' ? null : $this->findRegistrationByCode($code);
+
+        return view('operations.desk', [
+            'code' => $code,
+            'searched' => $code !== '',
+            'registration' => $registration,
+            'activityLogs' => $registration
+                ? IupcCoachActivityLog::query()
+                    ->with(['allocation', 'coachLink.coach'])
+                    ->where('registration_id', $registration->id)
+                    ->latest()
+                    ->limit(30)
+                    ->get()
+                : collect(),
         ]);
     }
 
@@ -190,6 +211,41 @@ class OperationsController extends Controller
         $data['status'] = $data['status'] ?? 'other';
 
         return $data;
+    }
+
+    private function findRegistrationByCode(string $code): ?Registration
+    {
+        $registration = Registration::query()
+            ->with(['event', 'participants', 'coach', 'payment', 'finalRegistration'])
+            ->whereRaw('LOWER(registration_code) = ?', [strtolower($code)])
+            ->first();
+
+        if ($registration) {
+            return $registration;
+        }
+
+        $normalizedCode = $this->normalizeRegistrationCode($code);
+
+        if ($normalizedCode === '') {
+            return null;
+        }
+
+        $registrationId = Registration::query()
+            ->select(['id', 'registration_code'])
+            ->get()
+            ->first(fn (Registration $candidate): bool => $this->normalizeRegistrationCode($candidate->registration_code) === $normalizedCode)
+            ?->id;
+
+        return $registrationId
+            ? Registration::query()
+                ->with(['event', 'participants', 'coach', 'payment', 'finalRegistration'])
+                ->find($registrationId)
+            : null;
+    }
+
+    private function normalizeRegistrationCode(string $code): string
+    {
+        return strtolower(preg_replace('/[^a-z0-9]+/i', '', $code) ?? '');
     }
 
     private function normalizeHeader(string $header): string

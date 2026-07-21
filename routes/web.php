@@ -90,6 +90,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/operations', [OperationsController::class, 'index'])->name('operations.index');
     Route::get('/operations/personnel', [OperationsController::class, 'personnel'])->name('operations.personnel.index');
     Route::get('/operations/fast-find', [OperationsController::class, 'fastFind'])->name('operations.fast-find.index');
+    Route::get('/operations/desk', [OperationsController::class, 'desk'])->name('operations.desk.index');
     Route::post('/operations/personnel', [OperationsController::class, 'store'])->name('operations.personnel.store');
     Route::post('/operations/personnel/upload', [OperationsController::class, 'upload'])->name('operations.personnel.upload');
     Route::patch('/operations/personnel/{personnel}', [OperationsController::class, 'update'])->name('operations.personnel.update');
