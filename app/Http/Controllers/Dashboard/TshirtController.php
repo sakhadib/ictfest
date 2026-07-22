@@ -66,11 +66,25 @@ class TshirtController extends Controller
 
     private function countsFrom(string $table): Collection
     {
-        return DB::table($table)
+        $query = DB::table($table)
             ->join('registrations', 'registrations.id', '=', "{$table}.registration_id")
             ->join('events', 'events.id', '=', 'registrations.event_id')
             ->whereNotNull("{$table}.tshirt_size")
-            ->where("{$table}.tshirt_size", '!=', '')
+            ->where("{$table}.tshirt_size", '!=', '');
+
+        if ($table === 'registration_coaches') {
+            $query
+                ->leftJoin('final_registrations', 'final_registrations.registration_id', '=', 'registrations.id')
+                ->leftJoin('payments', 'payments.registration_id', '=', 'registrations.id')
+                ->where(function ($query): void {
+                    $query->where('events.code', '!=', '01')
+                        ->orWhere('final_registrations.payment_package', 'with_coach_kit')
+                        ->orWhere('final_registrations.payment_amount', 5099)
+                        ->orWhere('payments.amount', 5099);
+                });
+        }
+
+        return $query
             ->select([
                 'events.code',
                 DB::raw("upper({$table}.tshirt_size) as size"),
