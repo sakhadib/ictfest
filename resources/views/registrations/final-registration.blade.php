@@ -9,7 +9,7 @@
     $selectedCoachSize = old('coach.tshirt_size', $registration->coach?->tshirt_size);
     $paymentInfo = [
         '02' => ['amount' => '2000 BDT', 'number' => '01746145346'],
-        '04' => ['amount' => '700 BDT', 'number' => '01941435623'],
+        '04' => ['amount' => '700 BDT', 'number' => '01746145346'],
     ][$registration->event?->code] ?? null;
 
     $amount = $paymentInfo['amount'] ?? 'BDT '.number_format((int) ($registration->event?->amount ?? 0));
