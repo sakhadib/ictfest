@@ -4,21 +4,23 @@
     <meta charset="utf-8">
     <style>
         @page {
-            margin: 0.42in;
+            margin: 0.32in;
+            size: A4 portrait;
         }
 
         body {
             color: #17202f;
             font-family: "DejaVu Sans", sans-serif;
-            font-size: 9px;
-            line-height: 1.25;
+            font-size: 11px;
+            line-height: 1.22;
             margin: 0;
         }
 
         .card {
             page-break-after: always;
+            page-break-inside: avoid;
             position: relative;
-            min-height: 10.1in;
+            min-height: 10.95in;
         }
 
         .card:last-child {
@@ -69,14 +71,14 @@
 
         .society {
             color: #d4574e;
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 700;
             letter-spacing: .5px;
         }
 
         .fest {
             color: #111827;
-            font-size: 14px;
+            font-size: 17px;
             font-weight: 800;
             margin-top: 2px;
         }
@@ -84,13 +86,13 @@
         .dept,
         .university {
             color: #4b5563;
-            font-size: 8px;
+            font-size: 10px;
             margin-top: 2px;
         }
 
         .divider {
             border-top: 2px solid #d4574e;
-            margin: 10px 0 12px;
+            margin: 9px 0 10px;
         }
 
         .card-title {
@@ -99,14 +101,14 @@
 
         .card-title h1 {
             color: #111827;
-            font-size: 22px;
+            font-size: 27px;
             margin: 0;
             text-transform: uppercase;
         }
 
         .card-title p {
             color: #d4574e;
-            font-size: 12px;
+            font-size: 15px;
             font-weight: 700;
             margin: 2px 0 0;
         }
@@ -115,7 +117,7 @@
             background: #fff3f2;
             border: 1px solid #f0c8c4;
             border-radius: 7px;
-            margin: 11px 0 10px;
+            margin: 9px 0 8px;
             padding: 8px 10px;
         }
 
@@ -130,26 +132,26 @@
 
         .reg-code {
             color: #d4574e;
-            font-size: 18px;
+            font-size: 23px;
             font-weight: 800;
         }
 
         .team-name {
             color: #111827;
-            font-size: 14px;
+            font-size: 17px;
             font-weight: 700;
             text-align: right;
         }
 
         .section {
-            margin-top: 9px;
+            margin-top: 8px;
         }
 
         .section-title {
             color: #111827;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 800;
-            margin: 0 0 5px;
+            margin: 0 0 4px;
             text-transform: uppercase;
         }
 
@@ -163,7 +165,7 @@
         .label {
             color: #667085;
             display: block;
-            font-size: 7px;
+            font-size: 8.5px;
             font-weight: 700;
             text-transform: uppercase;
         }
@@ -171,7 +173,7 @@
         .value {
             color: #111827;
             display: block;
-            font-size: 9px;
+            font-size: 11px;
             font-weight: 600;
             margin-top: 2px;
         }
@@ -187,20 +189,21 @@
         .data-table th {
             background: #d4574e;
             color: #ffffff;
-            font-size: 7px;
+            font-size: 8.5px;
             font-weight: 800;
             text-align: left;
             text-transform: uppercase;
         }
 
         .data-table td {
-            font-size: 8px;
+            font-size: 10px;
+            line-height: 1.18;
         }
 
         .notice {
             bottom: 0;
             color: #7b8494;
-            font-size: 7px;
+            font-size: 8.5px;
             left: 0;
             position: absolute;
             right: 0;
