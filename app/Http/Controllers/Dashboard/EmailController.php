@@ -93,15 +93,34 @@ class EmailController extends Controller
             'registration_statuses' => [$mode === 'events' ? 'required' : 'nullable', 'array'],
             'registration_statuses.*' => ['string', Rule::in(self::REGISTRATION_STATUSES)],
             'recipient_scope' => [$mode === 'events' ? 'required' : 'nullable', Rule::in(array_keys(self::RECIPIENT_SCOPES))],
-            'custom_email' => [$mode === 'custom' ? 'required' : 'nullable', new \App\Rules\StrictEmail(), 'max:255'],
+            'custom_email' => [$mode === 'custom' ? 'required' : 'nullable', 'string', 'max:10000'],
         ]);
+
+        $customEmails = [];
+
+        if ($validated['mode'] === 'custom') {
+            [$customEmails, $invalidEmails] = $this->parseCustomEmails((string) ($validated['custom_email'] ?? ''));
+
+            if ($invalidEmails !== []) {
+                return back()
+                    ->withErrors(['custom_email' => 'Invalid email address'.(count($invalidEmails) === 1 ? '' : 'es').': '.implode(', ', $invalidEmails).'.'])
+                    ->withInput();
+            }
+
+            if ($customEmails === []) {
+                return back()
+                    ->withErrors(['custom_email' => 'Enter at least one valid custom email address.'])
+                    ->withInput();
+            }
+        }
 
         $this->putDraft($request, [
             'mode' => $validated['mode'],
             'event_codes' => $validated['mode'] === 'events' ? array_values($validated['event_codes'] ?? []) : [],
             'registration_statuses' => $validated['mode'] === 'events' ? array_values($validated['registration_statuses'] ?? []) : [],
             'recipient_scope' => $validated['mode'] === 'events' ? $validated['recipient_scope'] : null,
-            'custom_email' => $validated['mode'] === 'custom' ? strtolower(trim($validated['custom_email'])) : null,
+            'custom_email' => $validated['mode'] === 'custom' ? implode(', ', $customEmails) : null,
+            'custom_emails' => $validated['mode'] === 'custom' ? $customEmails : [],
         ]);
 
         return redirect()->route('dashboard.emails.review');
@@ -300,7 +319,7 @@ class EmailController extends Controller
     }
 
     /**
-     * @return array{subject?: string, body?: string, mode?: string, event_codes?: array<int, string>, registration_statuses?: array<int, string>, recipient_scope?: ?string, custom_email?: ?string}
+     * @return array{subject?: string, body?: string, mode?: string, event_codes?: array<int, string>, registration_statuses?: array<int, string>, recipient_scope?: ?string, custom_email?: ?string, custom_emails?: array<int, string>}
      */
     private function draft(Request $request): array
     {
@@ -361,10 +380,14 @@ class EmailController extends Controller
                 ->with('status', 'Select whether this email should go to team leads or all participants.');
         }
 
-        if (($draft['mode'] ?? null) === 'custom' && blank($draft['custom_email'] ?? null)) {
+        if (
+            ($draft['mode'] ?? null) === 'custom' &&
+            empty($draft['custom_emails'] ?? []) &&
+            blank($draft['custom_email'] ?? null)
+        ) {
             return redirect()
                 ->route('dashboard.emails.recipients')
-                ->with('status', 'Enter a custom email address before reviewing the email.');
+                ->with('status', 'Enter at least one custom email address before reviewing the email.');
         }
 
         return null;
@@ -377,10 +400,18 @@ class EmailController extends Controller
     private function draftRecipients(array $draft): Collection
     {
         if (($draft['mode'] ?? null) === 'custom') {
-            return collect([[
+            $emails = $draft['custom_emails'] ?? [];
+
+            if (! is_array($emails) || $emails === []) {
+                [$emails] = $this->parseCustomEmails((string) ($draft['custom_email'] ?? ''));
+            }
+
+            return collect($emails)->map(fn (string $email): array => [
                 'name' => null,
-                'email' => strtolower(trim((string) $draft['custom_email'])),
-            ]])->filter(fn (array $recipient): bool => StrictEmail::isValid($recipient['email']))->values();
+                'email' => strtolower(trim($email)),
+            ])->filter(fn (array $recipient): bool => StrictEmail::isValid($recipient['email']))
+                ->unique('email')
+                ->values();
         }
 
         return $this->eventRecipients(
@@ -478,6 +509,30 @@ class EmailController extends Controller
         }
 
         return $counts;
+    }
+
+    /**
+     * @return array{0: array<int, string>, 1: array<int, string>}
+     */
+    private function parseCustomEmails(string $value): array
+    {
+        $emails = collect(preg_split('/[,\r\n]+/', $value) ?: [])
+            ->map(fn (string $email): string => strtolower(trim($email)))
+            ->filter()
+            ->unique()
+            ->values();
+
+        $valid = $emails
+            ->filter(fn (string $email): bool => StrictEmail::isValid($email))
+            ->values()
+            ->all();
+
+        $invalid = $emails
+            ->reject(fn (string $email): bool => StrictEmail::isValid($email))
+            ->values()
+            ->all();
+
+        return [$valid, $invalid];
     }
 
     /**

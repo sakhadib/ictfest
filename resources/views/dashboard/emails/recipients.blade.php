@@ -57,8 +57,8 @@
                     <span class="flex items-start gap-3">
                         <input type="radio" name="mode" value="custom" class="mt-1 h-4 w-4 border-black/20 text-primary focus:ring-primary" @checked($mode === 'custom') data-recipient-mode>
                         <span>
-                            <span class="block text-base font-semibold text-coal">Custom email</span>
-                            <span class="mt-1 block text-sm leading-6 text-coal/55">Send to one manually entered address.</span>
+                            <span class="block text-base font-semibold text-coal">Custom emails</span>
+                            <span class="mt-1 block text-sm leading-6 text-coal/55">Send to one or more manually entered addresses.</span>
                         </span>
                     </span>
                 </label>
@@ -156,15 +156,17 @@
             </div>
 
             <div class="mt-6" data-custom-panel>
-                <label for="custom_email" class="text-sm font-semibold text-coal">Custom email address</label>
-                <input
+                <label for="custom_email" class="text-sm font-semibold text-coal">Custom email addresses</label>
+                <textarea
                     id="custom_email"
-                    type="email"
                     name="custom_email"
-                    value="{{ old('custom_email', $draft['custom_email'] ?? '') }}"
-                    placeholder="name@example.com"
-                    class="mt-2 w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
-                >
+                    rows="5"
+                    placeholder="name@example.com, another@example.com"
+                    class="mt-2 w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm leading-6 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+                >{{ old('custom_email', $draft['custom_email'] ?? '') }}</textarea>
+                <p class="mt-2 text-xs leading-5 text-coal/50">
+                    Separate multiple addresses with commas. Line breaks are accepted too.
+                </p>
             </div>
 
             <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">

@@ -54,10 +54,16 @@ IUT Computer Society.</pre>
 
                 <div class="mt-5 rounded-xl border border-black/10 bg-paper/70 p-4">
                     <p class="text-xs font-semibold uppercase tracking-[.16em] text-coal/45">Mode</p>
-                    <p class="mt-2 text-sm font-semibold text-coal">{{ ($draft['mode'] ?? null) === 'custom' ? 'Custom email' : 'Event team leads' }}</p>
+                    <p class="mt-2 text-sm font-semibold text-coal">{{ ($draft['mode'] ?? null) === 'custom' ? 'Custom emails' : 'Event team leads' }}</p>
 
                     @if(($draft['mode'] ?? null) === 'custom')
-                        <p class="mt-2 break-all text-sm text-coal/60">{{ $draft['custom_email'] }}</p>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            @foreach($recipients as $recipient)
+                                <span class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-coal/60 shadow-sm">
+                                    {{ $recipient['email'] }}
+                                </span>
+                            @endforeach
+                        </div>
                     @else
                         <div class="mt-3 flex flex-wrap gap-2">
                             @foreach($selectedEvents as $event)
