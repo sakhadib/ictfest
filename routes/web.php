@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\BusRouteController;
 use App\Http\Controllers\Dashboard\EmailController;
 use App\Http\Controllers\Dashboard\EventRegistrationController;
 use App\Http\Controllers\Dashboard\EventStatusController;
@@ -56,6 +57,7 @@ Route::get('/sitemap.xml', function () {
         ['url' => route('events.rulebook', ['eventSlug' => 'valorant']), 'priority' => '0.6', 'changefreq' => 'weekly'],
         ['url' => route('registration.status'), 'priority' => '0.5', 'changefreq' => 'weekly'],
         ['url' => route('personnel.find'), 'priority' => '0.4', 'changefreq' => 'weekly'],
+        ['url' => route('bus.day1'), 'priority' => '0.5', 'changefreq' => 'daily'],
         ['url' => route('contact'), 'priority' => '0.4', 'changefreq' => 'monthly'],
         ['url' => route('about'), 'priority' => '0.4', 'changefreq' => 'monthly'],
     ]);
@@ -79,6 +81,7 @@ Route::get('/sitemap.xml', function () {
 Route::view('/about', 'about')->name('about');
 Route::view('/contact', 'contact')->name('contact');
 Route::get('/find', PersonnelFindController::class)->name('personnel.find');
+Route::get('/bus/day1', [BusRouteController::class, 'day1'])->name('bus.day1');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');

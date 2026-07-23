@@ -1,0 +1,147 @@
+{
+  "date": "2026-07-24",
+  "destination": "Islamic University of Technology (IUT)",
+  "routes": [
+    {
+      "id": 1,
+      "name": "Bus Route 1",
+      "arrival_time": "08:00",
+      "stops": [
+        {
+          "name": "Khilgaon",
+          "time": "06:20"
+        },
+        {
+          "name": "Malibagh",
+          "time": "06:30"
+        },
+        {
+          "name": "Rampura",
+          "time": "06:45"
+        },
+        {
+          "name": "BRAC",
+          "time": "06:55"
+        },
+        {
+          "name": "Badda",
+          "time": "07:05"
+        },
+        {
+          "name": "Notun Bazar",
+          "time": "07:15"
+        },
+        {
+          "name": "Jamuna Future Park",
+          "time": "07:25"
+        },
+        {
+          "name": "Airport",
+          "time": "07:40"
+        },
+        {
+          "name": "IUT",
+          "time": "08:00"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bus Route 2",
+      "arrival_time": "07:55",
+      "stops": [
+        {
+          "name": "Dhanmondi 27",
+          "time": "06:30"
+        },
+        {
+          "name": "Manik Mia Avenue",
+          "time": "06:32"
+        },
+        {
+          "name": "3 Khejur Bagan",
+          "time": "06:35"
+        },
+        {
+          "name": "Farmgate Police Box",
+          "time": "06:38"
+        },
+        {
+          "name": "Bijoy Sarani",
+          "time": "06:40"
+        },
+        {
+          "name": "Jahangir Gate",
+          "time": "06:45"
+        },
+        {
+          "name": "Raowa Club (Mohakhali Flyover)",
+          "time": "06:48"
+        },
+        {
+          "name": "Chairmanbari (Mohakhali Flyover)",
+          "time": "06:50"
+        },
+        {
+          "name": "Sainik Club",
+          "time": "06:52"
+        },
+        {
+          "name": "Zia Colony (MIS)",
+          "time": "06:55"
+        },
+        {
+          "name": "Khilkhet",
+          "time": "07:00"
+        },
+        {
+          "name": "jashim Uddin Avenue",
+          "time": "07:10"
+        },
+        {
+          "name": "Rajlakshmi",
+          "time": "07:12"
+        },
+        {
+          "name": "BNS Centre, Uttara",
+          "time": "07:15"
+        },
+        {
+          "name": "IUT",
+          "time": "07:55"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bus Route 3",
+      "arrival_time": "07:45",
+      "stops": [
+        {
+          "name": "Uttara North Metro",
+          "time": "06:45"
+        },
+        {
+          "name": "Zamzam Tower",
+          "time": "06:50"
+        },
+        {
+          "name": "Lubana Hospital (Gareeb-e-Newaz Avenue)",
+          "time": "06:52"
+        },
+        {
+          "name": "Miniso (Rabindra Sarani)",
+          "time": "06:55"
+        },
+        {
+          "name": "Square Building (Azampur)",
+          "time": "07:00"
+        },
+        {
+          "name": "IUT",
+          "time": "07:45"
+        }
+      ]
+    }
+  ]
+}
